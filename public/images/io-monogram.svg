@@ -1,0 +1,19 @@
+<svg width="600" height="600" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">IO Monogram Logo</title>
+  <desc id="desc">Minimal IO monogram logo with dark charcoal letters and emerald accent dot.</desc>
+
+  <style>
+    :root {
+      --logo-dark: #111314;
+      --logo-green: #1B7F5A;
+    }
+    .logo-dark { fill: var(--logo-dark); }
+    .logo-green { fill: var(--logo-green); }
+  </style>
+
+  <g id="io-monogram" transform="translate(82 104)">
+    <path id="monogram-i" class="logo-dark" d="M0 0H86V315H36C16.1177 315 0 298.882 0 279V0Z"/>
+    <path id="monogram-o" class="logo-dark" fill-rule="evenodd" clip-rule="evenodd" d="M281 326C371.022 326 444 253.022 444 163C444 72.9776 371.022 0 281 0C190.978 0 118 72.9776 118 163C118 253.022 190.978 326 281 326ZM281 245C326.287 245 363 208.287 363 163C363 117.713 326.287 81 281 81C235.713 81 199 117.713 199 163C199 208.287 235.713 245 281 245Z"/>
+    <circle id="monogram-dot" class="logo-green" cx="502" cy="275" r="43"/>
+  </g>
+</svg>
