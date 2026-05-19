@@ -29,7 +29,7 @@ export function CTA() {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button size="lg" className="w-full sm:w-auto" onClick={() => window.location.href = 'mailto:hello@israeloduguwa.com'}>
+            <Button size="lg" className="w-full sm:w-auto" onClick={() => window.location.href = 'mailto:oduguwa.israel22@gmail.com'}>
               Contact Me
             </Button>
             <Button variant="secondary" size="lg" className="w-full sm:w-auto" onClick={() => window.open('/resume.pdf', '_blank')}>

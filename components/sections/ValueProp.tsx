@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
   MotionConfig,
+  useInView,
   useReducedMotion,
 } from "framer-motion";
 import {
@@ -117,10 +118,16 @@ function useMediaQuery(query: string) {
 }
 
 export function ValueProp() {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const shouldReduceMotion = useReducedMotion();
   const canUseServiceMotion = useMediaQuery("(min-width: 1024px)");
-  const enableServiceMotion = canUseServiceMotion && !shouldReduceMotion;
+  const isSectionInView = useInView(sectionRef, {
+    margin: "200px 0px",
+    once: false,
+  });
+  const enableServiceMotion =
+    canUseServiceMotion && isSectionInView && !shouldReduceMotion;
 
   const handleSelect = (index: number) => {
     setActiveIndex(index);
@@ -128,14 +135,10 @@ export function ValueProp() {
 
   return (
     <section
+      ref={sectionRef}
       className="relative bg-[#050816] py-28 text-white md:py-32"
       id="process"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.055)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:64px_64px] opacity-30" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[120px]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
       <MotionConfig reducedMotion={enableServiceMotion ? "never" : "always"}>
         <div className="container relative z-10 mx-auto px-6 md:px-10 lg:px-14 xl:px-20 2xl:px-24">
           <div className="mx-auto mb-4 max-w-3xl text-center md:mb-5">
@@ -153,9 +156,9 @@ export function ValueProp() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.55, delay: 0.05 }}
-              className="text-5xl font-bold leading-tight tracking-tight text-white text-balance md:text-7xl lg:text-[5.5rem]"
+              className="text-5xl font-bold leading-tight tracking-tight text-white text-balance md:text-7xl lg:text-[4.5rem]"
             >
-              Where I create value
+              How I help your product
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 18 }}
@@ -164,9 +167,9 @@ export function ValueProp() {
               transition={{ duration: 0.55, delay: 0.12 }}
               className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300 md:text-lg"
             >
-              Practical software engineering for teams that need clearer
-              workflows, better interfaces, reliable implementation, and
-              systems that support real users.
+              I help teams build cleaner interfaces, connect real backend logic,
+              improve user flows, automate manual work, and ship product
+              features that support real business goals.
             </motion.p>
           </div>
 

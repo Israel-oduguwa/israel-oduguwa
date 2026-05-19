@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { buttonClasses } from "../ui/Button";
 import { Download, Menu, Send, X } from "lucide-react";
@@ -21,13 +21,19 @@ export function Navbar() {
   const [isOverDarkSection, setIsOverDarkSection] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const isScrolledRef = useRef(false);
 
   useEffect(() => {
     let frame = 0;
 
     const updateScrolled = () => {
       frame = 0;
-      setIsScrolled(window.scrollY > 20);
+      const nextIsScrolled = window.scrollY > 20;
+
+      if (isScrolledRef.current !== nextIsScrolled) {
+        isScrolledRef.current = nextIsScrolled;
+        setIsScrolled(nextIsScrolled);
+      }
     };
 
     const handleScroll = () => {
@@ -163,7 +169,7 @@ export function Navbar() {
                 Resume
               </a>
               <a
-                href="mailto:hello@israeloduguwa.com"
+                href="mailto:oduguwa.israel22@gmail.com"
                 className={buttonClasses({
                   variant: "primary",
                   className:
@@ -237,7 +243,7 @@ export function Navbar() {
                   Download Resume
                 </a>
                 <a
-                  href="mailto:hello@israeloduguwa.com"
+                  href="mailto:oduguwa.israel22@gmail.com"
                   className={buttonClasses({
                     variant: "primary",
                     size: "lg",

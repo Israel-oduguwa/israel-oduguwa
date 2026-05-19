@@ -34,6 +34,7 @@ type GlobeSceneProps = {
 export function GlobeScene({ data, globeConfig, markers }: GlobeSceneProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (shouldLoad) return;
@@ -50,7 +51,7 @@ export function GlobeScene({ data, globeConfig, markers }: GlobeSceneProps) {
           observer.disconnect();
         }
       },
-      { rootMargin: "900px 0px" },
+      { rootMargin: "280px 0px" },
     );
 
     const container = containerRef.current;
@@ -59,10 +60,37 @@ export function GlobeScene({ data, globeConfig, markers }: GlobeSceneProps) {
     return () => observer.disconnect();
   }, [shouldLoad]);
 
+  useEffect(() => {
+    if (!shouldLoad) return;
+
+    if (!("IntersectionObserver" in globalThis)) {
+      const timeout = globalThis.setTimeout(() => setIsVisible(true), 0);
+      return () => globalThis.clearTimeout(timeout);
+    }
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.12 },
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [shouldLoad]);
+
   return (
     <div ref={containerRef} className="h-full w-full">
       {shouldLoad ? (
-        <World data={data} globeConfig={globeConfig} markers={markers} />
+        <World
+          data={data}
+          globeConfig={globeConfig}
+          isActive={isVisible}
+          markers={markers}
+        />
       ) : (
         <GlobePlaceholder />
       )}

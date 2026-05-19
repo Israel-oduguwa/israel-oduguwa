@@ -15,22 +15,21 @@ export function Contact() {
                 Contact Me
               </h2>
               <p className="mt-6 text-base leading-7 text-slate-600 dark:text-slate-300 md:text-lg">
-                Tell me what you&apos;re building, what needs fixing, or where
-                the product needs to go next. I&apos;ll reply with clear next
-                steps.
+                Tell me what you’re building, what needs fixing, or what product
+                flow needs to work better. I’ll reply with clear next steps.
               </p>
             </div>
 
             <div className="space-y-6 pt-4">
               <div>
                 <p className="mb-1 text-sm text-slate-500 dark:text-slate-400">
-                  Email:
+                  Email
                 </p>
                 <a
-                  href="mailto:hello@israeloduguwa.com"
-                  className="break-words text-lg font-medium transition-colors hover:text-blue-600 dark:text-sky-100 dark:hover:text-sky-300 sm:text-xl"
+                  href="mailto:oduguwa.israel22@gmail.com"
+                  className="break-words text-lg  transition-colors hover:text-blue-600 dark:text-sky-100 dark:hover:text-sky-300 sm:text-xl"
                 >
-                  hello@israeloduguwa.com
+                  oduguwa.israel22@gmail.com
                 </a>
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -44,7 +43,7 @@ export function Contact() {
           <div className="rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_24px_80px_rgba(0,0,0,0.28)] md:p-12">
             <form
               className="space-y-6"
-              action="mailto:hello@israeloduguwa.com"
+              action="mailto:oduguwa.israel22@gmail.com"
               method="post"
               encType="text/plain"
             >
@@ -90,7 +89,8 @@ export function Contact() {
                   htmlFor="message"
                   className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200"
                 >
-                  How can we help you?
+                  Tell me about the project, role, or problem you need help
+                  with.
                 </label>
                 <textarea
                   id="message"

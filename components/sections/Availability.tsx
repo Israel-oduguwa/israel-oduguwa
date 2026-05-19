@@ -116,8 +116,8 @@ function Availability() {
 
       <div className="relative z-10 mx-auto max-w-[1920px]">
         <div className="container mx-auto mb-16 px-6 text-center md:mb-20 md:px-12">
-          <h2 className="mx-auto max-w-5xl text-5xl font-bold leading-tight tracking-tight text-white text-balance md:text-7xl lg:text-[5.5rem]">
-            Available for the right team
+          <h2 className="mx-auto max-w-5xl text-5xl font-bold leading-tight tracking-tight text-white text-balance md:text-7xl lg:text-[4.5rem]">
+            Available for work
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
             Open to frontend, full-stack, and product engineering roles where
@@ -145,10 +145,9 @@ function Availability() {
                   Remote-friendly, easy to work with
                 </h3>
                 <p className="mt-4 text-base leading-relaxed text-slate-300">
-                  I work async-first with teams across time zones. Whether
-                  you&apos;re in San Francisco or Tokyo, I ensure clean
-                  handoffs, reliable delivery, and enough overlap for clear
-                  decisions.
+                  I&apos;m open to remote-friendly roles and product projects
+                  where clean UI, reliable implementation, fast execution,
+                  scalability, and practical problem-solving matter.
                 </p>
               </div>
 
@@ -206,7 +205,7 @@ function Availability() {
                   Download Resume
                 </a>
                 <a
-                  href="mailto:hello@israeloduguwa.com"
+                  href="mailto:oduguwa.israel22@gmail.com"
                   className={buttonClasses({
                     variant: "secondary",
                     className:

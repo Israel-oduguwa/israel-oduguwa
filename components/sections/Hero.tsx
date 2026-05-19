@@ -4,9 +4,8 @@ import Image from "next/image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   motion,
-  useScroll,
-  useTransform,
   useSpring,
+  useTransform,
   useMotionValue,
   useReducedMotion,
 } from "framer-motion";
@@ -168,14 +167,6 @@ export function Hero() {
   );
   const enableAmbientMotion = canUsePointerTilt && !shouldReduceMotion;
 
-  // Parallax scroll effects
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
   // Mouse 3D effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -314,10 +305,7 @@ export function Hero() {
 
       {/* 4. Global Floating Product Badges */}
 
-      <motion.div
-        style={{ y, opacity }}
-        className="container mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center"
-      >
+      <div className="container mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
         {/* Left Column: Typography */}
         <div className="z-20 flex w-full max-w-[20rem] flex-col items-start text-left min-[380px]:max-w-[21rem] sm:max-w-none lg:col-span-7">
           <motion.h1
@@ -420,7 +408,7 @@ export function Hero() {
             />
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

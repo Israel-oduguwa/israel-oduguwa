@@ -29,7 +29,8 @@ function ProjectVideo({
   const [isReady, setIsReady] = useState(false);
 
   const isInView = useInView(containerRef, {
-    margin: "300px 0px",
+    amount: 0.25,
+    margin: "120px 0px",
     once: false,
   });
 
@@ -89,7 +90,7 @@ export function Projects() {
       title: "KinsCare",
       context: "Healthcare hiring marketplace",
       description:
-        "Helped build and improve the product experience for a platform that helps care providers find qualified caregivers faster and manage hiring from one place.",
+        "Helped build and improve a platform that helps care providers find qualified caregivers faster, manage hiring interest, and reduce scattered manual communication.",
       impact:
         "Focused on making a high-trust hiring process easier to understand, easier to navigate, and less dependent on scattered manual steps.",
       tags: ["Next.js", "React", "Node.js", "MongoDB", "Clerk", "Twilio"],
@@ -101,9 +102,9 @@ export function Projects() {
       title: "ExcelCNA",
       context: "Healthcare training and student acquisition",
       description:
-        "Helped improve the digital path from student interest to registration for a healthcare training business serving HCA, CPR, and BLS students.",
+        "Built and maintained the web platform for Excel Health Careers, a healthcare training business offering HCA, CPR, and BLS programs. The platform supports course discovery, student registration, enrollment flows, and business-facing operations.",
       impact:
-        "Worked across clearer pages, tracking, workflow support, and automation so the business could better understand and improve student enrollment.",
+        "Helped drive real student registrations and revenue by building a clearer online enrollment experience for healthcare training programs, making it easier for students to discover courses, understand requirements, and register online.",
       tags: ["Next.js", "React", "Firebase", "GA4", "GTM", "n8n", "OpenAI"],
       hasDemo: true,
       videoSrc: "/videos/excel-cna.mp4",
@@ -125,9 +126,9 @@ export function Projects() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight text-slate-900 dark:text-white leading-tight text-balance"
+            className="text-5xl md:text-7xl lg:text-[4.5rem] font-bold tracking-tight text-slate-900 dark:text-white leading-tight text-balance"
           >
-            Selected Work
+            Real products I’ve helped build
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 18 }}
@@ -136,8 +137,9 @@ export function Projects() {
             transition={{ duration: 0.55, delay: 0.08 }}
             className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-400 md:text-lg"
           >
-            Product work across healthcare hiring, student acquisition,
-            workflow systems, and business-facing web platforms.
+            A look at product systems I’ve worked on across healthcare hiring,
+            student acquisition, workflow automation, analytics, and business
+            operations.
           </motion.p>
         </div>
 
@@ -171,22 +173,22 @@ export function Projects() {
                   index === 0 ? "lg:order-1" : "lg:order-2"
                 }`}
               >
-                <h3 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-slate-900 dark:text-white tracking-tight">
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-slate-900 dark:text-white tracking-tight">
                   {project.title}
                 </h3>
-                <p className="mt-3 text-sm font-semibold uppercase tracking-[0.22em] text-primary">
+                {/* <p className="mt-3 text-sm font-semibold uppercase tracking-[0.22em] text-primary">
                   {project.context}
-                </p>
+                </p> */}
 
                 <p className="mt-6 text-base leading-7 text-slate-600 dark:text-slate-400 md:mt-8 md:text-lg">
                   {project.description}
                 </p>
 
-                <div className="mt-10">
+                <div className="mt-3">
                   <p className="text-base leading-7 text-slate-700 dark:text-slate-300 italic md:text-lg">
-                    <span className="font-medium not-italic text-slate-900 dark:text-white mr-3">
+                    {/* <span className="font-medium not-italic text-slate-900 dark:text-white mr-3">
                       Contribution:
-                    </span>
+                    </span> */}
                     {project.impact}
                   </p>
                 </div>
@@ -215,7 +217,7 @@ export function Projects() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      View Case Study{" "}
+                      View Project Details{" "}
                       <ExternalLink
                         className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
                         size={18}

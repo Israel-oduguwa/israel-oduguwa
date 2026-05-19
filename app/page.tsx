@@ -12,7 +12,7 @@ const personJsonLd = {
   name: "Israel Oduguwa",
   url: "https://israeloduguwa.com",
   jobTitle: "Frontend-Heavy Full-Stack Engineer",
-  email: "mailto:hello@israeloduguwa.com",
+  email: "mailto:oduguwa.israel22@gmail.com",
   knowsAbout: [
     "Next.js",
     "React",

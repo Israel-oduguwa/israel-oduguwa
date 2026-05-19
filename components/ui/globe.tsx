@@ -89,6 +89,7 @@ type Point = {
 type WorldProps = {
   globeConfig: GlobeConfig;
   data: Position[];
+  isActive?: boolean;
   markers?: GlobeMarker[];
 };
 
@@ -108,7 +109,7 @@ const defaultConfig = {
   maxRings: 3,
 };
 
-function Globe({ globeConfig, data, markers = [] }: WorldProps) {
+function Globe({ globeConfig, data, isActive = true, markers = [] }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
   const groupRef = useRef<Group | null>(null);
   const ringTickRef = useRef(0);
@@ -164,7 +165,7 @@ function Globe({ globeConfig, data, markers = [] }: WorldProps) {
   ]);
 
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data.length) return;
+    if (!globeRef.current || !isInitialized || !data.length || !isActive) return;
 
     const points: Point[] = [];
 
@@ -264,10 +265,10 @@ function Globe({ globeConfig, data, markers = [] }: WorldProps) {
         sprite.scale.set(markerSize, markerSize, 1);
         return sprite;
       });
-  }, [config, data, isInitialized, markers]);
+  }, [config, data, isActive, isInitialized, markers]);
 
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data.length) return;
+    if (!globeRef.current || !isInitialized || !data.length || !isActive) return;
 
     const interval = window.setInterval(() => {
       if (!globeRef.current) return;
@@ -287,7 +288,7 @@ function Globe({ globeConfig, data, markers = [] }: WorldProps) {
     }, 2000);
 
     return () => window.clearInterval(interval);
-  }, [data, isInitialized]);
+  }, [data, isActive, isInitialized]);
 
   return <group ref={groupRef} scale={scale} />;
 }
@@ -377,13 +378,19 @@ function WebGLRendererConfig() {
   return null;
 }
 
-function GlobeControls({ globeConfig }: { globeConfig: GlobeConfig }) {
+function GlobeControls({
+  globeConfig,
+  isActive,
+}: {
+  globeConfig: GlobeConfig;
+  isActive: boolean;
+}) {
   const { size } = useThree();
   const isSmallCanvas = size.width < 640;
 
   return (
     <OrbitControls
-      autoRotate={!isSmallCanvas && (globeConfig.autoRotate ?? true)}
+      autoRotate={isActive && !isSmallCanvas && (globeConfig.autoRotate ?? true)}
       autoRotateSpeed={isSmallCanvas ? 0.2 : (globeConfig.autoRotateSpeed ?? 1)}
       enablePan={false}
       enableZoom={false}
@@ -395,7 +402,7 @@ function GlobeControls({ globeConfig }: { globeConfig: GlobeConfig }) {
   );
 }
 
-export function World({ globeConfig, data, markers }: WorldProps) {
+export function World({ globeConfig, data, isActive = true, markers }: WorldProps) {
   const scene = useMemo(() => {
     const nextScene = new Scene();
     nextScene.fog = new Fog(0xffffff, 400, 2000);
@@ -406,6 +413,9 @@ export function World({ globeConfig, data, markers }: WorldProps) {
     <Canvas
       scene={scene}
       camera={{ fov: 50, near: 1, far: 2000, position: [0, 0, CAMERA_Z] }}
+      dpr={[1, 1.35]}
+      frameloop={isActive ? "always" : "demand"}
+      gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
     >
       <WebGLRendererConfig />
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
@@ -422,8 +432,13 @@ export function World({ globeConfig, data, markers }: WorldProps) {
         intensity={0.8}
         position={new Vector3(-200, 500, 200)}
       />
-      <Globe globeConfig={globeConfig} data={data} markers={markers} />
-      <GlobeControls globeConfig={globeConfig} />
+      <Globe
+        globeConfig={globeConfig}
+        data={data}
+        isActive={isActive}
+        markers={markers}
+      />
+      <GlobeControls globeConfig={globeConfig} isActive={isActive} />
     </Canvas>
   );
 }
