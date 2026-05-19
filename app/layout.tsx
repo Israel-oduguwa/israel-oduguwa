@@ -1,12 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://israeloduguwa.com"),
@@ -66,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`scroll-smooth ${inter.className}`} id="top">
+    <html lang="en" suppressHydrationWarning className="scroll-smooth" id="top">
       <body className="bg-background text-foreground antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-primary/30">
         <ThemeProvider
           attribute="class"

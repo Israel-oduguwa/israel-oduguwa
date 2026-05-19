@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import createGlobe, { type COBEOptions } from "cobe";
-import { useSpring } from "react-spring";
+import { useSpring } from "@react-spring/web";
 import { useTheme } from "next-themes";
 
 export function GithubGlobe() {
