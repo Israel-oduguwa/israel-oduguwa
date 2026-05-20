@@ -5,6 +5,9 @@ import { buttonClasses } from "@/components/ui/Button";
 import { GlobeScene } from "@/components/ui/GlobeScene";
 import type { GlobeConfig, GlobeMarker, Position } from "@/components/ui/globe";
 
+const resumeUrl =
+  "https://drive.google.com/file/d/1fCmYZ8ps7-5nYRNf2RHBXdXlzMEDRtuB/view?usp=sharing";
+
 const globeConfig: GlobeConfig = {
   pointSize: 4,
   globeColor: "#1e293b",
@@ -193,8 +196,9 @@ function Availability() {
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 <a
-                  href="/resume.pdf"
-                  download
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={buttonClasses({
                     variant: "primary",
                     className:

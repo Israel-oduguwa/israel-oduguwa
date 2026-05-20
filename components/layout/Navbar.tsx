@@ -15,6 +15,8 @@ const navLinks = [
 ];
 
 const darkSectionIds = ["process", "availability"];
+const resumeUrl =
+  "https://drive.google.com/file/d/1fCmYZ8ps7-5nYRNf2RHBXdXlzMEDRtuB/view?usp=sharing";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -129,7 +131,7 @@ export function Navbar() {
             <AnimatedLogo />
           </a>
 
-          <div className="hidden md:flex items-center gap-5 lg:gap-7">
+          <div className="hidden items-center gap-5 lg:flex lg:gap-7">
             <nav className="flex items-center gap-5 lg:gap-7">
               {navLinks.map((link) => (
                 <a
@@ -156,8 +158,9 @@ export function Navbar() {
             <div className="flex items-center gap-3">
               <ThemeToggle />
               <a
-                href="/resume.pdf"
-                download
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={buttonClasses({
                   variant: "secondary",
                   className: isOverDarkSection
@@ -183,7 +186,7 @@ export function Navbar() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 md:hidden z-50">
+          <div className="z-50 flex items-center gap-3 lg:hidden">
             <ThemeToggle />
             <button
               className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
@@ -207,7 +210,7 @@ export function Navbar() {
             initial={{ opacity: 0, filter: "blur(10px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, filter: "blur(10px)" }}
-            className="fixed inset-0 z-40 flex flex-col bg-background/95 px-6 pt-32 pb-6 backdrop-blur-2xl dark:bg-[#050816]/94 md:hidden"
+            className="fixed inset-0 z-40 flex flex-col bg-background/95 px-6 pt-32 pb-6 backdrop-blur-2xl dark:bg-[#050816]/94 lg:hidden"
           >
             <nav className="flex flex-col gap-8 items-center justify-center h-full pb-20">
               {navLinks.map((link) => (
@@ -229,8 +232,9 @@ export function Navbar() {
               ))}
               <div className="mt-8 w-full max-w-xs">
                 <a
-                  href="/resume.pdf"
-                  download
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={buttonClasses({
                     variant: "secondary",
                     size: "lg",

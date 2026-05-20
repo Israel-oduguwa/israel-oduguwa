@@ -4,6 +4,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "../ui/Button";
 
+const resumeUrl =
+  "https://drive.google.com/file/d/1fCmYZ8ps7-5nYRNf2RHBXdXlzMEDRtuB/view?usp=sharing";
+
 export function CTA() {
   return (
     <section className="py-32 relative overflow-hidden">
@@ -32,7 +35,7 @@ export function CTA() {
             <Button size="lg" className="w-full sm:w-auto" onClick={() => window.location.href = 'mailto:oduguwa.israel22@gmail.com'}>
               Contact Me
             </Button>
-            <Button variant="secondary" size="lg" className="w-full sm:w-auto" onClick={() => window.open('/resume.pdf', '_blank')}>
+            <Button variant="secondary" size="lg" className="w-full sm:w-auto" onClick={() => window.open(resumeUrl, '_blank', 'noopener,noreferrer')}>
               Download Resume
             </Button>
             <a href="#work" className="w-full sm:w-auto">
