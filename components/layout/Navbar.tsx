@@ -1,17 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { buttonClasses } from "../ui/Button";
 import { Download, Menu, Send, X } from "lucide-react";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import { AnimatedLogo } from "../ui/AnimatedLogo";
 
 const navLinks = [
-  { name: "Work", href: "#work" },
-  { name: "Services", href: "#process" },
-  { name: "Availability", href: "#availability" },
-  { name: "Contact", href: "#contact" },
+  { name: "Work", href: "/#work", sectionId: "work" },
+  { name: "Services", href: "/#process", sectionId: "process" },
+  { name: "Availability", href: "/#availability", sectionId: "availability" },
+  { name: "Contact", href: "/#contact", sectionId: "contact" },
+  { name: "Articles", href: "/articles", sectionId: "articles" },
 ];
 
 const darkSectionIds = ["process", "availability"];
@@ -53,7 +55,7 @@ export function Navbar() {
 
   useEffect(() => {
     const sections = navLinks
-      .map((link) => document.getElementById(link.href.slice(1)))
+      .map((link) => document.getElementById(link.sectionId))
       .filter((section): section is HTMLElement => Boolean(section));
 
     if (sections.length === 0) return;
@@ -111,25 +113,22 @@ export function Navbar() {
   return (
     <>
       <header className="fixed top-6 inset-x-0 z-50 flex justify-center pointer-events-none">
-        <motion.div
-          className={`pointer-events-auto flex items-center justify-between transition-[width,max-width,background-color,box-shadow,padding,border-radius,color,border-color] duration-500 ${
+        <div
+          className={`pointer-events-auto mx-auto flex w-[calc(100%-2rem)] max-w-5xl items-center justify-between rounded-full px-5 py-3 ring-1 backdrop-blur-xl transition-colors duration-200 lg:px-6 ${
             isOverDarkSection
-              ? "mx-auto w-[calc(100%-2rem)] max-w-5xl rounded-full border border-white/12 bg-[#050816]/78 px-5 py-3 text-white shadow-[0_24px_80px_rgba(0,0,0,0.36)] ring-1 ring-white/10 backdrop-blur-xl lg:px-6"
+              ? "border border-white/12 bg-[#050816]/82 text-white shadow-[0_18px_54px_rgba(0,0,0,0.28)] ring-white/10"
               : isScrolled
-                ? "mx-auto w-[calc(100%-2rem)] max-w-5xl rounded-full border border-card-border bg-card/80 px-5 py-3 text-foreground shadow-2xl backdrop-blur-xl dark:border-white/12 dark:bg-[#050816]/76 dark:text-white dark:shadow-[0_24px_80px_rgba(0,0,0,0.34)] dark:ring-1 dark:ring-white/10 lg:px-6"
-                : "w-full container mx-auto px-6 md:px-12 py-3 bg-transparent text-foreground"
+                ? "border border-card-border bg-card/86 text-foreground shadow-[0_18px_54px_rgba(15,23,42,0.12)] ring-black/5 dark:border-white/12 dark:bg-[#050816]/80 dark:text-white dark:shadow-[0_18px_54px_rgba(0,0,0,0.28)] dark:ring-white/10"
+                : "border border-transparent bg-transparent text-foreground shadow-none ring-transparent"
           }`}
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
         >
-          <a
-            href="#top"
+          <Link
+            href="/#top"
             className="z-50 scale-90 md:scale-100 origin-left"
             onClick={() => setMobileMenuOpen(false)}
           >
             <AnimatedLogo />
-          </a>
+          </Link>
 
           <div className="hidden items-center gap-5 lg:flex lg:gap-7">
             <nav className="flex items-center gap-5 lg:gap-7">
@@ -137,9 +136,13 @@ export function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setActiveSection(link.href.slice(1))}
+                  onClick={() => {
+                    if (link.href.startsWith("/#")) {
+                      setActiveSection(link.sectionId);
+                    }
+                  }}
                   className={`relative pb-1 font-semibold transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-1/2 after:origin-left after:rounded-full after:transition-transform after:duration-300 ${
-                    activeSection === link.href.slice(1)
+                    activeSection === link.sectionId
                       ? isOverDarkSection
                         ? "text-white after:scale-x-100 after:bg-white"
                         : "text-foreground after:scale-x-100 after:bg-foreground"
@@ -201,7 +204,7 @@ export function Navbar() {
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
-        </motion.div>
+        </div>
       </header>
 
       <AnimatePresence>
@@ -218,11 +221,13 @@ export function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => {
-                    setActiveSection(link.href.slice(1));
+                    if (link.href.startsWith("/#")) {
+                      setActiveSection(link.sectionId);
+                    }
                     setMobileMenuOpen(false);
                   }}
                   className={`relative pb-2 text-4xl font-bold tracking-tight transition-colors after:absolute after:left-0 after:-bottom-1 after:h-1 after:w-1/2 after:origin-left after:rounded-full after:bg-foreground after:transition-transform after:duration-300 ${
-                    activeSection === link.href.slice(1)
+                    activeSection === link.sectionId
                       ? "text-foreground after:scale-x-100"
                       : "text-muted-foreground after:scale-x-0 hover:text-foreground/85"
                   }`}

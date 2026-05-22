@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { buttonClasses } from "../ui/Button";
 import { ExternalLink } from "lucide-react";
+import { useLowPowerMode } from "@/components/hooks/usePerformanceMode";
 
 type Project = {
   title: string;
@@ -26,7 +27,14 @@ function ProjectVideo({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
+  const isLowPowerMode = useLowPowerMode();
   const [isReady, setIsReady] = useState(false);
+
+  const isNearView = useInView(containerRef, {
+    amount: 0,
+    margin: "800px 0px",
+    once: false,
+  });
 
   const isInView = useInView(containerRef, {
     amount: 0.25,
@@ -34,8 +42,17 @@ function ProjectVideo({
     once: false,
   });
 
-  const canUseVideo = isInView && !shouldReduceMotion;
+  const shouldPrepareVideo = isNearView && !shouldReduceMotion && !isLowPowerMode;
+  const canUseVideo = isInView && shouldPrepareVideo;
   const showVideo = canUseVideo && isReady;
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video || !shouldPrepareVideo) return;
+
+    video.load();
+  }, [shouldPrepareVideo]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -68,14 +85,14 @@ function ProjectVideo({
         muted
         loop
         playsInline
-        preload="none"
         aria-hidden="true"
         tabIndex={-1}
         disablePictureInPicture
         controlsList="nodownload nofullscreen noremoteplayback"
+        preload={canUseVideo ? "auto" : "metadata"}
         onCanPlay={() => setIsReady(true)}
       >
-        {canUseVideo ? <source src={videoSrc} type="video/mp4" /> : null}
+        {shouldPrepareVideo ? <source src={videoSrc} type="video/mp4" /> : null}
       </video>
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(255,255,255,0.08),transparent_46%)]" />
@@ -114,7 +131,7 @@ export function Projects() {
 
   return (
     <section
-      className="py-28 md:py-32 relative overflow-hidden bg-background"
+      className="relative overflow-hidden bg-background py-28 md:py-32"
       id="work"
     >
       {/* Minimal ambient glow */}

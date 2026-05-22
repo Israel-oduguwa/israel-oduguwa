@@ -8,6 +8,7 @@ import {
   useInView,
   useReducedMotion,
 } from "framer-motion";
+import { useLowPowerMode } from "@/components/hooks/usePerformanceMode";
 import {
   BrainCircuit,
   Bug,
@@ -121,13 +122,17 @@ export function ValueProp() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const shouldReduceMotion = useReducedMotion();
+  const isLowPowerMode = useLowPowerMode();
   const canUseServiceMotion = useMediaQuery("(min-width: 1024px)");
   const isSectionInView = useInView(sectionRef, {
     margin: "200px 0px",
     once: false,
   });
   const enableServiceMotion =
-    canUseServiceMotion && isSectionInView && !shouldReduceMotion;
+    canUseServiceMotion &&
+    isSectionInView &&
+    !shouldReduceMotion &&
+    !isLowPowerMode;
 
   const handleSelect = (index: number) => {
     setActiveIndex(index);
@@ -183,6 +188,7 @@ export function ValueProp() {
               <ConnectorLine
                 activeIndex={activeIndex}
                 item={items[activeIndex]}
+                enableMotion={enableServiceMotion}
               />
               <div className="relative z-10">
                 <AccordionList
@@ -194,6 +200,7 @@ export function ValueProp() {
                 <IllustrationPanel
                   item={items[activeIndex]}
                   index={activeIndex}
+                  enableMotion={enableServiceMotion}
                 />
               </div>
             </div>
@@ -207,9 +214,11 @@ export function ValueProp() {
 function ConnectorLine({
   activeIndex,
   item,
+  enableMotion,
 }: {
   activeIndex: number;
   item: ValueItem;
+  enableMotion: boolean;
 }) {
   const shouldReduceMotion = useReducedMotion();
   const startY = [40, 118, 196, 274, 352, 430][activeIndex] ?? 40;
@@ -302,7 +311,7 @@ function ConnectorLine({
         opacity="0.64"
         filter={`url(#connector-glow-${activeIndex})`}
         animate={
-          shouldReduceMotion
+          shouldReduceMotion || !enableMotion
             ? undefined
             : {
                 opacity: [0.52, 0.78, 0.52],
@@ -332,7 +341,7 @@ function ConnectorLine({
         filter={`url(#connector-glow-${activeIndex})`}
         initial={{ strokeDashoffset: 520, opacity: 0 }}
         animate={
-          shouldReduceMotion
+          shouldReduceMotion || !enableMotion
             ? { opacity: 0.45, strokeDashoffset: 0 }
             : { strokeDashoffset: [520, 0], opacity: [0, 1, 0.18] }
         }
@@ -348,7 +357,7 @@ function ConnectorLine({
         filter={`url(#connector-glow-${activeIndex})`}
         initial={{ cx: startX, cy: startY, opacity: 0 }}
         animate={
-          shouldReduceMotion
+          shouldReduceMotion || !enableMotion
             ? { cx: endX, cy: endY, opacity: 0.5 }
             : {
                 cx: [startX, 492, 594, 700, endX],
@@ -473,12 +482,62 @@ function AccordionList({
 function IllustrationPanel({
   item,
   index,
+  enableMotion = false,
 }: {
   item: ValueItem;
   index: number;
+  enableMotion?: boolean;
 }) {
   const Illustration = item.Illustration;
   const shouldReduceMotion = useReducedMotion();
+  const shouldAnimate = enableMotion && !shouldReduceMotion;
+
+  if (!shouldAnimate) {
+    const Icon = item.Icon;
+
+    return (
+      <div
+        className={`relative mt-8 mb-0 lg:mt-0 lg:-mr-24 lg:mb-0 xl:-mr-36 2xl:mr-0 ${item.accent}`}
+      >
+        <div className="relative min-h-[360px] overflow-hidden rounded-[1.5rem] border border-current/20 bg-white/[0.045] p-8 shadow-[0_32px_120px_-70px_rgba(15,23,42,1)]">
+          <div className={`absolute inset-0 bg-gradient-to-br ${item.glow}`} />
+          <div className="relative flex h-full min-h-[300px] flex-col justify-between rounded-[1.1rem] border border-white/10 bg-[#07111f]/82 p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="grid h-12 w-12 place-items-center rounded-xl border border-white/10 bg-white/[0.06]">
+                  <Icon className={`h-6 w-6 ${item.accent}`} />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/35">
+                    Service 0{index + 1}
+                  </p>
+                  <h3 className="mt-1 text-xl font-bold text-white">
+                    {item.title}
+                  </h3>
+                </div>
+              </div>
+              <span className={`h-3 w-3 rounded-full ${item.dot}`} />
+            </div>
+            <div className="grid gap-3">
+              <span className="h-3 w-4/5 rounded-full bg-white/18" />
+              <span className="h-3 w-2/3 rounded-full bg-white/12" />
+              <span className="h-3 w-3/5 rounded-full bg-white/10" />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {item.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-xs font-semibold text-slate-100"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -487,7 +546,7 @@ function IllustrationPanel({
       <motion.div
         className="pointer-events-none absolute -inset-4 rounded-[1.65rem] border border-current/35 opacity-35 shadow-[0_0_42px_currentColor] [mask-image:radial-gradient(ellipse_at_center,black_0%,black_62%,transparent_84%)]"
         animate={
-          shouldReduceMotion
+          shouldReduceMotion || !enableMotion
             ? undefined
             : {
                 opacity: [0.22, 0.52, 0.22],
@@ -503,7 +562,7 @@ function IllustrationPanel({
       <motion.div
         className="pointer-events-none absolute -inset-2 rounded-[1.35rem] bg-current opacity-[0.18] blur-xl"
         animate={
-          shouldReduceMotion
+          shouldReduceMotion || !enableMotion
             ? undefined
             : {
                 opacity: [0.1, 0.26, 0.1],
@@ -515,7 +574,7 @@ function IllustrationPanel({
       <motion.div
         className="pointer-events-none absolute -left-24 -right-20 -top-32 h-80 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.36),currentColor_24%,rgba(124,58,237,0.14)_54%,transparent_78%)] opacity-45 blur-3xl [mask-image:radial-gradient(ellipse_at_center,black_0%,black_52%,transparent_82%)]"
         animate={
-          shouldReduceMotion
+          shouldReduceMotion || !enableMotion
             ? undefined
             : {
                 opacity: [0.24, 0.48, 0.24],

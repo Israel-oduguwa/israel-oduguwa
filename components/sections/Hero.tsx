@@ -12,6 +12,7 @@ import {
 } from "framer-motion";
 import { buttonClasses } from "../ui/Button";
 import { ArrowRight, Play, Send, X } from "lucide-react";
+import { useLowPowerMode } from "@/components/hooks/usePerformanceMode";
 
 const syntaxSnippets = [
   {
@@ -33,7 +34,6 @@ const syntaxSnippets = [
   },
 ];
 
-const MotionImage = motion.create(Image);
 const introVideoEmbedUrl =
   "https://www.youtube.com/embed/9sbIcFZz80A?autoplay=1&rel=0&modestbranding=1&playsinline=1&vq=hd1080";
 
@@ -244,10 +244,12 @@ export function Hero() {
   const boundsRef = useRef<DOMRect | null>(null);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  const isLowPowerMode = useLowPowerMode();
   const canUsePointerTilt = useMediaQuery(
     "(hover: hover) and (pointer: fine) and (min-width: 1024px)",
   );
-  const enableAmbientMotion = canUsePointerTilt && !shouldReduceMotion;
+  const enableAmbientMotion =
+    canUsePointerTilt && !shouldReduceMotion && !isLowPowerMode;
 
   // Mouse 3D effect
   const mouseX = useMotionValue(0);
@@ -267,7 +269,7 @@ export function Hero() {
   }, []);
 
   useEffect(() => {
-    if (!canUsePointerTilt) {
+    if (!enableAmbientMotion) {
       boundsRef.current = null;
       return;
     }
@@ -275,10 +277,10 @@ export function Hero() {
     updateBounds();
     window.addEventListener("resize", updateBounds, { passive: true });
     return () => window.removeEventListener("resize", updateBounds);
-  }, [canUsePointerTilt, updateBounds]);
+  }, [enableAmbientMotion, updateBounds]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!canUsePointerTilt) return;
+    if (!enableAmbientMotion) return;
 
     const rect = boundsRef.current;
     if (!rect) return;
@@ -394,11 +396,8 @@ export function Hero() {
         <div className="relative z-10 mx-auto grid w-full max-w-[88rem] grid-cols-1 items-center gap-6 px-5 sm:gap-10 sm:px-6 md:px-8 lg:grid-cols-12 lg:gap-6 lg:px-10 xl:gap-8 xl:px-12">
           {/* Left Column: Typography */}
           <div className="z-20 flex w-full max-w-[22rem] flex-col items-start text-left min-[390px]:max-w-[24rem] sm:max-w-[42rem] md:max-w-[50rem] lg:col-span-7 lg:max-w-none">
-            <motion.h1
+            <h1
               className="mb-5 w-full text-[2.45rem] font-black leading-[1.03] text-foreground min-[390px]:text-[2.85rem] sm:mb-6 sm:text-[3.75rem] md:text-[4rem] lg:mb-7 lg:text-[4.15rem] xl:text-[4.75rem] 2xl:text-[5.65rem]"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
               From <SketchUnderline delay={0.55}>idea</SketchUnderline> to <br />
               <SketchUnderline className="text-foreground" delay={0.85}>
@@ -410,24 +409,18 @@ export function Hero() {
                 clean, usable, and <br className="sm:hidden" />
                 built to scale
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            <p
               className="mb-7 max-w-[38rem] text-[0.95rem] font-medium leading-[1.65] text-slate-700 sm:mb-8 sm:text-lg sm:leading-8 md:mb-10 lg:mb-10 lg:max-w-[35rem] lg:text-[1.05rem] lg:leading-8 xl:max-w-xl xl:text-lg 2xl:text-xl 2xl:leading-relaxed"
             >
               Hi, I&apos;m Israel Oduguwa, a full-stack software engineer helping
               businesses build modern web products from polished interfaces and
               reliable backend integration to dashboards, automation, AI-powered
               features, and product systems that support real users.
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            <div
               className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4"
             >
               <a
@@ -455,12 +448,12 @@ export function Hero() {
                 <span className="absolute bottom-3 left-8 right-8 h-px origin-left scale-x-0 bg-primary/60 transition-transform duration-300 group-hover:scale-x-100 dark:bg-sky-300/70" />
                 <ArrowRight className="relative z-10 ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5" />
               </a>
-            </motion.div>
+            </div>
           </div>
 
           {/* Right Column: Profile Image */}
           <motion.div
-            style={canUsePointerTilt ? { rotateX, rotateY } : undefined}
+            style={enableAmbientMotion ? { rotateX, rotateY } : undefined}
             className="relative z-10 mt-2 flex items-center justify-center perspective-1000 sm:mt-6 lg:col-span-5 lg:mt-0 lg:justify-end"
           >
             <div className="relative flex aspect-4/5 w-full max-w-[18rem] items-end justify-center min-[390px]:max-w-[20rem] sm:max-w-[23rem] md:max-w-[25rem] lg:max-w-[22rem] xl:max-w-[25rem] 2xl:max-w-[28rem]">
@@ -476,7 +469,7 @@ export function Hero() {
               />
 
               {/* Profile Image */}
-              <MotionImage
+              <Image
                 src="/images/profile.png"
                 alt="Israel Oduguwa"
                 width={1123}
@@ -484,13 +477,6 @@ export function Hero() {
                 priority
                 sizes="(min-width: 1536px) 42rem, (min-width: 1280px) 37rem, (min-width: 1024px) 32rem, (min-width: 640px) 34rem, 28rem"
                 className="relative z-10 h-auto w-[140%] max-w-none object-contain object-bottom drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] sm:w-[145%] lg:w-[140%] 2xl:w-[150%]"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.5,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
               />
               <motion.button
                 type="button"
