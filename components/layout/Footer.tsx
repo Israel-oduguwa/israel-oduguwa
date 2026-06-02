@@ -10,7 +10,7 @@ export function Footer() {
             Israel Oduguwa
           </p>
           <p className="text-sm text-slate-600 dark:text-gray-400">
-            Frontend-Heavy Full-Stack Engineer
+            Full-Stack Software Engineer
           </p>
           <p className="text-xs text-slate-500 mt-2 dark:text-gray-500">
             Next.js • React • Node.js • AI
