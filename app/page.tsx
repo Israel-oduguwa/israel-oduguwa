@@ -36,7 +36,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <Projects />
-        <ValueProp />
+        {/* <ValueProp /> */}
         <Availability />
         <Contact />
       </main>
