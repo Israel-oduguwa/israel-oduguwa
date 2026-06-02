@@ -23,7 +23,8 @@ const syntaxSnippets = [
   },
   {
     text: "<Product />",
-    className: "right-[6%] top-[24%] hidden rotate-[10deg] lg:block lg:right-[10%]",
+    className:
+      "right-[6%] top-[24%] hidden rotate-[10deg] lg:block lg:right-[10%]",
     delay: 0.6,
   },
   {
@@ -63,12 +64,12 @@ function HeroDecorations({
     !shouldAnimate
       ? { duration: 0 }
       : {
-        duration: 7,
-        delay,
-        repeat: Infinity,
-        repeatType: "mirror" as const,
-        ease: "easeInOut" as const,
-      };
+          duration: 7,
+          delay,
+          repeat: Infinity,
+          repeatType: "mirror" as const,
+          ease: "easeInOut" as const,
+        };
 
   return (
     <div
@@ -396,10 +397,9 @@ export function Hero() {
         <div className="relative z-10 mx-auto grid w-full max-w-[88rem] grid-cols-1 items-center gap-6 px-5 sm:gap-10 sm:px-6 md:px-8 lg:grid-cols-12 lg:gap-6 lg:px-10 xl:gap-8 xl:px-12">
           {/* Left Column: Typography */}
           <div className="z-20 flex w-full max-w-[22rem] flex-col items-start text-left min-[390px]:max-w-[24rem] sm:max-w-[42rem] md:max-w-[50rem] lg:col-span-7 lg:max-w-none">
-            <h1
-              className="mb-5 w-full text-[2.45rem] font-black leading-[1.03] text-foreground min-[390px]:text-[2.85rem] sm:mb-6 sm:text-[3.75rem] md:text-[4rem] lg:mb-7 lg:text-[4.15rem] xl:text-[4.75rem] 2xl:text-[5.65rem]"
-            >
-              From <SketchUnderline delay={0.55}>idea</SketchUnderline> to <br />
+            <h1 className="mb-5 w-full text-[2.45rem] font-black leading-[1.03] text-foreground min-[390px]:text-[2.85rem] sm:mb-6 sm:text-[3.75rem] md:text-[4rem] lg:mb-7 lg:text-[4.15rem] xl:text-[4.75rem] 2xl:text-[5.65rem]">
+              From <SketchUnderline delay={0.55}>idea</SketchUnderline> to{" "}
+              <br />
               <SketchUnderline className="text-foreground" delay={0.85}>
                 shipped product
               </SketchUnderline>
@@ -411,18 +411,15 @@ export function Hero() {
               </span>
             </h1>
 
-            <p
-              className="mb-7 max-w-[38rem] text-[0.95rem] font-medium leading-[1.65] text-slate-700 sm:mb-8 sm:text-lg sm:leading-8 md:mb-10 lg:mb-10 lg:max-w-[35rem] lg:text-[1.05rem] lg:leading-8 xl:max-w-xl xl:text-lg 2xl:text-xl 2xl:leading-relaxed"
-            >
-              Hi, I&apos;m Israel Oduguwa, a full-stack software engineer helping
-              businesses build modern web products from polished interfaces and
-              reliable backend integration to dashboards, automation, AI-powered
-              features, and product systems that support real users.
+            <p className="mb-7 max-w-152 dark:text-slate-300 text-[0.95rem] font-medium leading-[1.65] text-slate-700 sm:mb-8 sm:text-lg sm:leading-8 md:mb-10 lg:mb-10 lg:max-w-140 lg:text-[1.05rem] lg:leading-8 xl:max-w-xl xl:text-lg 2xl:text-xl 2xl:leading-relaxed">
+              Hi, I&apos;m Israel Oduguwa, a full-stack software engineer
+              helping businesses build modern web products from polished
+              interfaces and reliable backend integration to dashboards,
+              automation, AI-powered features, and product systems that support
+              real users.
             </p>
 
-            <div
-              className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4"
-            >
+            <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
               <a
                 href="#contact"
                 className={buttonClasses({
@@ -465,7 +462,11 @@ export function Hero() {
                     ? undefined
                     : { scale: [1, 1.1, 1], opacity: [0.6, 0.8, 0.6] }
                 }
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               />
 
               {/* Profile Image */}

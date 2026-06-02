@@ -10,7 +10,7 @@ import { AnimatedLogo } from "../ui/AnimatedLogo";
 
 const navLinks = [
   { name: "Work", href: "/#work", sectionId: "work" },
-  { name: "Services", href: "/#process", sectionId: "process" },
+  // { name: "Services", href: "/#process", sectionId: "process" },
   { name: "Availability", href: "/#availability", sectionId: "availability" },
   { name: "Contact", href: "/#contact", sectionId: "contact" },
   { name: "Articles", href: "/articles", sectionId: "articles" },
@@ -178,10 +178,9 @@ export function Navbar() {
                 href="mailto:oduguwa.israel22@gmail.com"
                 className={buttonClasses({
                   variant: "primary",
-                  className:
-                    isOverDarkSection
-                      ? "h-11 rounded-full bg-primary px-5 text-white shadow-[0_18px_40px_-20px_rgba(37,99,235,0.9)] hover:bg-blue-700 hover:text-white"
-                      : "h-11 rounded-full bg-primary px-5 text-white shadow-[0_18px_40px_-20px_rgba(37,99,235,0.75)] hover:bg-blue-700 hover:text-white",
+                  className: isOverDarkSection
+                    ? "h-11 rounded-full bg-primary px-5 text-white shadow-[0_18px_40px_-20px_rgba(37,99,235,0.9)] hover:bg-blue-700 hover:text-white"
+                    : "h-11 rounded-full bg-primary px-5 text-white shadow-[0_18px_40px_-20px_rgba(37,99,235,0.75)] hover:bg-blue-700 hover:text-white",
                 })}
               >
                 Contact Me
