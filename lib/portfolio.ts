@@ -109,7 +109,7 @@ export const projects: Project[] = [
     contribution:
       "I guided a seven-developer team, migrated the React frontend to Next.js, and planned the transition from MongoDB Realm to Clerk for more than 5,000 users.",
     tags: ["Next.js", "Node.js", "Python", "MongoDB", "Clerk"],
-    image: "/images/projects/kinscare.jpg",
+    image: "/images/projects/kinscare-homepage.jpg",
     imageAlt:
       "Public KinsCare homepage showing the caregiver and provider marketplace",
     theme: "care",
