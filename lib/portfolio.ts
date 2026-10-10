@@ -1,7 +1,6 @@
 export const profile = {
   name: "Israel Oduguwa",
   role: "Senior full-stack software engineer",
-  location: "Lagos, Nigeria",
   email: "oduguwa.israel22@gmail.com",
   url: "https://israel-oduguwa.vercel.app",
   github: "https://github.com/Israel-oduguwa",
@@ -36,7 +35,7 @@ export const projects: Project[] = [
     role: "Creator and maintainer",
     period: "2026",
     summary:
-      "A reliability layer for Stripe applications. It keeps operation identity, accepted webhooks and downstream work in the application's database.",
+      "A TypeScript library for recovering Stripe workflows after timeouts, repeated webhooks and worker crashes. Processing state stays in your database.",
     contribution:
       "I built the TypeScript library, database adapters, framework integrations, failure tests and public sandbox. The difficult part is deciding what a retry is allowed to repeat.",
     tags: ["TypeScript", "Node.js", "Stripe", "PostgreSQL", "Firestore"],
@@ -52,7 +51,7 @@ export const projects: Project[] = [
       { value: "1", label: "Original paid receipt retained by that replay" },
     ],
     challenge:
-      "Stripe and an application database cannot share a transaction. A request can succeed at Stripe while the application loses the response. Webhooks can repeat, and a worker can disappear after claiming a job. An integration needs a deliberate response at each of those boundaries.",
+      "Stripe and an application database cannot share a transaction. A request can succeed at Stripe while the application loses the response. Webhooks can repeat, and a worker can stop after claiming a job. The application has to remember what succeeded and which work still needs completion.",
     decisions: [
       {
         title: "Keep the business operation's identity",
@@ -110,7 +109,7 @@ export const projects: Project[] = [
     contribution:
       "I guided a seven-developer team, migrated the React frontend to Next.js, and planned the transition from MongoDB Realm to Clerk for more than 5,000 users.",
     tags: ["Next.js", "Node.js", "Python", "MongoDB", "Clerk"],
-    image: "/images/projects/kinscare.jpg",
+    image: "/images/projects/kinscare-homepage.jpg",
     imageAlt:
       "Public KinsCare homepage showing the caregiver and provider marketplace",
     theme: "care",
@@ -137,7 +136,7 @@ export const projects: Project[] = [
         body: "A Python and Express pipeline refreshed, normalized and indexed school, course and healthcare records. Model and data artifacts, embeddings and retrieval supported recommendation APIs. Cached results and persisted experiment assignments kept product behavior consistent.",
       },
       {
-        title: "Guide the team through the system boundaries",
+        title: "Review the frontend, backend and integrations together",
         body: "I guided seven developers through system design and code review across the frontend, backend, integrations and infrastructure. The marketplace included geospatial matching, subscriptions, lead routing, guided conversations and administrative review.",
       },
     ],
@@ -156,7 +155,7 @@ export const projects: Project[] = [
     summary:
       "An online enrollment platform for healthcare training. I connected registration, Stripe payment events and administrative tracking so the business could follow a student's progress.",
     contribution:
-      "I redesigned the enrollment journey, built payment-state recovery paths and developed acquisition workflows with a bounded, asynchronous video-generation system.",
+      "I redesigned enrollment, added payment recovery, and built campaign and video-generation workflows with limits on concurrent rendering jobs.",
     tags: ["Next.js", "Stripe", "Firebase", "Remotion", "AWS"],
     image: "/images/projects/excelcna.jpg",
     imageAlt:

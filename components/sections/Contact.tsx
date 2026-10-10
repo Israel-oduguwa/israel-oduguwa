@@ -54,20 +54,18 @@ export function Contact() {
     <section id="contact" className="contact-section">
       <div className="shell contact-grid">
         <div>
-          <p className="section-kicker">Contact</p>
+          <p className="section-kicker">
+            <span>07</span> Contact
+          </p>
           <h2>Get in touch</h2>
           <p className="section-description">
-            I’m open to senior full-stack roles and contract projects. Send a
-            role description or a short note about your project, and I’ll reply
-            by email.
+            Have a role or a project in mind? Send the job description or tell
+            me what you’re building. I’ll reply by email.
           </p>
           <a className="email-link" href={`mailto:${profile.email}`}>
             {profile.email}
             <ArrowUpRight size={20} aria-hidden="true" />
           </a>
-          <p className="contact-location">
-            Based in Lagos, Nigeria. Experienced working remotely with US teams.
-          </p>
         </div>
         <form onSubmit={send} className="contact-form" aria-busy={busy}>
           <div className="form-row">
