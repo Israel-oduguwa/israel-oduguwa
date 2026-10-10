@@ -138,12 +138,16 @@ export function GithubGlobe() {
           animation: "fade-in 1s ease forwards",
         }}
       />
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes fade-in {
           from { opacity: 0; }
           to { opacity: 1; }
         }
-      `}} />
+      `,
+        }}
+      />
     </div>
   );
 }

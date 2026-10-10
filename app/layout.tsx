@@ -3,9 +3,10 @@ import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://israeloduguwa.com"),
-  title: "Israel Oduguwa — Frontend-Heavy Full-Stack Engineer",
-  description: "Frontend-heavy full-stack engineer building product interfaces, dashboards, onboarding flows, and full-stack web features with Next.js, React, and Node.js.",
+  metadataBase: new URL("https://israel-oduguwa.vercel.app"),
+  title: "Israel Oduguwa — Senior Full Stack Software Engineer",
+  description:
+    "Senior full-stack software engineer building reliable products, payment systems and applied AI. Case studies from KinsCare, Excel Health Careers and SafeStripe.",
   keywords: [
     "Israel Oduguwa",
     "full-stack engineer",
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
     "product engineer",
     "web application developer",
   ],
-  authors: [{ name: "Israel Oduguwa", url: "https://israeloduguwa.com" }],
+  authors: [
+    { name: "Israel Oduguwa", url: "https://israel-oduguwa.vercel.app" },
+  ],
   creator: "Israel Oduguwa",
   publisher: "Israel Oduguwa",
   alternates: {
@@ -33,17 +36,19 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Israel Oduguwa — Frontend-Heavy Full-Stack Engineer",
-    description: "Frontend-heavy full-stack engineer building product interfaces, dashboards, onboarding flows, and full-stack web features with Next.js, React, and Node.js.",
-    url: "https://israeloduguwa.com",
+    title: "Israel Oduguwa — Senior Full Stack Software Engineer",
+    description:
+      "Senior full-stack software engineer building reliable products, payment systems and applied AI. Case studies from KinsCare, Excel Health Careers and SafeStripe.",
+    url: "https://israel-oduguwa.vercel.app",
     siteName: "Israel Oduguwa Portfolio",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Israel Oduguwa — Frontend-Heavy Full-Stack Engineer",
-    description: "Frontend-heavy full-stack engineer building clean product interfaces, dashboards, onboarding flows, and full-stack web features.",
+    title: "Israel Oduguwa — Senior Full Stack Software Engineer",
+    description:
+      "Product engineering, reliable backend workflows and applied AI. Explore the work of Israel Oduguwa.",
   },
 };
 
@@ -62,6 +67,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth" id="top">
       <body className="bg-background text-foreground antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-primary/30">
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

@@ -1,18 +1,5 @@
 import React from "react";
-
-function slugify(text: string) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "");
-}
-
-function stripMarkdown(text: string) {
-  return text
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[*`]/g, "")
-    .replace(/[^\w\s-]/g, "");
-}
+import { headingId } from "@/lib/markdown";
 
 type Block =
   | { type: "heading"; depth: 1 | 2 | 3; text: string }
@@ -154,7 +141,10 @@ function renderInline(text: string) {
 
     if (token.startsWith("**")) {
       nodes.push(
-        <strong key={match.index} className="font-semibold text-slate-950 dark:text-white">
+        <strong
+          key={match.index}
+          className="font-semibold text-slate-950 dark:text-white"
+        >
           {token.slice(2, -2)}
         </strong>,
       );
@@ -183,7 +173,11 @@ function renderInline(text: string) {
         nodes.push(
           <a
             key={match.index}
-            href={linkMatch[2]}
+            href={
+              /^(https?:\/\/|mailto:|\/(?!\/)|#)/i.test(linkMatch[2])
+                ? linkMatch[2]
+                : "#"
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold text-primary underline decoration-primary/25 underline-offset-4 transition hover:decoration-primary"
@@ -216,7 +210,7 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
           <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
           <span className="h-3 w-3 rounded-full bg-[#28c840]" />
         </div>
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs uppercase tracking-wide text-slate-300">
+        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs text-slate-300">
           {label}
         </span>
       </figcaption>
@@ -287,7 +281,7 @@ export function MarkdownArticle({
     <div className="mx-auto max-w-3xl">
       {renderedBlocks.map((block, index) => {
         if (block.type === "heading") {
-          const id = slugify(stripMarkdown(block.text));
+          const id = headingId(block.text);
 
           if (block.depth === 1) {
             return (
@@ -366,7 +360,9 @@ export function MarkdownArticle({
           );
         }
 
-        return <CodeBlock key={index} code={block.code} language={block.language} />;
+        return (
+          <CodeBlock key={index} code={block.code} language={block.language} />
+        );
       })}
     </div>
   );

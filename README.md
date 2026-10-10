@@ -1,37 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Israel Oduguwa
 
-## Getting Started
+My portfolio: selected engineering work, case studies and technical writing.
 
-First, run the development server:
+Live site: https://israel-oduguwa.vercel.app/
+
+Built with Next.js, TypeScript and Tailwind CSS. Project results and experience live in `lib/portfolio.ts`; articles live in `articles/`. The case studies distinguish client work from SafeStripe's open-source preview and link to available evidence.
+
+## Local development
+
+Use Node.js 22 or later.
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The contact form reads `RESEND_API_KEY` from the server environment. Copy `.env.example` to `.env.local` for local use, and configure the variables in Vercel for deployment. Without a key, visitors receive a direct-email fallback. Do not put credentials in source code or public variables.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run check
+npm audit
+```
 
-## Learn More
+Checks cover linting, TypeScript, contact validation and provider failures, content links, and the production build. Email delivery is mocked in tests; running the suite does not send messages. Browser review covers desktop and mobile layout, theme switching, navigation and document links.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Vercel deploys the default branch. Pull requests run the checks before merge. Configure the Resend key and a sender allowed by the Resend account. Protect the public contact endpoint with Vercel's rate-limiting controls if abusive traffic appears; the honeypot and origin validation are not a distributed abuse-control service.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Review project claims against the underlying work record when editing. Keep original article dates and expose revision dates when an existing article changes substantially. Never publish private client code, student data or internal evaluation materials.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# israel-oduguwa
+The profile uses the original `public/images/profile.png` without image edits. The original globe visual remains; its arcs illustrate remote collaboration, not a list of client locations. Reduced-motion and low-power settings use the static fallback.

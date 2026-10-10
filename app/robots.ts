@@ -1,11 +1,8 @@
 import type { MetadataRoute } from "next";
-
+import { profile } from "@/lib/portfolio";
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
-    sitemap: "https://israeloduguwa.com/sitemap.xml",
+    rules: { userAgent: "*", allow: "/", disallow: "/api/" },
+    sitemap: `${profile.url}/sitemap.xml`,
   };
 }
