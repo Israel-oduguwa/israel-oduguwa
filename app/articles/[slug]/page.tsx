@@ -112,7 +112,7 @@ export default async function ArticlePage({ params }: Props) {
             <Link href="/work/safestripe" className="article-project-link">
               <span>Related project</span>
               <strong>SafeStripe</strong>
-              <p>Recovery boundaries, tests and the limits of the preview.</p>
+              <p>How webhook retries and worker recovery work.</p>
               <ArrowUpRight size={18} aria-hidden="true" />
             </Link>
           </aside>

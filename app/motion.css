@@ -1,0 +1,102 @@
+@keyframes enter {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes count-change {
+  from {
+    transform: translateY(5px);
+    color: #2154ed;
+  }
+  to {
+    transform: translateY(0);
+    color: #172034;
+  }
+}
+@keyframes reading-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.reading-progress {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy {
+    animation: enter 0.65s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+  .portrait-frame {
+    animation: enter 0.85s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+  [data-reveal] {
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  .reveal-pending:focus-within {
+    opacity: 1;
+    transform: none;
+  }
+  .recovery-counts strong {
+    animation: count-change 0.25s ease both;
+  }
+  .button,
+  .text-link svg,
+  .writing-list > a > svg {
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+  .button:hover {
+    transform: translateY(-2px);
+  }
+  .button:active {
+    transform: translateY(0);
+  }
+  .text-link:hover svg {
+    transform: translate(2px, -2px);
+  }
+  .project-screenshot {
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  @media (hover: hover) {
+    .project-visual:hover .project-screenshot {
+      transform: translateY(-5px);
+    }
+    .writing-list > a:hover > svg {
+      transform: rotate(45deg);
+      background: var(--primary);
+      color: white;
+    }
+  }
+  @supports (animation-timeline: scroll()) {
+    .reading-progress {
+      display: block;
+      position: fixed;
+      inset: 0 0 auto;
+      height: 2px;
+      background: var(--primary);
+      z-index: 100;
+      transform-origin: left;
+      animation: reading-progress linear both;
+      animation-timeline: scroll();
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-pending {
+    opacity: 1;
+    transform: none;
+  }
+}

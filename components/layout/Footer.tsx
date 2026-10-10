@@ -8,7 +8,7 @@ export function Footer() {
         <Link href="/#top" className="wordmark" aria-label="Back to home">
           IO<span>.</span>
         </Link>
-        <p>Israel Oduguwa · Lagos, Nigeria</p>
+        <p>Israel Oduguwa · Software engineer</p>
       </div>
       <div className="footer-links">
         <a href={profile.github} target="_blank" rel="noopener noreferrer">

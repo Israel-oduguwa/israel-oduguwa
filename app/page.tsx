@@ -4,15 +4,16 @@ import {
   ArrowDown,
   ArrowUpRight,
   FileDown,
-  GitBranch,
   ShieldCheck,
-  Sparkles,
+  Braces,
   Layers,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Contact } from "@/components/sections/Contact";
 import Availability from "@/components/sections/Availability";
+import { ProjectVisual } from "@/components/sections/ProjectVisual";
+import { PageMotion } from "@/components/ui/PageMotion";
 import { credentials, experience, profile, projects } from "@/lib/portfolio";
 import { getAllArticles } from "@/lib/articles";
 
@@ -21,19 +22,19 @@ const capabilities = [
     icon: Layers,
     title: "Product engineering",
     description:
-      "Interfaces, APIs and data models that support the same user journey. React, Next.js, Node.js, TypeScript and Python.",
+      "I connect React and Next.js interfaces to Node.js and Python services, with the data models and deployment needed to run them.",
   },
   {
     icon: ShieldCheck,
     title: "Reliable systems",
     description:
-      "Payment state, retries, identity migrations and asynchronous jobs. I make the failure paths part of the design.",
+      "I build payment recovery, background jobs and identity migrations. I test what happens when requests repeat or a process stops.",
   },
   {
-    icon: Sparkles,
+    icon: Braces,
     title: "Applied AI",
     description:
-      "Retrieval and recommendation services, agent workflows and media pipelines, with evaluation criteria and bounded execution.",
+      "I’ve built recommendations and automated media workflows, and reviewed model-generated code against specific engineering tasks.",
   },
 ];
 
@@ -65,7 +66,9 @@ export default function Home() {
         }}
       />
       <Navbar />
+      <PageMotion />
       <main id="main-content">
+        <div className="reading-progress" aria-hidden="true" />
         <section className="hero shell" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="intro">
@@ -73,16 +76,21 @@ export default function Home() {
               Engineer
             </p>
             <h1 id="hero-title">
-              Israel
+              <span className="hero-first-name">Israel</span>
               <br />
-              Oduguwa<span>.</span>
+              Oduguwa<span className="hero-period">.</span>
             </h1>
             <p className="hero-description">
-              I build and maintain web applications, from the interface to
-              backend services and deployment. My recent work includes KinsCare,
-              Excel Health Careers, and SafeStripe. I also work on AI
-              integrations and software-engineering evaluations.
+              Web applications, payment systems and AI features. I work across
+              the interface, APIs, databases and deployment.
             </p>
+            <div className="hero-client-links" aria-label="Recent projects">
+              <a href="#work">SafeStripe</a>
+              <span aria-hidden="true">/</span>
+              <Link href="/work/kinscare">KinsCare</Link>
+              <span aria-hidden="true">/</span>
+              <Link href="/work/excelcna">Excel Health Careers</Link>
+            </div>
             <div className="hero-actions">
               <a href="#work" className="button primary">
                 View my work <ArrowDown size={17} aria-hidden="true" />
@@ -96,12 +104,35 @@ export default function Home() {
                 Read my résumé <FileDown size={17} aria-hidden="true" />
               </a>
             </div>
-            <p className="hero-location">
-              Lagos, Nigeria · Remote with teams across time zones
+            <p className="hero-availability">
+              <span /> Open to full-time and contract roles
             </p>
           </div>
           <div className="portrait-frame">
-            <div className="portrait-glow" aria-hidden="true" />
+            <div className="portrait-backdrop" aria-hidden="true" />
+            <svg
+              className="portrait-orbit"
+              viewBox="0 0 520 600"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M56 486C-36 361 47 80 267 44C493 9 548 301 454 473"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M82 517C-19 465 17 157 215 94C414 30 545 191 500 414"
+                stroke="currentColor"
+                strokeOpacity=".25"
+              />
+              <circle cx="267" cy="44" r="7" fill="currentColor" />
+              <path
+                d="M435 97V125M421 111H449"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+            </svg>
             <Image
               src="/images/profile.png"
               alt="Israel Oduguwa"
@@ -112,13 +143,21 @@ export default function Home() {
               sizes="(max-width: 700px) 80vw, 450px"
               className="portrait"
             />
+            <div className="portrait-note">
+              <Braces size={20} aria-hidden="true" />
+              <div>
+                <strong>Web applications & services</strong>
+                <span>TypeScript · Node.js · Python</span>
+              </div>
+            </div>
           </div>
         </section>
         <div className="proof-strip shell">
           <p>
-            Results from
-            <br />
-            <strong>selected projects</strong>
+            <span className="proof-caption">Selected results</span>
+            <a href="#work">
+              See the work <ArrowUpRight size={14} aria-hidden="true" />
+            </a>
           </p>
           <div>
             <strong>&gt;75%</strong>
@@ -137,25 +176,28 @@ export default function Home() {
             </span>
           </div>
           <div>
-            <GitBranch size={22} aria-hidden="true" />
+            <strong>8,000+</strong>
             <span>
-              SafeStripe
+              Successful transactions
               <br />
-              <strong>Open-source reliability work</strong>
+              at Excel Health Careers
             </span>
           </div>
         </div>
 
         <section id="work" className="section shell">
-          <div className="section-heading">
+          <div className="section-heading" data-reveal>
             <div>
-              <p className="section-kicker">Selected work</p>
-              <h2>Selected projects</h2>
+              <p className="section-kicker">
+                <span>01</span> Work
+              </p>
+              <h2>
+                Selected projects<span className="heading-period">.</span>
+              </h2>
             </div>
             <p className="section-description">
-              A closer look at SafeStripe, KinsCare and Excel Health Careers:
-              what I built, the decisions I made, and how the work helped each
-              product.
+              Payment recovery, healthcare hiring and student enrollment. Here’s
+              what I built and what changed.
             </p>
           </div>
           <div className="projects-grid">
@@ -163,43 +205,24 @@ export default function Home() {
               <article
                 key={project.slug}
                 className={`project-card ${index === 0 ? "featured" : ""}`}
+                data-reveal
               >
-                <Link
-                  href={`/work/${project.slug}`}
-                  className={`project-visual ${project.theme}`}
-                  aria-label={`Read the ${project.name} case study`}
-                >
-                  <div className="browser-chrome" aria-hidden="true">
-                    <span />
-                    <span />
-                    <span />
-                    <div>
-                      {project.slug === "safestripe"
-                        ? "safestripe · recovery explained"
-                        : project.slug === "kinscare"
-                          ? "kinscare.org"
-                          : "excelcna.com"}
-                    </div>
-                  </div>
-                  <Image
-                    src={project.image}
-                    alt={project.imageAlt}
-                    width={1440}
-                    height={900}
-                    sizes={
-                      index === 0
-                        ? "(max-width: 800px) 90vw, 600px"
-                        : "(max-width: 800px) 90vw, 550px"
-                    }
-                    className="project-screenshot"
-                  />
-                </Link>
+                <ProjectVisual project={project} />
                 <div className="project-copy">
-                  <p className="project-category">{project.category}</p>
+                  <p className="project-category">
+                    <span className="project-number">0{index + 1}</span>
+                    {project.category}
+                  </p>
                   <h3>
                     <Link href={`/work/${project.slug}`}>{project.name}</Link>
                   </h3>
                   <p>{project.summary}</p>
+                  {index > 0 && (
+                    <div className="project-outcome">
+                      <strong>{project.metrics[0].value}</strong>
+                      <span>{project.metrics[0].label}</span>
+                    </div>
+                  )}
                   <div className="tags">
                     {project.tags.slice(0, 4).map((tag) => (
                       <span key={tag}>{tag}</span>
@@ -223,12 +246,13 @@ export default function Home() {
         <section id="experience" className="experience-section">
           <div className="shell experience-grid">
             <div className="experience-intro">
-              <p className="section-kicker">Experience</p>
+              <p className="section-kicker">
+                <span>02</span> Experience
+              </p>
               <h2>Work experience</h2>
               <p className="section-description">
-                My professional work started in 2020. I’ve worked on product
-                features, backend systems, technical leadership and AI model
-                evaluation.
+                Professional engineering since 2020: web products, payments,
+                technical leadership and AI evaluation.
               </p>
               <a
                 href={profile.resume}
@@ -241,7 +265,7 @@ export default function Home() {
             </div>
             <div className="experience-list">
               {experience.map((item) => (
-                <article key={item.company}>
+                <article key={item.company} data-reveal>
                   <p className="experience-date">{item.period}</p>
                   <h3>{item.company}</h3>
                   <p className="experience-role">{item.role}</p>
@@ -258,9 +282,11 @@ export default function Home() {
         </section>
 
         <section id="about" className="section shell">
-          <div className="about-grid">
+          <div className="about-grid" data-reveal>
             <div>
-              <p className="section-kicker">About me</p>
+              <p className="section-kicker">
+                <span>03</span> About me
+              </p>
               <h2>How I got started</h2>
             </div>
             <div className="about-copy">
@@ -278,16 +304,15 @@ export default function Home() {
               </p>
               <p>
                 I studied Food Science and Technology at Obafemi Awolowo
-                University and graduated in 2022. Today, I work across
-                full-stack development and applied AI. I care about how
-                engineering decisions affect the people using a product, its
-                operating costs, and the team maintaining it.
+                University and graduated in 2022. In software, I’m interested in
+                the decisions behind a product: how users complete a task, what
+                it costs to run, and how the team fixes it when it fails.
               </p>
             </div>
           </div>
           <div className="capabilities">
             {capabilities.map((item) => (
-              <article key={item.title}>
+              <article key={item.title} data-reveal>
                 <item.icon size={25} strokeWidth={1.6} aria-hidden="true" />
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
@@ -300,9 +325,11 @@ export default function Home() {
           className="credentials-section shell"
           aria-labelledby="credentials-title"
         >
-          <div className="section-heading">
+          <div className="section-heading" data-reveal>
             <div>
-              <p className="section-kicker">Certificates</p>
+              <p className="section-kicker">
+                <span>04</span> Certificates
+              </p>
               <h2 id="credentials-title">AI coursework</h2>
             </div>
             <p className="section-description">
@@ -312,7 +339,11 @@ export default function Home() {
           </div>
           <div className="credentials-grid">
             {credentials.map((cert) => (
-              <article key={cert.verify} className="credential-card">
+              <article
+                key={cert.verify}
+                className="credential-card"
+                data-reveal
+              >
                 <a
                   href={cert.document}
                   target="_blank"
@@ -349,9 +380,11 @@ export default function Home() {
         </section>
 
         <section className="section shell" aria-labelledby="writing-title">
-          <div className="section-heading">
+          <div className="section-heading" data-reveal>
             <div>
-              <p className="section-kicker">Engineering notes</p>
+              <p className="section-kicker">
+                <span>05</span> Writing
+              </p>
               <h2 id="writing-title">Technical writing</h2>
             </div>
             <Link href="/articles" className="text-link">

@@ -1,6 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import "./globals.css";
+import "./portfolio-details.css";
+import "./motion.css";
+
+const displayFont = localFont({
+  src: "./fonts/bricolage-grotesque.woff2",
+  variable: "--font-display",
+  weight: "400 800",
+  display: "swap",
+});
+const bodyFont = localFont({
+  src: "./fonts/dm-sans.woff2",
+  variable: "--font-body",
+  weight: "400 700",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://israel-oduguwa.vercel.app"),
@@ -66,7 +82,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth" id="top">
-      <body className="bg-background text-foreground antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-primary/30">
+      <body
+        className={[
+          displayFont.variable,
+          bodyFont.variable,
+          "bg-background text-foreground antialiased min-h-screen flex flex-col overflow-x-hidden selection:bg-primary/30",
+        ].join(" ")}
+      >
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
