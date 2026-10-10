@@ -109,7 +109,12 @@ const defaultConfig = {
   maxRings: 3,
 };
 
-function Globe({ globeConfig, data, isActive = true, markers = [] }: WorldProps) {
+function Globe({
+  globeConfig,
+  data,
+  isActive = true,
+  markers = [],
+}: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
   const groupRef = useRef<Group | null>(null);
   const ringTickRef = useRef(0);
@@ -165,7 +170,8 @@ function Globe({ globeConfig, data, isActive = true, markers = [] }: WorldProps)
   ]);
 
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data.length || !isActive) return;
+    if (!globeRef.current || !isInitialized || !data.length || !isActive)
+      return;
 
     const points: Point[] = [];
 
@@ -250,11 +256,16 @@ function Globe({ globeConfig, data, isActive = true, markers = [] }: WorldProps)
       .objectsData(markers.filter((marker) => marker.imageUrl))
       .objectLat((item: unknown) => (item as GlobeMarker).lat)
       .objectLng((item: unknown) => (item as GlobeMarker).lng)
-      .objectAltitude((item: unknown) => (item as GlobeMarker).imageAltitude ?? 0.18)
+      .objectAltitude(
+        (item: unknown) => (item as GlobeMarker).imageAltitude ?? 0.18,
+      )
       .objectFacesSurface(false)
       .objectThreeObject((item: object): Object3D => {
         const marker = item as GlobeMarker;
-        const texture = createAvatarTexture(marker.imageUrl ?? "", marker.imageGlowColor);
+        const texture = createAvatarTexture(
+          marker.imageUrl ?? "",
+          marker.imageGlowColor,
+        );
         const material = new SpriteMaterial({
           map: texture,
           transparent: true,
@@ -268,7 +279,8 @@ function Globe({ globeConfig, data, isActive = true, markers = [] }: WorldProps)
   }, [config, data, isActive, isInitialized, markers]);
 
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data.length || !isActive) return;
+    if (!globeRef.current || !isInitialized || !data.length || !isActive)
+      return;
 
     const interval = window.setInterval(() => {
       if (!globeRef.current) return;
@@ -305,7 +317,14 @@ function createAvatarTexture(imageUrl: string, glowColor = "#a78bfa") {
 
   const texture = new CanvasTexture(canvas);
   const paintFallback = () => {
-    const gradient = context.createRadialGradient(center, center, 12, center, center, center);
+    const gradient = context.createRadialGradient(
+      center,
+      center,
+      12,
+      center,
+      center,
+      center,
+    );
     gradient.addColorStop(0, "#fef3c7");
     gradient.addColorStop(0.5, glowColor);
     gradient.addColorStop(1, "#2563eb");
@@ -323,7 +342,14 @@ function createAvatarTexture(imageUrl: string, glowColor = "#a78bfa") {
   image.onload = () => {
     context.clearRect(0, 0, size, size);
 
-    const glow = context.createRadialGradient(center, center, 48, center, center, 78);
+    const glow = context.createRadialGradient(
+      center,
+      center,
+      48,
+      center,
+      center,
+      78,
+    );
     glow.addColorStop(0, "rgba(255,255,255,0.96)");
     glow.addColorStop(0.62, glowColor);
     glow.addColorStop(1, "rgba(37,99,235,0)");
@@ -390,7 +416,9 @@ function GlobeControls({
 
   return (
     <OrbitControls
-      autoRotate={isActive && !isSmallCanvas && (globeConfig.autoRotate ?? true)}
+      autoRotate={
+        isActive && !isSmallCanvas && (globeConfig.autoRotate ?? true)
+      }
       autoRotateSpeed={isSmallCanvas ? 0.2 : (globeConfig.autoRotateSpeed ?? 1)}
       enablePan={false}
       enableZoom={false}
@@ -402,7 +430,12 @@ function GlobeControls({
   );
 }
 
-export function World({ globeConfig, data, isActive = true, markers }: WorldProps) {
+export function World({
+  globeConfig,
+  data,
+  isActive = true,
+  markers,
+}: WorldProps) {
   const scene = useMemo(() => {
     const nextScene = new Scene();
     nextScene.fog = new Fog(0xffffff, 400, 2000);

@@ -24,13 +24,24 @@ export function useLowPowerMode() {
       typeof nav.hardwareConcurrency === "number" &&
       nav.hardwareConcurrency <= 4;
 
-    frame = requestAnimationFrame(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () =>
       setIsLowPowerMode(
-        prefersDataSaving || hasLimitedMemory || hasLimitedCpu,
+        prefersDataSaving ||
+          hasLimitedMemory ||
+          hasLimitedCpu ||
+          reducedMotion.matches,
       );
-    });
 
-    return () => cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      update();
+    });
+    reducedMotion.addEventListener("change", update);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      reducedMotion.removeEventListener("change", update);
+    };
   }, []);
 
   return isLowPowerMode;

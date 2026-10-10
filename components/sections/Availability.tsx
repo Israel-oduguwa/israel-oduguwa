@@ -5,8 +5,7 @@ import { buttonClasses } from "@/components/ui/Button";
 import { GlobeScene } from "@/components/ui/GlobeScene";
 import type { GlobeConfig, GlobeMarker, Position } from "@/components/ui/globe";
 
-const resumeUrl =
-  "https://drive.google.com/file/d/1fCmYZ8ps7-5nYRNf2RHBXdXlzMEDRtuB/view?usp=sharing";
+const resumeUrl = "/documents/israel-oduguwa-resume.pdf";
 
 const globeConfig: GlobeConfig = {
   pointSize: 4,
@@ -89,7 +88,7 @@ const globeMarkers: GlobeMarker[] = [
     lat: nigeria.lat,
     lng: nigeria.lng,
     label: "",
-    imageUrl: "/images/profile-tiny.png",
+    imageUrl: "/images/profile.png",
     imageAltitude: 0.1,
     // imageGlowColor: "#0000",
     imageSize: 8,
@@ -97,14 +96,9 @@ const globeMarkers: GlobeMarker[] = [
 ];
 
 const locations = [
-  // { name: "Nigeria", code: "NG" },
-  { name: "USA", code: "US" },
-  { name: "London", code: "GBR" },
-  { name: "Switzerland", code: "CH" },
-  { name: "Canada", code: "CA" },
-  { name: "Dubai", code: "AE" },
-  { name: "Tokyo", code: "JP" },
-  { name: "Remote", code: "001" },
+  { name: "Lagos, Nigeria", code: "NG" },
+  { name: "US team experience", code: "US" },
+  { name: "Remote opportunities", code: "001" },
 ];
 
 function Availability() {
@@ -123,8 +117,8 @@ function Availability() {
             Available for work
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-            Open to frontend, full-stack, and product engineering roles where
-            clean UI, reliable workflows, and fast execution matter.
+            Open to senior full-stack roles and focused projects across product
+            engineering, backend reliability and applied AI.
           </p>
         </div>
 
@@ -145,15 +139,19 @@ function Availability() {
             <div className="space-y-8">
               <div>
                 <h3 className="text-2xl font-bold text-white">
-                  Remote-friendly, easy to work with
+                  Working remotely from Lagos
                 </h3>
                 <p className="mt-4 text-base leading-relaxed text-slate-300">
-                  I&apos;m open to remote-friendly roles and product projects
-                  where clean UI, reliable implementation, fast execution,
-                  scalability, and practical problem-solving matter.
+                  I&apos;ve worked remotely with US teams on enrollment,
+                  healthcare hiring and payment systems. I bring product context
+                  to engineering decisions, communicate trade-offs clearly, and
+                  follow changes through deployment and recovery.
                 </p>
               </div>
 
+              <p className="text-xs leading-6 text-slate-400">
+                The routes on the globe illustrate remote collaboration.
+              </p>
               <div className="flex flex-wrap gap-2">
                 {locations.map((location) => (
                   <span
@@ -184,13 +182,13 @@ function Availability() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                   </span>
-                  <p className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">
+                  <p className="text-sm font-semibold text-emerald-400">
                     Open for work
                   </p>
                 </div>
                 <p className="text-sm text-slate-400">
-                  Available for frontend, full-stack, product engineering,
-                  contract, freelance, and full-time opportunities.
+                  Available for senior full-stack engineering, applied AI,
+                  contract and full-time opportunities.
                 </p>
               </div>
 

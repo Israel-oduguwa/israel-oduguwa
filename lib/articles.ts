@@ -6,6 +6,7 @@ export type Article = {
   title: string;
   description: string;
   date: string;
+  updatedAt?: string;
   coverImage?: string;
   tags: string[];
   body: string;
@@ -76,6 +77,8 @@ function readArticle(fileName: string): Article {
     title: String(metadata.title ?? fallbackSlug),
     description: String(metadata.description ?? ""),
     date: String(metadata.date ?? ""),
+    updatedAt:
+      typeof metadata.updatedAt === "string" ? metadata.updatedAt : undefined,
     coverImage:
       typeof metadata.coverImage === "string" ? metadata.coverImage : undefined,
     tags: Array.isArray(metadata.tags) ? metadata.tags : [],
