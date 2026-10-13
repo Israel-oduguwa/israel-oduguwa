@@ -1,0 +1,199 @@
+---
+slug: "validating-ai-coding-benchmarks"
+title: "Validating AI coding benchmarks: grader sensitivity, task sampling and decision risk"
+description: "An executable frontend evaluation example, a protocol for validating graders, and a statistical design for comparing coding agents."
+date: "2026-10-13"
+tags:
+  - AI benchmarks
+  - Evaluation design
+  - Software engineering
+---
+
+A coding agent can earn a perfect score on a test suite while its implementation still violates the requested behavior. The evaluator may have checked the final screen state and missed an earlier write from an obsolete request. Every assertion passes; the user still sees the wrong result.
+
+That is a failure in the measurement. Increasing the number of tasks will make the reported score more precise without repairing what it measures.
+
+I would validate a coding benchmark at two levels: whether the task and grader distinguish acceptable implementations from plausible failures, and whether the resulting sample supports the decision someone wants to make. Below, I use a runnable frontend experiment to develop that protocol, then extend it to model comparisons and expert data production.
+
+The experiment evaluates five hand-written implementations under controlled request completion schedules. Its results measure the grader's sensitivity to those implementations. The accompanying [source and recorded verdicts](https://github.com/Israel-oduguwa/israel-oduguwa/tree/main/examples/benchmark-validity) include the full harness and require no model access.
+
+## Define the decision before the score
+
+“Which model is better at frontend engineering?” leaves too much unspecified. A more useful question is whether a particular agent configuration can fix asynchronous state bugs in an existing application, with its normal tools, within a defined time and cost budget, while preserving the surrounding behavior.
+
+The measured system includes the model, instructions, repository access, tools, context management and stopping policy. Changing any of these can change the outcome. I would identify the whole configuration in the run manifest and describe a model-only comparison only when the other conditions stay fixed.
+
+For a task drawn from a defined workload, let success mean that one attempt satisfies its behavioral contract and required regression checks within the budget. The quantity of interest is the probability of that success under the stated task distribution and execution conditions. The observed score estimates it only to the extent that the task sample and grader represent those conditions.
+
+Three distributions need explicit treatment:
+
+- **Deployment workload:** the tasks the system is expected to handle, with frequencies or business priorities supported by actual evidence.
+- **Diagnostic suite:** intentionally selected failure cases used to locate weaknesses, often with a much larger proportion of difficult cases.
+- **Qualification suite:** cases tied to a release decision, including requirements whose failure cannot be offset by strength elsewhere.
+
+A diagnostic suite may be excellent engineering work and a poor estimator of average deployment success. Report its result as performance on that suite. If workload weights are unavailable, report the sampling design and slice results rather than presenting the arithmetic mean as production reliability.
+
+This is a construct-validity question: what capability does performance on these tasks justify claiming? The [benchmarking epistemology paper](https://arxiv.org/abs/2510.23191) examines the assumptions connecting concrete benchmark measurements to broader capability claims. I would make that connection inspectable in the task specification.
+
+## A frontend task with a precise contract
+
+Consider a search interface. The user changes the query while earlier requests are still running. The task asks the agent to implement a request controller with these requirements:
+
+- A newly started request becomes the sole owner of completion state.
+- An obsolete success or failure cannot update that state.
+- Returning to an earlier query creates a new request identity.
+- Disposal prevents later completions from publishing state.
+- Cancellation is best effort; the transport may complete after an abort signal.
+
+The last requirement matters. An abort signal requests cancellation, while the state owner decides whether a completion is still relevant. The benchmark should allow valid solutions that use either an epoch, a unique request token or another mechanism that satisfies the contract.
+
+An evaluator can begin with ordinary examples: one successful request, one failed request, sequential requests, and overlapping requests that complete in their original order. If each example checks only the final state, all five candidates in my experiment pass.
+
+The candidates are an unguarded controller, a controller that compares query strings, one that relies on aborting the previous request, one that guards only successful responses, and a reference that uses request epochs for both response paths and invalidates ownership on disposal.
+
+The ordinary suite gives every candidate 4/4. It has no discriminatory power over these known failure modes.
+
+## Probe the grader with plausible wrong answers
+
+I added four diagnostic cases. Each exposes a different consequence of the contract:
+
+- **Late success:** request B completes, then obsolete request A completes. B's state must remain unchanged, with no additional state write.
+- **A–B–A:** the user returns to query A. The newest A request completes before the first A request. Comparing query text cannot distinguish their ownership.
+- **Late error:** B succeeds, then A rejects. An obsolete error must not replace B's success state.
+- **Completion after disposal:** a pending request finishes after the controller has been disposed. The event log must remain unchanged.
+
+The harness uses deferred promises and resolves them explicitly. It makes no real network requests and uses no elapsed-time sleeps. The transport receives abort signals but deliberately allows completion, matching the task's stated cancellation contract.
+
+Run it from the repository root:
+
+```sh
+node examples/benchmark-validity/run.mjs
+```
+
+The observed results are:
+
+```text
+Candidate       Ordinary checks   Diagnostic checks
+unguarded       4/4               0/4
+query-key       4/4               3/4
+abort-only      4/4               1/4
+success-only    4/4               3/4
+epoch           4/4               4/4
+```
+
+The query-key candidate fails the A–B–A case. The success-only candidate fails the obsolete-error case. Both earn the same aggregate score, although they need different fixes. A useful report retains the case-level verdicts and failure reasons alongside the total.
+
+The overlap-in-order case also reveals a weakness in the ordinary grader. An obsolete request can briefly publish state before the current request completes and restores the expected result. Looking only at the final snapshot misses that violation. The diagnostic cases check the absence of stale writes as well as the final state.
+
+These are deliberately authored mutations of a small controller. They establish that the revised grader rejects these specific failures and accepts the epoch reference. Extending the claim to a React application requires integration cases for component lifecycle, effects, rendering and the application's actual transport contract.
+
+## Treat grader validation as a separate engineering deliverable
+
+A passing reference proves that at least one implementation can satisfy the current grader. It does not establish that all valid solutions pass, or that all important failures are rejected.
+
+For each task, I would retain a small validation bank with independent expert labels:
+
+- A correct reference and at least one materially different valid solution.
+- Plausible defects derived from the task's failure boundaries.
+- A solution that resembles the reference but violates one critical requirement.
+- A solution that follows a valid alternative approach and uses different names or structure.
+- Ambiguous cases requiring specification repair or expert adjudication.
+
+The validation record needs both error directions. A **false acceptance** occurs when the grader passes a contract violation. A **false rejection** occurs when it fails an acceptable solution. Mutation checks primarily probe false acceptance; independently reviewed alternatives probe false rejection. Their frequencies on a deliberately constructed bank describe that bank, so estimating operational error rates requires a representative sample as well.
+
+For executable properties, I prefer outcome assertions to source-text resemblance. Searching a patch for `AbortController` would reward the abort-only candidate. Searching for an incrementing counter could reward a counter used on only one completion path. The observable contract is stronger evidence.
+
+Tests also need protection from the candidate. Run candidate work in a disposable environment, execute authoritative grader files from a separate trusted location, constrain access to evaluation secrets, and retain hashes of the submitted patch and grader. A candidate changing the test runner should produce a distinct invalid-submission result rather than a passing task.
+
+[SWE-bench's evaluation guide](https://www.swebench.com/SWE-bench/guides/evaluation/) describes applying generated patches to repositories and checking them in containerized environments. That execution model is useful; the task-specific assertions still determine which behavioral claims a pass supports.
+
+## Combine hard requirements with diagnostic credit
+
+Partial credit helps explain a failure, but the release rule must reflect the consequences of that failure. In the search example, an implementation that handles three diagnostic cases and still publishes an obsolete result has failed the ownership contract.
+
+I would report a vector containing ordinary behavior, request ownership, disposal behavior and any separately assessed maintainability criteria. Qualification can then require all ownership and disposal cases to pass while preserving partial scores for diagnosis.
+
+For a task with a critical gate G and a quality score Q, record both. If the product needs a gated score, define it explicitly as G multiplied by Q, with G equal to zero or one. Also report the gate-failure rate. Dropping failures and reporting quality only among passing attempts creates a selection effect: the most problematic outputs disappear from the denominator.
+
+Rubric criteria should describe evidence. “Uses a scalable architecture” is hard to adjudicate. “The change preserves the supplied interface and prevents obsolete completions from updating state” has an inspectable result. Maintainability criteria can refer to unnecessary duplication, unrelated edits or unexplained dependencies where those issues affect the requested change.
+
+## Validate model judges against the failure boundary
+
+Some qualities need expert judgment: whether an explanation correctly connects a bug to repository evidence, whether a proposed change introduces unnecessary complexity, or whether an answer resolves an ambiguous requirement responsibly.
+
+For those dimensions, I would calibrate a model judge against independently reviewed examples, including valid alternatives and persuasive explanations of incorrect code. The judge should return criterion-level verdicts, the evidence supporting each verdict, and an explicit unresolved outcome when the supplied material is insufficient.
+
+The [MT-Bench judge study](https://arxiv.org/abs/2306.05685) documents position, verbosity and self-enhancement biases. That motivates controlled probes: swap answer order in pairwise comparisons, vary the prose length without changing technical content, and remove model identity. Record how often the verdict changes under transformations that preserve the quality being judged.
+
+I would measure agreement per criterion and inspect disagreements involving critical requirements. Overall agreement can conceal systematic false acceptance on a rare but consequential slice. Two reviewers independently labeling the same artifacts also reveal whether disagreement originates in the rubric before a model judge enters the process.
+
+For coding work, a fluent explanation should not overturn a reproducible contract violation. Execution evidence, expert assessment and judge output can coexist in the report with clear authority for each dimension. [Anthropic's guide to agent evaluations](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) describes combining code, model and human graders; the calibration protocol above specifies how I would validate their use for this task.
+
+## Separate task failures from measurement failures
+
+An agent that exhausts its specified budget has failed that attempt. A grader container that cannot start has failed to measure the attempt. Combining them conceals infrastructure problems; silently removing the latter can inflate the score if failures occur unevenly across configurations.
+
+I would preserve explicit statuses for graded success, graded failure, budget exhaustion, candidate-caused execution failure, invalid task and evaluator infrastructure failure. Include all counts in the run report and predefine how the denominator handles each status.
+
+Rerun policy needs the same discipline. A broken evaluator may justify a rerun after repair. An unfavorable agent result does not justify additional attempts unless the same trial budget applies to the comparison. Keep the original record, the repair and the relationship between runs.
+
+Reset workspaces, caches and mutable services between attempts. A hidden shared-state dependency can make several failures correlated, or let a later attempt benefit from an earlier solution. Pin the repository revision and environment, then retain the command, logs, patch, grader version and verdict for every attempt.
+
+## Compare agents at the unit you sampled
+
+For model comparisons, use the same task set and define the attempt budget before collecting results. If one configuration gets several chances and another gets one, their raw success rates answer different questions.
+
+Repeated trials estimate variation in attempts on a given task. New tasks improve coverage of the workload. Several tasks from the same repository may share conventions, dependencies and failure mechanisms. Treating every attempt as an independent observation can understate uncertainty about performance on new repositories.
+
+For an equally weighted repository-level comparison, first average repeated trials within each task, then average task scores within each repository. Let d_g be configuration B's repository mean minus configuration A's repository mean. With G independently sampled repositories, the estimated difference is the mean of d_g; its standard error is the sample standard deviation of d_g divided by the square root of G.
+
+```python
+from math import sqrt
+from statistics import mean, stdev
+
+def paired_repository_effect(repository_differences):
+    g = len(repository_differences)
+    if g < 2:
+        raise ValueError("At least two repository pairs are required")
+    effect = mean(repository_differences)
+    standard_error = stdev(repository_differences) / sqrt(g)
+    return effect, standard_error, g
+```
+
+This estimates an average repository effect with equal repository weights. If the deployment question weights tasks by workload frequency, the estimator and its uncertainty calculation must preserve those weights. Choosing equal repository weights simply because they produce a cleaner result would change the question after seeing the data.
+
+With sufficient independent groups and suitable sampling assumptions, a t-based interval can use G−1 degrees of freedom. Small, highly heterogeneous groups need more careful inference; increasing repeat attempts inside those groups does not manufacture new independent repositories. [Adding Error Bars to Evals](https://arxiv.org/html/2411.00640v1) develops paired comparisons, clustered uncertainty and experiment planning for language-model evaluations.
+
+Before a run, specify the smallest improvement that would justify a change, any acceptable regression margins on critical slices, and the cost or latency constraints. Estimate the task and cluster budget from pilot variation. If several prompts or configurations compete on one development set, evaluate the selected configuration on a held-out set. Repeatedly choosing the best observed score also selects favorable measurement noise.
+
+An uncertainty interval describes variation under the analysis assumptions. It does not cover an incorrect grader, an unrepresentative workload or answer leakage. Those require separate evidence.
+
+## Protect the holdout and explain benchmark changes
+
+A split by individual task can leak repository-specific information when related tasks appear in training and evaluation. Split by the unit of generalization: repository, issue family, source document or time period, depending on the intended claim. Audit near duplicates and shared reference artifacts as well as identical text.
+
+Keep development, judge calibration and final qualification material separate. Publishing the diagnostic cases in this article makes them public examples; a protected qualification set needs independently authored cases. A secret test should check an announced requirement through an unseen instance, rather than introducing an undisclosed obligation.
+
+[LiveCodeBench](https://arxiv.org/abs/2403.07974) uses newly collected competition problems and time-based evaluation to address contamination. For a repository benchmark, I would also record task provenance, exposure dates and the permitted network sources. Fresh tasks reduce one leakage route, while access to reference solutions during an agent run creates another.
+
+Version the task bank, rubric, grader and environment separately. A repaired grader creates a new measurement regime. Regrade retained artifacts where possible and report which results changed and why. Comparing a new score with an old score across that boundary needs an explicit bridge analysis.
+
+## Turn expert corrections into targeted training work
+
+The expert's contribution starts with recognizing which failure matters. In the controller example, “stale response” is too broad a label to direct a useful intervention. The A–B–A failure calls for reasoning about operation identity; the obsolete-error failure calls for applying ownership consistently across completion paths.
+
+I would store the observed failure, violated criterion, supporting execution trace, minimal correction and a related transfer case. A training example can then teach the distinction, while a separately held-out case tests whether the system applies it in a different implementation.
+
+After an intervention, compare configurations on the untouched qualification set and inspect the affected slice. Improvement on examples used for training establishes fit to those examples. Improvement on protected transfer cases provides stronger evidence that the correction extends beyond them.
+
+micro1's public [flow description](https://www.micro1.ai/blog/introducing-flow) connects expert-defined work, model-assisted inspection and human corrections in a data workflow. The engineering record I would want from that process is specific: what failed, what the expert corrected, which criterion changed, and whether an independent evaluation subsequently improved.
+
+At micro1, I currently create frontend engineering evaluation tasks, expert reference outputs and objective assessment criteria. This article's controller, mutations and protocol are public examples developed for this piece; the implementation choices above describe how I would approach this evaluation problem.
+
+## What I would require before trusting a result
+
+A reviewable benchmark release should include the decision it supports, the task sampling design, the behavioral contracts, grader-validation evidence and a complete run manifest. Its report should preserve failure slices, uncertainty at the sampling unit, infrastructure outcomes and the qualification rule.
+
+For the worked example, the supported result is concrete: four ordinary checks accept every candidate; four additional checks distinguish the known mutations and expose different failures behind equal totals. Anyone can rerun the harness and inspect each verdict.
+
+For a real coding-agent comparison, I would require the same chain of evidence at a larger scale. A model ranking becomes useful when another engineer can reconstruct why the tasks were selected, why each output received its verdict, and what decision the measured difference supports.

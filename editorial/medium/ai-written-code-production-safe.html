@@ -1,0 +1,25 @@
+<h1>Reviewing generated code before it reaches production</h1>
+<h2>How I assess a proposed implementation against the repository, the task and the system's failure boundaries.</h2>
+<p>This article was edited with AI assistance.</p>
+<p>A proposed implementation can compile and still solve the wrong problem. It may use an API the repository does not support, assume a permission the caller does not have or leave a failure path without recovery. Those problems matter whether the code came from a colleague, a model or your own first attempt.</p>
+<p>When evaluating generated work, I start with the task and the source material. A confident explanation is not evidence that the implementation matches either one.</p>
+<h2>Establish the reference first</h2>
+<p>The reviewer needs to know what counts as a correct result. That includes the requested behavior, the relevant repository conventions, the constraints and the evidence the solution must use.</p>
+<p>For a frontend task, a reference might describe the current component contract, an API response shape and the behavior expected when a request fails. If those details are missing, reviewers can end up rewarding different solutions for incompatible reasons.</p>
+<p>At micro1, I design frontend engineering evaluation tasks from supplied source material, write expert reference outputs and define objective assessment criteria. The examples in this article use public engineering scenarios; micro1 retains the internal task materials and model responses.</p>
+<h2>Trace the implementation across boundaries</h2>
+<p>A feature rarely lives in one component. Follow the request from the browser through the API and persistence layer to any external integration. Check how the response returns to the interface and what happens if it does not.</p>
+<p>For example, a loading flag needs a success path and a failure path. A request may time out, return an unexpected shape or finish after the user navigates away. A button that stays disabled indefinitely is a product bug even if the network call was technically valid.</p>
+<p>On the server, check authorization and tenant scope before the mutation. Check whether retries preserve the operation's identity. Check what state remains if the process fails midway through the workflow.</p>
+<h2>Make the criteria observable</h2>
+<p>“High-quality code” is too broad to grade consistently. Split the assessment into things a reviewer can inspect:</p>
+<ul><li>Correctness: does the implementation produce the requested behavior, including the specified failure cases?</li><li>Completeness: are the connected layers and necessary state transitions covered?</li><li>Source use: does the implementation follow the supplied contracts rather than inventing interfaces?</li><li>Security: are permissions, inputs and secret boundaries enforced in the relevant place?</li><li>Maintainability: can another engineer understand the change without relying on the author's explanation?</li><li>Performance: does the design add unnecessary work or unbounded concurrency for the expected workload?</li></ul>
+<p>These dimensions need task-specific evidence. A small UI fix should not be judged by the volume of its architecture discussion. A payment mutation should not pass just because the form looks right.</p>
+<h2>Tests should challenge the claim</h2>
+<p>A test that repeats the implementation's assumptions can make a flawed solution look convincing. Better tests exercise the task's boundary: another tenant's resource, an interrupted request, a repeated event, an invalid response or a state transition that is no longer allowed.</p>
+<p>For concurrency claims, use competing workers or processes when the distinction matters. An exception thrown inside one process does not reproduce every effect of that process disappearing.</p>
+<p>SafeStripe's reliability work records the tested scenarios and their recovery results. Another engineer can inspect the tests and decide which failure paths their own application still needs to cover.</p>
+<h2>Keep the explanation tied to evidence</h2>
+<p>A good review can say which behavior is correct, where the implementation diverges and what would establish a fix. It should distinguish an observed failure from a suspected one and a tested scenario from an unverified claim.</p>
+<p>The review should leave the next engineer with enough evidence to check the fix and maintain the system.</p>
+<p>Originally published on Israel Oduguwa's website.</p>

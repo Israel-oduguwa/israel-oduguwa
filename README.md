@@ -68,6 +68,7 @@ I use the same approach in application work: follow a request through the fronte
 
 ## Technical writing
 
+- [Validating AI coding benchmarks](https://israel-oduguwa.vercel.app/articles/validating-ai-coding-benchmarks): a runnable grader experiment, task sampling, judge calibration and decision rules for coding-agent evaluations.
 - [Stripe idempotency does not finish the payment workflow](https://israel-oduguwa.vercel.app/articles/stripe-idempotency-your-app-still-needs-it): where request retries, webhook deduplication and business effects meet.
 - [What a crashed payment worker leaves behind](https://israel-oduguwa.vercel.app/articles/worker-ownership-and-payment-recovery): leases, ownership checks and the transaction boundary behind recovery.
 

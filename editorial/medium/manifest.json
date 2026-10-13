@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "validating-ai-coding-benchmarks",
+    "title": "Validating AI coding benchmarks: grader sensitivity, task sampling and decision risk",
+    "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/validating-ai-coding-benchmarks",
+    "originalDate": "2026-10-13",
+    "updatedAt": null,
+    "markdown": "validating-ai-coding-benchmarks.md",
+    "html": "validating-ai-coding-benchmarks.html",
+    "disclosure": "This article was written with AI assistance. The linked experiment includes runnable code and recorded results."
+  },
+  {
+    "slug": "worker-ownership-and-payment-recovery",
+    "title": "What a crashed payment worker leaves behind",
+    "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/worker-ownership-and-payment-recovery",
+    "originalDate": "2026-10-09",
+    "updatedAt": "2026-10-13",
+    "markdown": "worker-ownership-and-payment-recovery.md",
+    "html": "worker-ownership-and-payment-recovery.html",
+    "disclosure": "This article was edited with AI assistance."
+  },
+  {
+    "slug": "from-it-works-locally-to-production",
+    "title": "What changes when a workflow reaches production",
+    "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/from-it-works-locally-to-production",
+    "originalDate": "2026-04-21",
+    "updatedAt": "2026-10-13",
+    "markdown": "from-it-works-locally-to-production.md",
+    "html": "from-it-works-locally-to-production.html",
+    "disclosure": "This article was edited with AI assistance."
+  },
+  {
+    "slug": "ai-written-code-production-safe",
+    "title": "Reviewing generated code before it reaches production",
+    "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/ai-written-code-production-safe",
+    "originalDate": "2025-08-13",
+    "updatedAt": "2026-10-13",
+    "markdown": "ai-written-code-production-safe.md",
+    "html": "ai-written-code-production-safe.html",
+    "disclosure": "This article was edited with AI assistance."
+  },
+  {
+    "slug": "authorization-architecture-beyond-roles",
+    "title": "A role is not enough to authorize a request",
+    "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/authorization-architecture-beyond-roles",
+    "originalDate": "2025-05-22",
+    "updatedAt": "2026-10-13",
+    "markdown": "authorization-architecture-beyond-roles.md",
+    "html": "authorization-architecture-beyond-roles.html",
+    "disclosure": "This article was edited with AI assistance."
+  },
+  {
+    "slug": "stripe-idempotency-your-app-still-needs-it",
+    "title": "Stripe idempotency does not finish the payment workflow",
+    "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/stripe-idempotency-your-app-still-needs-it",
+    "originalDate": "2024-05-21",
+    "updatedAt": "2026-10-13",
+    "markdown": "stripe-idempotency-your-app-still-needs-it.md",
+    "html": "stripe-idempotency-your-app-still-needs-it.html",
+    "disclosure": "This article was edited with AI assistance."
+  }
+]

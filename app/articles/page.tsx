@@ -6,7 +6,7 @@ import { getAllArticles } from "@/lib/articles";
 export const metadata = {
   title: "Engineering notes | Israel Oduguwa",
   description:
-    "Writing about payment recovery, authorization, operations and evaluating technical work.",
+    "Writing about AI benchmark design, engineering evaluation, platform architecture and payment reliability.",
   alternates: { canonical: "/articles" },
   openGraph: { url: "/articles" },
 };
@@ -19,8 +19,8 @@ export default function ArticlesPage() {
           <p className="section-kicker">Engineering notes</p>
           <h1>Technical writing</h1>
           <p>
-            Articles on payment reliability, authorization, deployments and
-            reviewing code. Each one works through a specific engineering
+            Articles on AI benchmarks, engineering evaluation, platform
+            architecture and payment reliability. Each one works through a specific engineering
             problem with examples and links to the relevant documentation.
           </p>
         </header>

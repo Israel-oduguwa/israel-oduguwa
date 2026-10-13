@@ -1,0 +1,281 @@
+{
+  "provenance": "Hand-written candidates; deterministic controlled completions; no LLM calls",
+  "summary": [
+    {
+      "candidate": "unguarded",
+      "ordinary": 4,
+      "diagnostic": 0
+    },
+    {
+      "candidate": "query-key",
+      "ordinary": 4,
+      "diagnostic": 3
+    },
+    {
+      "candidate": "abort-only",
+      "ordinary": 4,
+      "diagnostic": 1
+    },
+    {
+      "candidate": "success-only",
+      "ordinary": 4,
+      "diagnostic": 3
+    },
+    {
+      "candidate": "epoch",
+      "ordinary": 4,
+      "diagnostic": 4
+    }
+  ],
+  "results": [
+    {
+      "candidate": "unguarded",
+      "case": "one-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "unguarded",
+      "case": "current-error",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "unguarded",
+      "case": "sequential-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "unguarded",
+      "case": "overlap-in-order",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "unguarded",
+      "case": "late-success",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   query: 'A',\n-   query: 'B',\n    status: 'success',\n+   value: 'A1'\n-   value: 'B1'\n  }\n"
+    },
+    {
+      "candidate": "unguarded",
+      "case": "ABA-request-identity",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    query: 'A',\n    status: 'success',\n+   value: 'A-old'\n-   value: 'A-new'\n  }\n"
+    },
+    {
+      "candidate": "unguarded",
+      "case": "late-error",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   error: 'old failure',\n+   query: 'A',\n+   status: 'error'\n-   query: 'B',\n-   status: 'success',\n-   value: 'B1'\n  }\n"
+    },
+    {
+      "candidate": "unguarded",
+      "case": "after-disposal",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly equal:\n\n2 !== 1\n"
+    },
+    {
+      "candidate": "query-key",
+      "case": "one-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "query-key",
+      "case": "current-error",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "query-key",
+      "case": "sequential-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "query-key",
+      "case": "overlap-in-order",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "query-key",
+      "case": "late-success",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "query-key",
+      "case": "ABA-request-identity",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    query: 'A',\n    status: 'success',\n+   value: 'A-old'\n-   value: 'A-new'\n  }\n"
+    },
+    {
+      "candidate": "query-key",
+      "case": "late-error",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "query-key",
+      "case": "after-disposal",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "abort-only",
+      "case": "one-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "abort-only",
+      "case": "current-error",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "abort-only",
+      "case": "sequential-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "abort-only",
+      "case": "overlap-in-order",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "abort-only",
+      "case": "late-success",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   query: 'A',\n-   query: 'B',\n    status: 'success',\n+   value: 'A1'\n-   value: 'B1'\n  }\n"
+    },
+    {
+      "candidate": "abort-only",
+      "case": "ABA-request-identity",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    query: 'A',\n    status: 'success',\n+   value: 'A-old'\n-   value: 'A-new'\n  }\n"
+    },
+    {
+      "candidate": "abort-only",
+      "case": "late-error",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   error: 'old failure',\n+   query: 'A',\n+   status: 'error'\n-   query: 'B',\n-   status: 'success',\n-   value: 'B1'\n  }\n"
+    },
+    {
+      "candidate": "abort-only",
+      "case": "after-disposal",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "success-only",
+      "case": "one-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "success-only",
+      "case": "current-error",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "success-only",
+      "case": "sequential-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "success-only",
+      "case": "overlap-in-order",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "success-only",
+      "case": "late-success",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "success-only",
+      "case": "ABA-request-identity",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "success-only",
+      "case": "late-error",
+      "suite": "diagnostic",
+      "pass": false,
+      "reason": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n+   error: 'old failure',\n+   query: 'A',\n+   status: 'error'\n-   query: 'B',\n-   status: 'success',\n-   value: 'B1'\n  }\n"
+    },
+    {
+      "candidate": "success-only",
+      "case": "after-disposal",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "one-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "current-error",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "sequential-success",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "overlap-in-order",
+      "suite": "ordinary",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "late-success",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "ABA-request-identity",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "late-error",
+      "suite": "diagnostic",
+      "pass": true
+    },
+    {
+      "candidate": "epoch",
+      "case": "after-disposal",
+      "suite": "diagnostic",
+      "pass": true
+    }
+  ]
+}

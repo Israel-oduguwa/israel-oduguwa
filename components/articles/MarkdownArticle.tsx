@@ -203,14 +203,9 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
   const label = language === "txt" ? "text" : language;
 
   return (
-    <figure className="my-9 overflow-hidden rounded-2xl border border-slate-800 bg-[#0b1020] shadow-[0_28px_80px_rgba(15,23,42,0.22)]">
-      <figcaption className="flex items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-          <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-          <span className="h-3 w-3 rounded-full bg-[#28c840]" />
-        </div>
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs text-slate-300">
+    <figure className="my-9 overflow-hidden rounded-xl border border-slate-800 bg-[#0b1020]">
+      <figcaption className="border-b border-white/10 bg-white/[0.04] px-4 py-3">
+        <span className="font-mono text-xs text-slate-300">
           {label}
         </span>
       </figcaption>
