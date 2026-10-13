@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title description">
   <title id="title">Israel Oduguwa, Senior Full Stack Software Engineer</title>
-  <desc id="description">SaaS products, payment systems and applied AI. A dotted globe reuses the visual from Israel's portfolio.</desc>
+  <desc id="description">Platform architecture, payment infrastructure and AI systems. A dotted globe reuses the visual from Israel's portfolio.</desc>
   <defs>
     <linearGradient id="accent" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0"><stop stop-color="#5b9cf6"/><stop offset=".52" stop-color="#9981f3"/><stop offset="1" stop-color="#57c9b5"/></linearGradient>
     <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#27354b" stroke-width=".7"/></pattern>
@@ -16,10 +16,10 @@
     <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif">
       <rect x="54" y="52" width="42" height="42" rx="12" fill="#f0f5ff"/>
       <text x="75" y="80" font-size="18" font-weight="700" fill="#101827" text-anchor="middle">io.</text>
-      <text x="113" y="80" font-size="18" fill="#aebed5">Engineering across the stack</text>
+      <text x="113" y="80" font-size="18" fill="#aebed5">Architecture and technical leadership</text>
       <text x="54" y="163" font-size="61" font-weight="700" letter-spacing="-2" fill="#f0f5ff">Israel Oduguwa</text>
       <text x="57" y="210" font-size="27" font-weight="500" fill="#8fbaff">Senior Full Stack Software Engineer</text>
-      <text x="57" y="255" font-size="19" fill="#aebed5">SaaS products, payment systems and applied AI.</text>
+      <text x="57" y="255" font-size="19" fill="#aebed5">Platform architecture, payment infrastructure and AI systems.</text>
       <path d="M57 299H113" stroke="url(#accent)" stroke-width="3" stroke-linecap="round"/>
       <text x="128" y="305" font-size="16" fill="#aebed5">Product work  ·  Open source  ·  Technical writing</text>
     </g>

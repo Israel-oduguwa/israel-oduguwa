@@ -11,12 +11,10 @@ export function RecoveryPreview() {
         <span className="recovery-mark">
           <ShieldCheck size={18} aria-hidden="true" /> SafeStripe
         </span>
-        <span className="recovery-demo-label">Interactive illustration</span>
+        <span className="recovery-demo-label">Webhook replay illustration</span>
       </div>
       <h3>
-        Same payment.
-        <br />
-        Still one receipt.
+        Guard the business effect.
       </h3>
       <div className="recovery-flow" aria-hidden="true">
         <span>
@@ -69,7 +67,8 @@ export function RecoveryPreview() {
         </button>
       </div>
       <p className="recovery-footnote">
-        A visual explanation. No Stripe requests are made here.
+        A local illustration of event deduplication. The case study covers
+        operation identities, worker ownership and transaction boundaries.
       </p>
     </div>
   );

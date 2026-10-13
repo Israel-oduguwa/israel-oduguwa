@@ -71,13 +71,15 @@ export default function Availability() {
             remote work<span>.</span>
           </h2>
           <p>
-            I’ve worked with distributed teams on healthcare hiring, student
-            enrollment and payments. At KinsCare, I guided seven developers
-            across the frontend, backend and infrastructure.
+            My work covers system architecture, backend and data services,
+            production migrations and AI orchestration. At KinsCare, I guided
+            seven developers through design, code review and infrastructure
+            decisions.
           </p>
           <p>
-            I’m looking for a senior engineering role or a contract project with
-            a product team.
+            I’m open to senior engineering roles and contract projects with
+            ownership of architecture and delivery. I also work at micro1 on
+            frontend software engineering evaluation.
           </p>
           <div className="availability-tags">
             <span>Full-stack engineering</span>

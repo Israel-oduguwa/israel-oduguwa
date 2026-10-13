@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://israel-oduguwa.vercel.app"),
   title: "Israel Oduguwa | Senior Full Stack Software Engineer",
   description:
-    "Web applications and the services behind them. Engineering work from KinsCare, Excel Health Careers and SafeStripe, with case studies and technical writing.",
+    "Senior full-stack engineer with 6+ years in platform architecture, payment infrastructure, AI systems and technical leadership. Creator of SafeStripe.",
   keywords: [
     "Israel Oduguwa",
     "full-stack engineer",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Israel Oduguwa | Senior Full Stack Software Engineer",
     description:
-      "Web applications and the services behind them. Engineering work from KinsCare, Excel Health Careers and SafeStripe, with case studies and technical writing.",
+      "Senior full-stack engineer with 6+ years in platform architecture, payment infrastructure, AI systems and technical leadership. Creator of SafeStripe.",
     url: "https://israel-oduguwa.vercel.app",
     siteName: "Israel Oduguwa Portfolio",
     locale: "en_US",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Israel Oduguwa | Senior Full Stack Software Engineer",
     description:
-      "Web applications, payment recovery and applied AI. Projects and engineering notes by Israel Oduguwa.",
+      "Platform architecture, payment infrastructure and AI systems. Engineering case studies and technical writing by Israel Oduguwa, creator of SafeStripe.",
   },
 };
 

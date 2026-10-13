@@ -92,11 +92,12 @@ export default async function ArticlePage({ params }: Props) {
               <p>About the author</p>
               <strong>Israel Oduguwa</strong>
               <p>
-                Senior full-stack software engineer working across product
-                interfaces, reliable backend workflows and applied AI.
+                Senior full-stack software engineer working on platform
+                architecture, payment infrastructure and AI systems. Creator of
+                SafeStripe and AI evaluation expert at micro1.
               </p>
               <Link href="/#work" className="text-link">
-                Explore my work <ArrowUpRight size={16} aria-hidden="true" />
+                View my engineering work
               </Link>
             </div>
           </article>
@@ -112,7 +113,10 @@ export default async function ArticlePage({ params }: Props) {
             <Link href="/work/safestripe" className="article-project-link">
               <span>Related project</span>
               <strong>SafeStripe</strong>
-              <p>How webhook retries and worker recovery work.</p>
+              <p>
+                Durable operations, worker ownership and transactional business
+                effects across four database adapters.
+              </p>
               <ArrowUpRight size={18} aria-hidden="true" />
             </Link>
           </aside>

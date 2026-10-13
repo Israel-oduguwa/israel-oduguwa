@@ -61,8 +61,8 @@ export default function Image() {
               lineHeight: 1.25,
             }}
           >
-            Senior full-stack software engineer. Web applications and the
-            services behind them.
+            Senior full-stack software engineer. Platform architecture,
+            payment infrastructure and AI systems.
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@ export default function Image() {
           padding: "26px 32px",
         }}
       >
-        Product · Systems · AI
+        Architecture · Payments · AI
       </div>
     </div>,
     size,

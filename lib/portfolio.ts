@@ -32,46 +32,54 @@ export const projects: Project[] = [
     slug: "safestripe",
     name: "SafeStripe",
     category: "Open-source payment infrastructure",
-    role: "Creator and maintainer",
+    role: "Creator, architecture and implementation",
     period: "2026",
     summary:
-      "A TypeScript library that stores payment operation history and webhook work in your database, so Stripe workflows can recover after a timeout or worker crash.",
+      "A database-backed reliability layer for Stripe: durable operation identities, verified webhook ingestion, leased workers and transactional business effects across four storage adapters.",
     contribution:
-      "I built the TypeScript library, database adapters, framework integrations, failure tests and public sandbox. The difficult part is deciding what a retry is allowed to repeat.",
-    tags: ["TypeScript", "Node.js", "Stripe", "PostgreSQL", "Firestore"],
+      "I designed the reliability contracts and storage architecture, then built the TypeScript engine, PostgreSQL, MongoDB, Firestore and SQLite adapters, and Express and Next.js integrations. I also built process-level failure tests, adapter conformance coverage and the public evaluation sandbox.",
+    tags: ["TypeScript", "Stripe", "PostgreSQL", "MongoDB", "Firestore", "SQLite", "Express", "Next.js"],
     image: "/images/projects/safestripe.jpg",
     imageAlt:
       "SafeStripe explainer illustrating one payment and repeated payment updates",
     theme: "stripe",
     metrics: [
       {
-        value: "10",
-        label: "Duplicate admissions in the retained sandbox replay",
+        value: "4",
+        label: "Database adapters behind a shared storage contract",
       },
-      { value: "1", label: "Original paid receipt retained by that replay" },
+      { value: "5", label: "Reliability contracts with documented failure boundaries" },
     ],
     challenge:
       "Stripe and an application database cannot share a transaction. A request can succeed at Stripe while the application loses the response. Webhooks can repeat, and a worker can stop after claiming a job. The application has to remember what succeeded and which work still needs completion.",
     decisions: [
       {
-        title: "Keep the business operation's identity",
+        title: "Give each financial operation a stable identity",
         body: "The caller supplies an operation ID. SafeStripe stores its scope, parameters and progress, then uses a stable Stripe idempotency key. Changed parameters conflict instead of silently becoming another mutation. Older ambiguous outcomes require review.",
       },
       {
-        title: "Save accepted work before acknowledging it",
+        title: "Persist verified events before acknowledgment",
         body: "The receiver verifies the original request bytes and Stripe signature before durable admission. If storage fails, the endpoint does not acknowledge work it has not saved. Workers process admitted jobs separately from the HTTP request.",
       },
       {
-        title: "Make ownership expire safely",
+        title: "Fence worker ownership at the commit",
         body: "Jobs use expiring leases and ownership tokens. Completion checks the current owner in the transaction. The process-level tests kill real workers and verify that another worker can recover committed work without allowing a stale owner to overwrite the result.",
       },
       {
-        title: "Separate local effects from external delivery",
-        body: "A stable business effect key protects supported local record writes and an outbox intent in one transaction. The dispatcher delivers at least once. The receiving service must deduplicate; a database transaction cannot make an arbitrary external call exactly once.",
+        title: "Give business effects their own identity",
+        body: "Different webhook events can refer to the same business action. I used a stable effect key to guard supported local record changes, so deduplication follows the business effect as well as the event ID.",
+      },
+      {
+        title: "Commit state changes and outbox intent atomically",
+        body: "Supported billing-record updates, effect guards and outbox intent commit in one transaction. The dispatcher delivers at least once; receiving services deduplicate repeated delivery. I document that boundary explicitly because a local transaction cannot make an arbitrary external call exactly once.",
+      },
+      {
+        title: "Define a portable storage contract",
+        body: "PostgreSQL, MongoDB, Firestore and SQLite implement a shared storage contract with documented transaction boundaries. Adapter conformance and contention tests check the contract, while process-level worker tests exercise crash recovery and stale ownership across the supported implementation paths.",
       },
     ],
     result:
-      "The published 0.3.0 package has a public evaluation sandbox, architecture decisions, reproducible benchmarks and CI. A retained Express + Firestore sandbox run recorded twelve journeys. Its duplicate replay added ten admissions while preserving the original receipt and paid time.",
+      "The published 0.3.0 package brings the five reliability contracts to four database adapters and Express/Next.js integrations. Its evidence includes adapter conformance, contention and process-level worker failure tests, reproducible benchmarks and CI. A retained Express + Firestore sandbox run recorded twelve journeys; its duplicate replay added ten admissions while preserving the original receipt and paid time.",
     boundary:
       "Version 0.3.0 is an evaluation preview. The linked sandbox run and benchmarks cover their stated scenarios and workloads. Applications supply authorization, stable operation and effect identities, durable storage and a recovery plan. Independent security review and enterprise capacity testing remain outside this preview's evidence.",
     links: [
@@ -101,13 +109,13 @@ export const projects: Project[] = [
   {
     slug: "kinscare",
     name: "KinsCare",
-    category: "Healthcare hiring marketplace",
-    role: "Software engineer; technical leadership",
+    category: "Marketplace architecture and platform modernization",
+    role: "Software engineer; architecture and technical leadership",
     period: "Oct 2022 - Dec 2025",
     summary:
-      "A marketplace connecting care providers with caregivers. My work covered the product interface, matching services, identity and the infrastructure behind them.",
+      "I defined the architecture of a healthcare workforce marketplace, guided seven developers and built geospatial matching, retrieval-backed recommendations and production platform migrations.",
     contribution:
-      "I guided a seven-developer team, migrated the React frontend to Next.js, and planned the transition from MongoDB Realm to Clerk for more than 5,000 users.",
+      "I owned architecture and technical decisions across caregiver onboarding, provider jobs, geospatial matching, subscriptions, conversations and administration. I guided seven developers through system design and code review, modernized the frontend and infrastructure, and planned and executed the Realm-to-Clerk migration for 5,000+ users.",
     tags: ["Next.js", "Node.js", "Python", "MongoDB", "Clerk"],
     image: "/images/projects/kinscare-homepage.jpg",
     imageAlt:
@@ -119,6 +127,8 @@ export const projects: Project[] = [
         label: "Infrastructure spend reduction after modernization",
       },
       { value: "5,000+", label: "Users in the identity migration" },
+      { value: "≈60%", label: "Reduction in manual matching and triage review" },
+      { value: "3 days", label: "Qualified matches through the matching workflow" },
     ],
     challenge:
       "Caregiver onboarding, provider jobs, matching and conversations needed to work as one product. At the same time, the frontend and identity platform needed to change without leaving existing users unable to access their accounts.",
@@ -133,7 +143,11 @@ export const projects: Project[] = [
       },
       {
         title: "Give recommendations a maintained data pipeline",
-        body: "A Python and Express pipeline refreshed, normalized and indexed school, course and healthcare records. Model and data artifacts, embeddings and retrieval supported recommendation APIs. Cached results and persisted experiment assignments kept product behavior consistent.",
+        body: "I built a Python and Express pipeline to refresh, normalize and index thousands of school, course and healthcare records. Persisted model and data artifacts, embeddings and retrieval supported personalized recommendation APIs, with cached results to keep responses consistent.",
+      },
+      {
+        title: "Make matching and experimentation part of the architecture",
+        body: "I combined caregiver profiles, provider requirements and geospatial signals to shortlist candidates and route review and scheduling. Weighted variant assignment, persisted user assignments and event recording supported controlled product experiments. Guided conversations connected user input to recommendation calls and cached results.",
       },
       {
         title: "Review the frontend, backend and integrations together",
@@ -141,7 +155,7 @@ export const projects: Project[] = [
       },
     ],
     result:
-      "The modernization reduced infrastructure spend by more than 75%. The recorded Lighthouse performance score moved from 59 to 90, with SEO at 100. The identity migration preserved account continuity for the existing user base.",
+      "Infrastructure spend fell by more than 75%, and the recorded Lighthouse performance score moved from 59 to 90, with SEO at 100. The identity migration preserved access for 5,000+ users. Matching and triage reduced manual agent review by approximately 60% and enabled qualified matches within three days.",
     boundary:
       "Results cover my October 2022 to December 2025 work at KinsCare. The live site provides current product context; KinsCare maintains the client code, user data and internal architecture.",
     links: [{ label: "Visit KinsCare", href: "https://www.kinscare.org/" }],
@@ -149,13 +163,13 @@ export const projects: Project[] = [
   {
     slug: "excelcna",
     name: "Excel Health Careers",
-    category: "Enrollment, payments and acquisition",
+    category: "Revenue systems and AI orchestration",
     role: "Senior software engineer, contract",
     period: "Mar 2025 - Apr 2026",
     summary:
-      "An enrollment platform for healthcare training. I connected registration and Stripe payment events to student records and the team's administrative workflows.",
+      "I engineered the transaction layer and revenue-driven AI acquisition engine for a healthcare training business, connecting payment consistency, campaign orchestration and automated media production.",
     contribution:
-      "I redesigned enrollment, added payment recovery, and built campaign and video-generation workflows with limits on concurrent rendering jobs.",
+      "I designed the platform's state transitions and transaction layer, established integration and end-to-end coverage, and built the AI acquisition engine and asynchronous media system. That work covered event deduplication, reconciliation, render concurrency, provider failures and publishing integrity.",
     tags: ["Next.js", "Stripe", "Firebase", "Remotion", "AWS"],
     image: "/images/projects/excelcna.jpg",
     imageAlt:
@@ -163,32 +177,34 @@ export const projects: Project[] = [
     theme: "training",
     metrics: [
       {
-        value: "+73%",
-        label: "Completed enrollments after the workflow redesign",
+        value: "+60%",
+        label: "Qualified acquisition increase supported by the AI campaign engine",
       },
       {
         value: "8,000+",
-        label: "Successful transactions supported by the enrollment layer",
+        label: "Successful transactions supported by the transaction layer",
       },
+      { value: "+73%", label: "Completed enrollments after the workflow redesign" },
+      { value: "-40%", label: "Manual operational work after the redesign" },
     ],
     challenge:
       "Course discovery, registration, payment and training administration needed to describe the same student journey. A successful Stripe payment had to become an accurate enrollment record even when delivery was delayed or repeated.",
     decisions: [
       {
-        title: "Treat enrollment as a sequence of state changes",
-        body: "I redesigned the Next.js platform around a unified registration-to-training journey. Integration, end-to-end and regression coverage exercised critical state transitions and administrative processes.",
+        title: "Model the revenue workflow as state transitions",
+        body: "I redesigned the Next.js platform around the registration, payment and training lifecycle. I established integration, end-to-end and regression coverage for critical state transitions and administrative processes, so the team could verify changes across the full workflow.",
       },
       {
-        title: "Connect payments to a recoverable local record",
-        body: "The transaction layer connected registration records, Stripe events, enrollment state and administrative tracking. Event deduplication, reconciliation and recovery paths covered duplicate, delayed, failed and out-of-order scenarios.",
+        title: "Preserve consistency across asynchronous payment events",
+        body: "I engineered the transaction layer connecting registration records, Stripe events, enrollment state and administrative tracking. Application-level event deduplication, reconciliation and recovery paths exercised duplicate, delayed, failed and out-of-order scenarios across 8,000+ successful transactions.",
       },
       {
-        title: "Bound asynchronous media work",
-        body: "The video-generation system coordinated OpenAI, ElevenLabs, Remotion and AWS Lambda. It used progress polling, bounded render concurrency, latency monitoring, retries and recovery paths for rendering or publishing failures.",
+        title: "Orchestrate AI services with bounded concurrency",
+        body: "I built the media system coordinating OpenAI, ElevenLabs, Remotion and AWS Lambda. Asynchronous progress polling, bounded render concurrency, latency monitoring, retries and rollback paths covered render and publishing failures. I verified concurrency limits, service failures and publishing integrity.",
       },
       {
-        title: "Measure acquisition against enrollment revenue",
-        body: "The acquisition engine used registration and Stripe revenue data to choose campaign workflows and measure their results. Video, blog, graphics and advertising pipelines included quality gates and failure recovery before release.",
+        title: "Connect campaign execution to revenue evidence",
+        body: "I designed and launched the acquisition engine to analyze historical registration and Stripe revenue data, select campaign workflows and route execution through video, blog, graphics and advertising pipelines. Quality gates, failure recovery and workflow checks preceded release; campaign output was measured against resulting revenue.",
       },
     ],
     result:
@@ -207,17 +223,17 @@ export const projects: Project[] = [
 export const experience = [
   {
     company: "micro1",
-    role: "Software engineer · AI model evaluation project",
-    period: "Jul 2026 · one month",
+    role: "AI evaluation expert · Frontend software engineering",
+    period: "Jul 2026 - Present",
     description:
-      "Designed source-grounded frontend engineering tasks, expert reference outputs and objective evaluation criteria. Reviewed generated solutions for correctness, completeness, source use, performance, security and maintainability.",
+      "Design source-grounded frontend engineering evaluation tasks, expert reference outputs and objective assessment criteria. Review generated technical deliverables for reasoning, correctness, completeness, source use and instruction following.",
   },
   {
     company: "Excel Health Careers",
     role: "Senior software engineer · contract",
     period: "Mar 2025 - Apr 2026",
     description:
-      "Enrollment and Stripe payment consistency, administrative workflows, acquisition systems and asynchronous media generation.",
+      "Engineered the platform transaction layer across 8,000+ successful payments and built a revenue-driven AI acquisition engine with asynchronous media orchestration, concurrency limits and failure recovery.",
     project: "/work/excelcna",
   },
   {
@@ -225,7 +241,7 @@ export const experience = [
     role: "Software engineer · technical leadership",
     period: "Oct 2022 - Dec 2025",
     description:
-      "Marketplace architecture, a seven-developer team, Next.js modernization, identity migration and recommendation services.",
+      "Defined marketplace architecture and guided seven developers. Built retrieval and matching services, modernized cloud infrastructure and migrated 5,000+ user accounts while reducing infrastructure spend by more than 75%.",
     project: "/work/kinscare",
   },
   {

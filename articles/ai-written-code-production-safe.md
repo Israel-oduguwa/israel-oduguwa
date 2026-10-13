@@ -19,7 +19,7 @@ The reviewer needs to know what counts as a correct result. That includes the re
 
 For a frontend task, a reference might describe the current component contract, an API response shape and the behavior expected when a request fails. If those details are missing, reviewers can end up rewarding different solutions for incompatible reasons.
 
-In my one-month micro1 project, I designed frontend engineering evaluation tasks from supplied source material, wrote reference outputs and defined objective criteria. The examples in this article use public engineering scenarios; micro1 retains the internal task materials and model responses.
+At micro1, I design frontend engineering evaluation tasks from supplied source material, write expert reference outputs and define objective assessment criteria. The examples in this article use public engineering scenarios; micro1 retains the internal task materials and model responses.
 
 ## Trace the implementation across boundaries
 

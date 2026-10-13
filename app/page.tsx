@@ -16,19 +16,24 @@ import { getAllArticles } from "@/lib/articles";
 
 const capabilities = [
   {
-    title: "Product engineering",
+    title: "Architecture & backend systems",
     description:
-      "I connect React and Next.js interfaces to Node.js and Python services, with the data models and deployment needed to run them.",
+      "I design service boundaries, APIs and data models, including authorization, asynchronous processing and transaction consistency across external services.",
   },
   {
-    title: "Reliable systems",
+    title: "Platform modernization",
     description:
-      "I build payment recovery, background jobs and identity migrations. I test what happens when requests repeat or a process stops.",
+      "At KinsCare, I modernized the frontend and cloud infrastructure and migrated 5,000+ user accounts. Infrastructure spend fell by more than 75% during that work.",
   },
   {
-    title: "Applied AI",
+    title: "Applied AI & data systems",
     description:
-      "I’ve built recommendations and automated media workflows, and reviewed model-generated code against specific engineering tasks.",
+      "I build data ingestion and retrieval pipelines, recommendation APIs and AI media orchestration, with persisted state, concurrency limits and checks for service failures.",
+  },
+  {
+    title: "Technical leadership & evaluation",
+    description:
+      "I guided seven developers through architecture and code review at KinsCare. At micro1, I design frontend engineering evaluation tasks, expert reference outputs and assessment criteria.",
   },
 ];
 
@@ -74,8 +79,9 @@ export default function Home() {
               Oduguwa<span className="hero-period">.</span>
             </h1>
             <p className="hero-description">
-              I build web applications and the services behind them. My work
-              includes healthcare hiring, student enrollment and payment recovery.
+              I architect and build production platforms, payment infrastructure
+              and AI systems. I’ve led seven developers and migrated 5,000+ user
+              accounts while preserving access.
             </p>
             <div className="hero-client-links" aria-label="Recent projects">
               <a href="#work">SafeStripe</a>
@@ -129,11 +135,11 @@ export default function Home() {
             </span>
           </div>
           <div>
-            <strong>+73%</strong>
+            <strong>7</strong>
             <span>
-              Completed enrollments
+              Developers guided
               <br />
-              at Excel Health Careers
+              at KinsCare
             </span>
           </div>
           <div>
@@ -157,8 +163,9 @@ export default function Home() {
               </h2>
             </div>
             <p className="section-description">
-              Payment recovery, healthcare hiring and student enrollment. Here’s
-              what I built and what changed.
+              Architecture and implementation across payment infrastructure,
+              marketplace systems and AI orchestration. Each case study explains
+              the decisions I owned and the results.
             </p>
           </div>
           <div className="projects-grid">
@@ -211,8 +218,8 @@ export default function Home() {
               </p>
               <h2>Work experience</h2>
               <p className="section-description">
-                Professional engineering since 2020: web products, payments,
-                technical leadership and AI evaluation.
+                6+ years in production software: system architecture, backend
+                and data services, cloud infrastructure and technical leadership.
               </p>
               <a
                 href={profile.resume}
@@ -264,9 +271,10 @@ export default function Home() {
               </p>
               <p>
                 I studied Food Science and Technology at Obafemi Awolowo
-                University and graduated in 2022. In software, I’m interested in
-                the decisions behind a product: how users complete a task, what
-                it costs to run, and how the team fixes it when it fails.
+                University and graduated in 2022. My engineering work now spans
+                platform architecture, distributed workflows and applied AI. I
+                work through the tradeoffs in data consistency, operating cost
+                and how a team will maintain the system.
               </p>
             </div>
           </div>
