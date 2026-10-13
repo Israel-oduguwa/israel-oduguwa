@@ -14,7 +14,8 @@ const inline = (text) => {
     const token = match[0];
     if (token.startsWith("**")) html += `<strong>${escape(token.slice(2, -2))}</strong>`;
     else if (token.startsWith("*")) html += `<em>${escape(token.slice(1, -1))}</em>`;
-    else if (token.startsWith("`")) html += `<code>${escape(token.slice(1, -1))}</code>`;
+    // Medium imports inline <code> as a separate block; keep these tokens inline.
+    else if (token.startsWith("`")) html += escape(token.slice(1, -1));
     else {
       const [, label, url] = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (!/^https?:\/\//.test(url)) throw new Error(`Unsupported link: ${url}`);

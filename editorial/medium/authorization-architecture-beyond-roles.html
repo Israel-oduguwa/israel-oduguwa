@@ -1,7 +1,7 @@
 <h1>A role is not enough to authorize a request</h1>
 <h2>Checking ownership, tenant scope and resource state at the point where an application changes data.</h2>
 <p>This article was edited with AI assistance.</p>
-<p>A route that checks <code>user.role === &quot;admin&quot;</code> can still authorize the wrong action. An administrator may belong to a different organization. A student may own an enrollment but not be allowed to change its paid status. A caregiver may edit a profile but not another person's verification result.</p>
+<p>A route that checks user.role === &quot;admin&quot; can still authorize the wrong action. An administrator may belong to a different organization. A student may own an enrollment but not be allowed to change its paid status. A caregiver may edit a profile but not another person's verification result.</p>
 <p>The question is more specific than “does this person have a role?” It is “can this actor perform this action on this resource in its current state?” That question needs the relevant data and a clear enforcement point.</p>
 <h2>Start with the resource</h2>
 <p>For an enrollment update, identify the enrollment, its organization, its owner and its current state. Load those values from trusted application state. A request body can propose a new value, but it should not establish the caller's organization or authority.</p>

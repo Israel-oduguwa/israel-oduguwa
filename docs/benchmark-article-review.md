@@ -11,7 +11,10 @@
 - Every one of the 11 table-of-contents links was clicked and resolved to an existing heading. The article index leads to the new page and the return link leads back to the index.
 - Measured description contrast: 5.94:1 in light mode and 8.90:1 in dark mode. Code text and line numbers use the retained slate colors on `#0b1020`, at approximately 17.28:1 and 7.38:1 respectively.
 - Retained navbar, footer, mobile menu, contact states and existing article routes have the prior 125-control and 46-layout-combination review in `senior-positioning-review.md`; their handlers and styling are unchanged.
-- Source-link navigation and public deployment are verified after the source and article are pushed together. The canonical URL is the website article; Medium uses the same original source.
+- All eight external article links were clicked and their destination pages verified. Keyboard Enter activates the index and article links; the skip link reaches `#main-content`.
+- GitHub checks and Vercel deployment passed for `677bac3d5f4ef786d7be78e0959dbb36b8dac408`. The live page renders all 11 sections and three source examples with the correct canonical URL.
+- All six articles published to Israel's signed-in Medium profile. Their canonical URLs match the website articles; code examples and required disclosures were verified. Medium's importer omitted code, so the source HTML restored it. Direct `vercel.app` body links triggered Medium's publishing restriction; removing those body links allowed publication with canonical metadata retained.
+- Daily draft automation is active at 09:00 local time. The host reports WAT / UTC+01:00, matching Africa/Lagos. The prompt requires review before commit, push, upload or publication; drafts live outside the published article directory.
 
 ## Design direction
 
