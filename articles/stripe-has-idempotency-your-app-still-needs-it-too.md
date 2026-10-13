@@ -1,17 +1,17 @@
 ---
 slug: "stripe-idempotency-your-app-still-needs-it"
 title: "Stripe idempotency does not finish the payment workflow"
-description: "A successful payment request and a correct application state are different problems. Here is where retries, webhooks and business effects meet."
+description: "How request retries, repeated webhooks and local business effects need separate identities and recovery rules."
 date: "2024-05-21"
-updatedAt: "2026-10-09"
+updatedAt: "2026-10-13"
 tags:
   - Payments
   - Reliability
 ---
 
-A customer pays for a course. Stripe accepts the payment, but your server loses the response before it updates the enrollment record. The customer sees an error. Your application sees a timeout. Neither observation tells you whether the money moved.
+Consider a customer paying for a course. Stripe accepts the payment, but your server loses the response before it updates the enrollment record. The customer sees an error. Your application sees a timeout. Neither observation tells you whether the money moved.
 
-This is an illustrative failure, not a report of a client incident. It is useful because it exposes several different meanings of “try again.” Retrying the Stripe request, handling a repeated webhook and granting access to the course are separate operations. Each needs its own identity and recovery rule.
+In this example, “try again” can mean retrying the Stripe request, handling a repeated webhook or granting access to the course. Each operation needs its own identity and recovery rule.
 
 ## What Stripe's key protects
 
@@ -62,7 +62,7 @@ Tests should inspect business state, not just HTTP status codes:
 - Kill a worker after it claims work, then verify another worker can recover it after the lease expires.
 - Lose the outbox receiver's response and verify a repeated delivery carries an identity the recipient can deduplicate.
 
-These are the boundaries I document in [SafeStripe's case study](/work/safestripe). Its preview and retained tests have explicit limits; they are evidence for recorded scenarios, not a claim that every payment application is now safe.
+I document these boundaries in [SafeStripe's case study](/work/safestripe). The evaluation preview links to retained tests and sandbox results, with the tested scenarios described alongside them.
 
 ## References
 

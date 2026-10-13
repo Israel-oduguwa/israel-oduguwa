@@ -32,7 +32,7 @@ Vercel deploys the default branch. Pull requests run the checks before merge. Co
 
 Review project claims against the underlying work record when editing. Keep original article dates and expose revision dates when an existing article changes substantially. Never publish private client code, student data or internal evaluation materials.
 
-The profile uses the original `public/images/profile.png` without image edits. The original globe visual remains; its arcs illustrate remote collaboration, not a list of client locations. Reduced-motion and low-power settings use the static fallback.
+The portrait uses the owner's supplied `public/images/israel-portrait.png`. The website and GitHub profile keep that file unchanged, including its checkerboard background. The globe's routes illustrate remote collaboration; they represent illustrative locations. Its arcs stay still, and visitors can rotate the globe. Reduced-motion and low-power settings use the static fallback.
 
 Bricolage Grotesque and DM Sans are served locally from `app/fonts/`, with their Open Font License files alongside them. The site does not request fonts from Google at runtime. Page motion uses CSS and one intersection observer; offscreen sections reveal once, and the first screen remains visible before JavaScript loads. Reduced-motion settings disable these animations.
 

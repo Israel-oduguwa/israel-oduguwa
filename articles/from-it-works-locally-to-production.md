@@ -3,7 +3,7 @@ slug: "from-it-works-locally-to-production"
 title: "What changes when a workflow reaches production"
 description: "A deployment review focused on failure recovery, observable state and the cost of running the product."
 date: "2026-04-21"
-updatedAt: "2026-10-09"
+updatedAt: "2026-10-13"
 tags:
   - Operations
   - Reliability
@@ -27,7 +27,7 @@ A media workflow can look simple as a sequence of API calls. Under load, renderi
 
 Bound the number of active jobs and make progress durable where the workflow requires it. Separate a transient provider error from a permanent invalid request. Set retry limits and give exhausted jobs an inspectable state rather than letting them disappear into logs.
 
-For the asynchronous media system described in my [Excel Health Careers case study](/work/excelcna), concurrency, progress polling, latency monitoring and recovery were part of the engineering scope. The case study explains the recorded result without treating one observed completion time as a universal benchmark.
+At [Excel Health Careers](/work/excelcna), I bounded render concurrency, polled for progress and added recovery paths to the media workflow. The case study records the results from that contract.
 
 ## Measure the user-visible failure
 
@@ -41,7 +41,7 @@ Google's [SRE monitoring chapter](https://sre.google/sre-book/monitoring-distrib
 
 Infrastructure cost is a product constraint. Track what drives it: continuously running compute, database access patterns, media processing, storage, data transfer and external API usage. A cheaper component is not automatically a cheaper system if it adds operational work or causes repeated processing.
 
-At KinsCare, frontend modernization and infrastructure changes were part of the same work. The recorded reduction in infrastructure spend was over 75%. That figure belongs to that project and its prior setup; it is not a prediction for an unrelated application.
+At KinsCare, I worked on frontend modernization and infrastructure changes together. Infrastructure spend fell by over 75% during that work period. The [case study](/work/kinscare) describes the migration and the results.
 
 ## Release with a recovery path
 
@@ -49,4 +49,4 @@ A release should include a way to identify incomplete work, a way to retry only 
 
 Write down who can make that decision and what evidence they need. Then exercise the path in a disposable environment. A runbook becomes useful when another engineer can follow it under pressure, not when it contains every command the author happened to run.
 
-The goal is a release whose limitations are understood. That understanding makes the next improvement easier to prioritize and the first incident easier to resolve.
+A release is easier to operate when the team knows how to find unfinished work, which retries are safe and who can make the recovery decision.

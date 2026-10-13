@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { ArrowUpRight, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { profile } from "@/lib/portfolio";
 
 export function Contact() {
@@ -64,7 +64,6 @@ export function Contact() {
           </p>
           <a className="email-link" href={`mailto:${profile.email}`}>
             {profile.email}
-            <ArrowUpRight size={20} aria-hidden="true" />
           </a>
         </div>
         <form onSubmit={send} className="contact-form" aria-busy={busy}>
@@ -130,9 +129,7 @@ export function Contact() {
                   Sending…
                 </>
               ) : (
-                <>
-                  Send message <ArrowUpRight size={17} aria-hidden="true" />
-                </>
+                "Send message"
               )}
             </button>
           </div>

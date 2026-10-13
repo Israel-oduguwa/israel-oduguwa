@@ -3,7 +3,7 @@ slug: "ai-written-code-production-safe"
 title: "Reviewing generated code before it reaches production"
 description: "How I assess a proposed implementation against the repository, the task and the system's failure boundaries."
 date: "2025-08-13"
-updatedAt: "2026-10-09"
+updatedAt: "2026-10-13"
 tags:
   - AI evaluation
   - Code review
@@ -19,7 +19,7 @@ The reviewer needs to know what counts as a correct result. That includes the re
 
 For a frontend task, a reference might describe the current component contract, an API response shape and the behavior expected when a request fails. If those details are missing, reviewers can end up rewarding different solutions for incompatible reasons.
 
-In my one-month micro1 project, I designed source-grounded frontend engineering evaluation tasks, reference outputs and objective criteria. That is the public scope described here. I do not publish internal task materials, model responses or confidential project information.
+In my one-month micro1 project, I designed frontend engineering evaluation tasks from supplied source material, wrote reference outputs and defined objective criteria. The examples in this article use public engineering scenarios; micro1 retains the internal task materials and model responses.
 
 ## Trace the implementation across boundaries
 
@@ -48,10 +48,10 @@ A test that repeats the implementation's assumptions can make a flawed solution 
 
 For concurrency claims, use competing workers or processes when the distinction matters. An exception thrown inside one process does not reproduce every effect of that process disappearing.
 
-SafeStripe's [reliability work](/work/safestripe) is an example of documenting those boundaries. Its tests and recorded sandbox run support specific claims. They do not justify a blanket promise of production safety for every application.
+SafeStripe's [reliability work](/work/safestripe) records the tested scenarios and their recovery results. Another engineer can inspect the tests and decide which failure paths their own application still needs to cover.
 
 ## Keep the explanation tied to evidence
 
 A good review can say which behavior is correct, where the implementation diverges and what would establish a fix. It should distinguish an observed failure from a suspected one and a tested scenario from an unverified claim.
 
-That is also a useful discipline for everyday engineering. The final explanation should help the next person maintain the system, not make the author sound more certain than the evidence allows.
+The review should leave the next engineer with enough evidence to check the fix and maintain the system.

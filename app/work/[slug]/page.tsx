@@ -75,13 +75,13 @@ export default async function CaseStudy({
           />
           <figcaption>
             {project.slug === "safestripe"
-              ? "The public explainer illustrates duplicate payment updates. It is a teaching scenario, not footage of a production incident."
+              ? "A teaching example from the public explainer: repeated payment updates for one payment."
               : "Public product view, captured October 2026. My contribution and work period are described below."}
           </figcaption>
         </figure>
         <div className="case-body">
           <aside className="case-aside">
-            <h2>Explore the project</h2>
+            <h2>Project links</h2>
             {project.links.map((link) => (
               <a
                 key={link.href}
@@ -136,7 +136,7 @@ export default async function CaseStudy({
         <div className="case-next">
           <p>Have a similar problem?</p>
           <Link className="button primary" href="/#contact">
-            Let’s talk <ArrowUpRight size={17} aria-hidden="true" />
+            Discuss a project
           </Link>
         </div>
       </main>

@@ -221,7 +221,7 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
               key={`${index}-${line}`}
               className="grid grid-cols-[3.25rem_1fr] px-4 transition-colors hover:bg-white/[0.035]"
             >
-              <span className="select-none pr-4 text-right font-mono text-xs text-slate-500">
+              <span className="select-none pr-4 text-right font-mono text-xs text-slate-400">
                 {index + 1}
               </span>
               <span className="whitespace-pre font-mono">{line || " "}</span>

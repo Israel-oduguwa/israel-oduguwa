@@ -34,7 +34,7 @@ export function ProjectVisual({ project }: { project: Project }) {
         className="project-screenshot"
       />
       <span className="project-open" aria-hidden="true">
-        View project ↗
+        Read case study
       </span>
     </Link>
   );

@@ -1,4 +1,4 @@
-import { Download, Mail, ArrowUpRight } from "lucide-react";
+import { Download, Mail } from "lucide-react";
 import { GlobeScene } from "@/components/ui/GlobeScene";
 import type { GlobeConfig, Position } from "@/components/ui/globe";
 import { profile } from "@/lib/portfolio";
@@ -7,22 +7,22 @@ const globeConfig: GlobeConfig = {
   pointSize: 4,
   globeColor: "#1e293b",
   showAtmosphere: true,
-  atmosphereColor: "#c084fc",
+  atmosphereColor: "#81a6ff",
   atmosphereAltitude: 0.15,
   emissive: "#0f172a",
   emissiveIntensity: 0.8,
   shininess: 0.9,
   polygonColor: "rgba(255,255,255,0.8)",
-  ambientLight: "#38bdf8",
+  ambientLight: "#ffffff",
   directionalLeftLight: "#ffffff",
   directionalTopLight: "#ffffff",
   pointLight: "#ffffff",
-  arcTime: 1000,
-  arcLength: 0.9,
-  rings: 1,
+  arcTime: 0,
+  arcLength: 1,
+  rings: 0,
   maxRings: 3,
   initialPosition: { lat: 22.3193, lng: 114.1694 },
-  autoRotate: true,
+  autoRotate: false,
   autoRotateSpeed: 0.5,
 };
 
@@ -39,7 +39,6 @@ const points = [
   [1.3521, 103.8198],
   [48.8566, 2.3522],
 ];
-const colors = ["#ec4899", "#8b5cf6", "#3b82f6", "#06b6d4"];
 const routes: Position[] = points.flatMap((start, index) =>
   points
     .filter((_, endIndex) => endIndex > index && (index + endIndex) % 3 === 0)
@@ -50,7 +49,7 @@ const routes: Position[] = points.flatMap((start, index) =>
       endLat: end[0],
       endLng: end[1],
       arcAlt: 0.18 + (routeIndex % 3) * 0.06,
-      color: colors[index % colors.length],
+      color: "#81a6ff",
     })),
 );
 
@@ -95,8 +94,7 @@ export default function Availability() {
               <Download size={17} aria-hidden="true" /> Read my résumé
             </a>
             <a href={`mailto:${profile.email}`} className="availability-email">
-              <Mail size={17} aria-hidden="true" /> Email me{" "}
-              <ArrowUpRight size={15} aria-hidden="true" />
+              <Mail size={17} aria-hidden="true" /> Email me
             </a>
           </div>
         </div>

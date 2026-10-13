@@ -14,7 +14,7 @@ test("published article URLs survive the refresh and dates remain explicit", () 
   ]) {
     const article = getArticleBySlug(slug);
     assert.ok(article);
-    assert.equal(article.updatedAt, "2026-10-09");
+    assert.equal(article.updatedAt, "2026-10-13");
     assert.ok(article.date < article.updatedAt);
   }
   assert.equal(getArticleBySlug("../../package.json"), undefined);

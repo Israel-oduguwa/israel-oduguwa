@@ -66,7 +66,7 @@ export function Navbar() {
             Résumé <ArrowUpRight size={15} aria-hidden="true" />
           </a>
           <Link className="button primary nav-contact" href="/#contact">
-            Let’s talk
+            Contact me
           </Link>
           <button
             ref={trigger}
@@ -93,11 +93,10 @@ export function Navbar() {
               onClick={() => setOpen(false)}
             >
               {link.label}
-              <ArrowUpRight size={17} aria-hidden="true" />
             </Link>
           ))}
           <Link href="/#contact" onClick={() => setOpen(false)}>
-            Contact <ArrowUpRight size={17} aria-hidden="true" />
+            Contact
           </Link>
         </nav>
       )}

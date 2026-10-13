@@ -20,9 +20,9 @@ const bodyFont = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://israel-oduguwa.vercel.app"),
-  title: "Israel Oduguwa — Senior Full Stack Software Engineer",
+  title: "Israel Oduguwa | Senior Full Stack Software Engineer",
   description:
-    "Senior full-stack software engineer building reliable products, payment systems and applied AI. Case studies from KinsCare, Excel Health Careers and SafeStripe.",
+    "Web applications and the services behind them. Engineering work from KinsCare, Excel Health Careers and SafeStripe, with case studies and technical writing.",
   keywords: [
     "Israel Oduguwa",
     "full-stack engineer",
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Israel Oduguwa — Senior Full Stack Software Engineer",
+    title: "Israel Oduguwa | Senior Full Stack Software Engineer",
     description:
-      "Senior full-stack software engineer building reliable products, payment systems and applied AI. Case studies from KinsCare, Excel Health Careers and SafeStripe.",
+      "Web applications and the services behind them. Engineering work from KinsCare, Excel Health Careers and SafeStripe, with case studies and technical writing.",
     url: "https://israel-oduguwa.vercel.app",
     siteName: "Israel Oduguwa Portfolio",
     locale: "en_US",
@@ -62,9 +62,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Israel Oduguwa — Senior Full Stack Software Engineer",
+    title: "Israel Oduguwa | Senior Full Stack Software Engineer",
     description:
-      "Product engineering, reliable backend workflows and applied AI. Explore the work of Israel Oduguwa.",
+      "Web applications, payment recovery and applied AI. Projects and engineering notes by Israel Oduguwa.",
   },
 };
 

@@ -1,8 +1,9 @@
 ---
 slug: "worker-ownership-and-payment-recovery"
 title: "What a crashed payment worker leaves behind"
-description: "The ownership and transaction boundaries behind SafeStripe's recovery design, with the tests and limits that support it."
+description: "How SafeStripe uses leases, ownership checks and transactions to recover work after a payment worker crashes."
 date: "2026-10-09"
+updatedAt: "2026-10-13"
 tags:
   - Systems
   - Reliability
@@ -10,7 +11,7 @@ tags:
 
 A worker claims a payment update, starts processing and disappears. The queue still contains the work, but the process that claimed it will never release it. Another worker needs permission to continue without letting the old one later overwrite its result.
 
-That is one of the problems I built SafeStripe around. It is a TypeScript reliability layer for Stripe applications, with durable admission, leased work, guarded local effects and an outbox. The [0.3 preview](/work/safestripe) makes those mechanisms inspectable rather than hiding them behind a promise that payments “just work.”
+I built SafeStripe to handle this kind of recovery. The TypeScript library saves accepted work, leases jobs to workers and checks ownership before committing local effects. The [0.3 preview](/work/safestripe) includes tests and a sandbox where you can inspect that behavior.
 
 ## A claim is temporary ownership
 
@@ -51,12 +52,12 @@ A process-level failure test creates a stronger recovery scenario than throwing 
 
 The question is what durable state remains: who owns the job, whether the effect was committed and whether the downstream intent exists. A successful HTTP response alone cannot establish those properties.
 
-The repository also keeps [a real Stripe sandbox lifecycle run](https://github.com/Israel-oduguwa/SafeStripe/actions/runs/37600727941). That run recorded twelve journeys. A duplicate replay added ten admissions while preserving the original Firestore paid receipt and paid time. This is evidence for the recorded workflow, not a claim about every customer's fulfillment logic.
+The repository also keeps [a Stripe sandbox lifecycle run](https://github.com/Israel-oduguwa/SafeStripe/actions/runs/37600727941) covering twelve journeys. In its duplicate replay, ten additional admissions preserved the original Firestore paid receipt and paid time.
 
 ## The limits are part of the design
 
 SafeStripe cannot authorize an application's refund policy, make an external service participate in its local transaction or repair missing database history without remote reconciliation. Database backup and restore behavior still belongs in the application's recovery plan.
 
-The [architecture and reliability contracts](https://israel-oduguwa.github.io/SafeStripe/) explain those limits alongside the mechanisms. Reproducible benchmarks describe their environment and workload. Neither a sandbox run nor a benchmark is an independent security review or an enterprise capacity guarantee.
+The [architecture and reliability contracts](https://israel-oduguwa.github.io/SafeStripe/) explain those responsibilities alongside the mechanisms. The sandbox run covers its recorded journeys, and each benchmark names its environment and workload. Independent security review and enterprise capacity testing remain outside that evidence.
 
-I want another engineer to be able to identify the transaction boundary, challenge the recovery claim and reproduce the relevant test. That is the useful outcome of the project: a payment integration whose behavior under failure can be discussed with evidence.
+I want another engineer to be able to identify the transaction boundary and reproduce the recovery test. The tests give us something concrete to inspect when deciding how the payment integration behaves after a failure.

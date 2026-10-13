@@ -222,8 +222,10 @@ function Globe({
         return [0.32, 0.28, 0.3][arc.order % 3];
       })
       .arcDashLength(config.arcLength)
-      .arcDashInitialGap((item: unknown) => (item as Position).order)
-      .arcDashGap(15)
+      .arcDashInitialGap((item: unknown) =>
+        config.arcTime ? (item as Position).order : 0,
+      )
+      .arcDashGap(config.arcTime ? 15 : 0)
       .arcDashAnimateTime(() => config.arcTime);
 
     globeRef.current
@@ -238,7 +240,9 @@ function Globe({
       .ringColor(() => config.polygonColor)
       .ringMaxRadius(config.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
-      .ringRepeatPeriod((config.arcTime * config.arcLength) / config.rings);
+      .ringRepeatPeriod(
+        config.rings ? (config.arcTime * config.arcLength) / config.rings : 0,
+      );
 
     globeRef.current
       .labelsData(markers.filter((marker) => marker.label))
@@ -279,7 +283,13 @@ function Globe({
   }, [config, data, isActive, isInitialized, markers]);
 
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data.length || !isActive)
+    if (
+      !globeRef.current ||
+      !isInitialized ||
+      !data.length ||
+      !isActive ||
+      !config.rings
+    )
       return;
 
     const interval = window.setInterval(() => {
@@ -300,7 +310,7 @@ function Globe({
     }, 2000);
 
     return () => window.clearInterval(interval);
-  }, [data, isActive, isInitialized]);
+  }, [config.rings, data, isActive, isInitialized]);
 
   return <group ref={groupRef} scale={scale} />;
 }

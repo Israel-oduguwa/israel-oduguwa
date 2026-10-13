@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { getAllArticles } from "@/lib/articles";
@@ -40,15 +39,13 @@ export default function ArticlesPage() {
                   {article.updatedAt ? ` · Revised ${article.updatedAt}` : ""}
                 </p>
               </div>
-              <ArrowUpRight size={22} aria-hidden="true" />
             </Link>
           ))}
         </div>
         <div className="editorial-footer">
           <p>Interested in the implementation behind the writing?</p>
           <Link href="/work/safestripe" className="text-link">
-            Read the SafeStripe case study{" "}
-            <ArrowUpRight size={17} aria-hidden="true" />
+            Read the SafeStripe case study
           </Link>
         </div>
       </main>

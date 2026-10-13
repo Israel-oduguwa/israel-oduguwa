@@ -42,8 +42,8 @@
     --background: #060608;
     --foreground: #fafafa;
 
-    --primary: #3b82f6;
-    --primary-foreground: #ffffff;
+    --primary: #72a8ff;
+    --primary-foreground: #10151e;
 
     --accent: #6366f1;
     --accent-foreground: #ffffff;
@@ -201,6 +201,9 @@ button {
   gap: 26px;
 }
 .desktop-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 14px;
   font-weight: 550;
   color: var(--muted-foreground);
@@ -218,14 +221,15 @@ button {
   gap: 5px;
   font-size: 13px;
   font-weight: 600;
+  min-height: 44px;
 }
 .theme-toggle,
 .menu-trigger {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 36px;
-  width: 36px;
+  height: 44px;
+  width: 44px;
   border-radius: 8px;
   cursor: pointer;
 }
@@ -270,7 +274,7 @@ button {
   font-weight: 600;
   padding: 14px 19px;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: 10px;
   cursor: pointer;
 }
 .button.primary {
@@ -312,14 +316,6 @@ button {
   font-weight: 550;
   margin-bottom: 26px;
 }
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #2563eb;
-  box-shadow: 0 0 0 4px #2563eb12;
-  flex-shrink: 0;
-}
 .hero h1 {
   font-size: clamp(82px, 9.4vw, 128px);
   font-weight: 700;
@@ -354,7 +350,8 @@ button {
   height: 540px;
   position: relative;
   isolation: isolate;
-  overflow: visible;
+  overflow: hidden;
+  border-radius: 20px;
 }
 .portrait {
   position: absolute;
@@ -463,8 +460,6 @@ h2 {
 }
 .project-visual.stripe {
   background: #2154ed;
-  background-image: radial-gradient(#ffffff1a 1px, transparent 1px);
-  background-size: 20px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -549,10 +544,20 @@ h2 {
   color: var(--primary);
   font-size: 13px;
   font-weight: 600;
+  min-height: 44px;
 }
 .text-link:hover {
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.case-aside a,
+.email-link {
+  min-height: 44px;
 }
 .preview-note {
   font-size: 11px;
@@ -619,25 +624,21 @@ h2 {
   margin-bottom: 18px;
 }
 .capabilities {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
   margin-top: 46px;
 }
-.capabilities article {
+.capabilities > div {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 100px;
   border-top: 1px solid var(--card-border);
-  padding-top: 25px;
+  padding-block: 22px;
 }
-.capabilities svg {
-  color: var(--primary);
-  margin-bottom: 17px;
-}
-.capabilities h3 {
+.capabilities dt {
+  font-family: var(--font-display), ui-sans-serif, sans-serif;
   font-size: 17px;
   font-weight: 600;
-  margin-bottom: 10px;
 }
-.capabilities p {
+.capabilities dd {
   color: var(--muted-foreground);
   font-size: 13px;
   line-height: 1.85;
@@ -796,7 +797,7 @@ h2 {
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
   color: var(--muted-foreground);
-  opacity: 0.7;
+  opacity: 1;
 }
 .honeypot {
   position: absolute;
@@ -827,6 +828,9 @@ h2 {
 }
 .form-feedback.error {
   color: #b91c1c;
+}
+.dark .form-feedback {
+  color: #86efac;
 }
 .dark .form-feedback.error {
   color: #fca5a5;
@@ -1164,15 +1168,11 @@ h2 {
     margin-block: 18px;
   }
   .capabilities {
-    grid-template-columns: 1fr;
-    gap: 25px;
     margin-top: 30px;
   }
-  .capabilities article {
-    padding-top: 22px;
-  }
-  .capabilities svg {
-    margin-bottom: 12px;
+  .capabilities > div {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
   .credentials-section {
     padding-block: 20px;

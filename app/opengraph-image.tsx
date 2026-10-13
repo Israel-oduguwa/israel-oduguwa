@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Israel Oduguwa — Senior Full Stack Software Engineer";
+export const alt = "Israel Oduguwa | Senior Full Stack Software Engineer";
 export const size = {
   width: 1200,
   height: 630,
@@ -24,30 +24,6 @@ export default function Image() {
         width: "100%",
       }}
     >
-      <div
-        style={{
-          background: "#2563eb",
-          borderRadius: "999px",
-          height: 360,
-          opacity: 0.18,
-          position: "absolute",
-          right: -80,
-          top: -120,
-          width: 360,
-        }}
-      />
-      <div
-        style={{
-          background: "#6366f1",
-          borderRadius: "999px",
-          bottom: -160,
-          height: 420,
-          left: -120,
-          opacity: 0.12,
-          position: "absolute",
-          width: 420,
-        }}
-      />
       <div
         style={{
           display: "flex",
@@ -85,8 +61,8 @@ export default function Image() {
               lineHeight: 1.25,
             }}
           >
-            Senior Full Stack Software Engineer. Reliable products, payment
-            systems and applied AI.
+            Senior full-stack software engineer. Web applications and the
+            services behind them.
           </div>
         </div>
       </div>

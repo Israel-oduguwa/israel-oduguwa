@@ -3,7 +3,7 @@ slug: "authorization-architecture-beyond-roles"
 title: "A role is not enough to authorize a request"
 description: "Checking ownership, tenant scope and resource state at the point where an application changes data."
 date: "2025-05-22"
-updatedAt: "2026-10-09"
+updatedAt: "2026-10-13"
 tags:
   - Security
   - Backend
@@ -28,7 +28,7 @@ Authenticated actor
     → write
 ```
 
-This is a policy outline, not a complete implementation. Authentication establishes the actor. It does not establish permission for every resource.
+This policy outline separates authentication from authorization: establish the actor, then check permission for the resource and action.
 
 ## Keep enforcement near the write
 
@@ -44,7 +44,7 @@ Background jobs often escape a careful authorization design. A worker may receiv
 
 Persist enough context to re-establish the job's scope. Avoid storing an unrestricted instruction to act on an arbitrary ID. Define which actions the worker can perform and validate that the resource still belongs to the expected organization.
 
-That does not mean copying every user permission into a queue payload. Permissions can change. Decide whether the action uses the initiating user's continuing authority, a narrowly defined system policy, or a previously approved business transition. Make that choice visible in the design.
+Permissions can change while a job waits in the queue. Decide whether the action uses the initiating user's continuing authority, a narrowly defined system policy, or a previously approved business transition. Make that choice visible in the design.
 
 ## Test the denied paths
 

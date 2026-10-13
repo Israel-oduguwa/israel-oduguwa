@@ -4,9 +4,6 @@ import {
   ArrowDown,
   ArrowUpRight,
   FileDown,
-  ShieldCheck,
-  Braces,
-  Layers,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -19,19 +16,16 @@ import { getAllArticles } from "@/lib/articles";
 
 const capabilities = [
   {
-    icon: Layers,
     title: "Product engineering",
     description:
       "I connect React and Next.js interfaces to Node.js and Python services, with the data models and deployment needed to run them.",
   },
   {
-    icon: ShieldCheck,
     title: "Reliable systems",
     description:
       "I build payment recovery, background jobs and identity migrations. I test what happens when requests repeat or a process stops.",
   },
   {
-    icon: Braces,
     title: "Applied AI",
     description:
       "I’ve built recommendations and automated media workflows, and reviewed model-generated code against specific engineering tasks.",
@@ -72,8 +66,7 @@ export default function Home() {
         <section className="hero shell" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="intro">
-              <span className="status-dot" /> Senior Full Stack Software
-              Engineer
+              Senior full-stack software engineer
             </p>
             <h1 id="hero-title">
               <span className="hero-first-name">Israel</span>
@@ -81,8 +74,8 @@ export default function Home() {
               Oduguwa<span className="hero-period">.</span>
             </h1>
             <p className="hero-description">
-              Web applications, payment systems and AI features. I work across
-              the interface, APIs, databases and deployment.
+              I build web applications and the services behind them. My work
+              includes healthcare hiring, student enrollment and payment recovery.
             </p>
             <div className="hero-client-links" aria-label="Recent projects">
               <a href="#work">SafeStripe</a>
@@ -109,54 +102,22 @@ export default function Home() {
             </p>
           </div>
           <div className="portrait-frame">
-            <div className="portrait-backdrop" aria-hidden="true" />
-            <svg
-              className="portrait-orbit"
-              viewBox="0 0 520 600"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M56 486C-36 361 47 80 267 44C493 9 548 301 454 473"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M82 517C-19 465 17 157 215 94C414 30 545 191 500 414"
-                stroke="currentColor"
-                strokeOpacity=".25"
-              />
-              <circle cx="267" cy="44" r="7" fill="currentColor" />
-              <path
-                d="M435 97V125M421 111H449"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-            </svg>
             <Image
-              src="/images/profile.png"
+              src="/images/israel-portrait.png"
               alt="Israel Oduguwa"
-              width={1123}
-              height={1401}
-              unoptimized
+              width={1122}
+              height={1402}
               preload
               sizes="(max-width: 700px) 80vw, 450px"
               className="portrait"
             />
-            <div className="portrait-note">
-              <Braces size={20} aria-hidden="true" />
-              <div>
-                <strong>Web applications & services</strong>
-                <span>TypeScript · Node.js · Python</span>
-              </div>
-            </div>
           </div>
         </section>
         <div className="proof-strip shell">
           <p>
             <span className="proof-caption">Selected results</span>
             <a href="#work">
-              See the work <ArrowUpRight size={14} aria-hidden="true" />
+              See project results
             </a>
           </p>
           <div>
@@ -229,12 +190,11 @@ export default function Home() {
                     ))}
                   </div>
                   <Link href={`/work/${project.slug}`} className="text-link">
-                    Read the case study{" "}
-                    <ArrowUpRight size={18} aria-hidden="true" />
+                    Read the case study
                   </Link>
                   {index === 0 && (
                     <p className="preview-note">
-                      0.3 evaluation preview · public tests and limitations
+                      0.3.0 evaluation preview · sandbox and recovery tests
                     </p>
                   )}
                 </div>
@@ -272,7 +232,7 @@ export default function Home() {
                   <p>{item.description}</p>
                   {item.project && (
                     <Link href={item.project} className="text-link">
-                      See the work <ArrowUpRight size={16} aria-hidden="true" />
+                      Read the case study
                     </Link>
                   )}
                 </article>
@@ -310,15 +270,14 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="capabilities">
+          <dl className="capabilities">
             {capabilities.map((item) => (
-              <article key={item.title} data-reveal>
-                <item.icon size={25} strokeWidth={1.6} aria-hidden="true" />
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </article>
+              <div key={item.title} data-reveal>
+                <dt>{item.title}</dt>
+                <dd>{item.description}</dd>
+              </div>
             ))}
-          </div>
+          </dl>
         </section>
 
         <section
@@ -388,7 +347,7 @@ export default function Home() {
               <h2 id="writing-title">Technical writing</h2>
             </div>
             <Link href="/articles" className="text-link">
-              All writing <ArrowUpRight size={18} aria-hidden="true" />
+              All articles
             </Link>
           </div>
           <div className="writing-list">
@@ -402,7 +361,6 @@ export default function Home() {
                   <h3>{article.title}</h3>
                   <span>{article.description}</span>
                 </div>
-                <ArrowUpRight size={22} aria-hidden="true" />
               </Link>
             ))}
           </div>

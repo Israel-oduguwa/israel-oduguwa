@@ -4,7 +4,7 @@ The portfolio's client results are taken from the owner's résumé and work desc
 
 SafeStripe's public preview links to retained sandbox evidence and benchmarks. It does not claim universal enterprise capacity or an independent security review.
 
-The profile image is the repository's original `public/images/profile.png`. The globe retains its original interactive implementation and uses a static rendering of the existing geographic data when motion or hardware settings require it.
+The profile image is the owner's supplied `public/images/israel-portrait.png`, also copied to `.github/profile/portrait.png`. Its bytes match the supplied file, including the checkerboard background, as requested. The globe supports manual rotation with stationary routes. Motion and hardware preferences use a static rendering of the existing geographic data.
 
 The collaboration routes are illustrative. They do not identify the owner's location or represent a list of customers. Location text is omitted from the current pages and downloadable résumé.
 

@@ -35,7 +35,7 @@ export const projects: Project[] = [
     role: "Creator and maintainer",
     period: "2026",
     summary:
-      "A TypeScript library for recovering Stripe workflows after timeouts, repeated webhooks and worker crashes. Processing state stays in your database.",
+      "A TypeScript library that stores payment operation history and webhook work in your database, so Stripe workflows can recover after a timeout or worker crash.",
     contribution:
       "I built the TypeScript library, database adapters, framework integrations, failure tests and public sandbox. The difficult part is deciding what a retry is allowed to repeat.",
     tags: ["TypeScript", "Node.js", "Stripe", "PostgreSQL", "Firestore"],
@@ -73,7 +73,7 @@ export const projects: Project[] = [
     result:
       "The published 0.3.0 package has a public evaluation sandbox, architecture decisions, reproducible benchmarks and CI. A retained Express + Firestore sandbox run recorded twelve journeys. Its duplicate replay added ten admissions while preserving the original receipt and paid time.",
     boundary:
-      "Version 0.3.0 is an evaluation preview. Sandbox tests establish the recorded scenarios, not enterprise capacity or an independent security audit. Applications still supply authorization, stable operation and effect identities, database durability and a tested recovery plan.",
+      "Version 0.3.0 is an evaluation preview. The linked sandbox run and benchmarks cover their stated scenarios and workloads. Applications supply authorization, stable operation and effect identities, durable storage and a recovery plan. Independent security review and enterprise capacity testing remain outside this preview's evidence.",
     links: [
       {
         label: "Repository",
@@ -93,7 +93,7 @@ export const projects: Project[] = [
         href: "https://github.com/Israel-oduguwa/SafeStripe/actions/runs/37600727941",
       },
       {
-        label: "Benchmarks and their limits",
+        label: "Benchmark results",
         href: "https://israel-oduguwa.github.io/SafeStripe/benchmarks/",
       },
     ],
@@ -125,11 +125,11 @@ export const projects: Project[] = [
     decisions: [
       {
         title: "Modernize the product and deployment together",
-        body: "I migrated the frontend from React to Next.js and reworked production deployment and infrastructure. The work addressed page delivery and infrastructure spend as part of the same modernization, rather than treating the frontend as an isolated redesign.",
+        body: "I migrated the frontend from React to Next.js and reworked production deployment and infrastructure. That let me address page performance and running costs in the same migration.",
       },
       {
         title: "Plan the identity migration around continuity",
-        body: "The Realm-to-Clerk migration covered more than 5,000 users despite limited exportable identity data. Preserving access and account continuity was a requirement of the transition, not an assumption that could be left until launch.",
+        body: "The Realm-to-Clerk migration covered more than 5,000 users with limited exportable identity data. I planned the transition around preserving access to their existing accounts.",
       },
       {
         title: "Give recommendations a maintained data pipeline",
@@ -141,9 +141,9 @@ export const projects: Project[] = [
       },
     ],
     result:
-      "The modernization reduced infrastructure spend by more than 75%. The recorded Lighthouse performance score moved from 59 to 90, with SEO at 100. The identity migration preserved account continuity for the existing user base. These are results from my work period, not a measurement of today's website.",
+      "The modernization reduced infrastructure spend by more than 75%. The recorded Lighthouse performance score moved from 59 to 90, with SEO at 100. The identity migration preserved account continuity for the existing user base.",
     boundary:
-      "The live site shows the public product. Client source code, user data and internal architecture details are not published here. Results reflect the work period above. Subsequent product changes and current site ownership belong to KinsCare.",
+      "Results cover my October 2022 to December 2025 work at KinsCare. The live site provides current product context; KinsCare maintains the client code, user data and internal architecture.",
     links: [{ label: "Visit KinsCare", href: "https://www.kinscare.org/" }],
   },
   {
@@ -153,7 +153,7 @@ export const projects: Project[] = [
     role: "Senior software engineer, contract",
     period: "Mar 2025 - Apr 2026",
     summary:
-      "An online enrollment platform for healthcare training. I connected registration, Stripe payment events and administrative tracking so the business could follow a student's progress.",
+      "An enrollment platform for healthcare training. I connected registration and Stripe payment events to student records and the team's administrative workflows.",
     contribution:
       "I redesigned enrollment, added payment recovery, and built campaign and video-generation workflows with limits on concurrent rendering jobs.",
     tags: ["Next.js", "Stripe", "Firebase", "Remotion", "AWS"],
@@ -194,7 +194,7 @@ export const projects: Project[] = [
     result:
       "The enrollment redesign increased completed enrollments by 73% and reduced manual operational work by 40%. The transaction layer supported more than 8,000 successful transactions. Acquisition work contributed to a 60% increase in qualified student acquisition; video generation completed in under eight minutes per item.",
     boundary:
-      "These figures describe my contract work and are not a current conversion-rate or benchmark claim. The public site is linked for product context. Student records, payment data and private implementation details remain with the client.",
+      "Results cover my March 2025 to April 2026 contract. The live site provides product context. The client retains student records, payment data and private implementation details.",
     links: [
       {
         label: "Visit Excel Health Careers",
