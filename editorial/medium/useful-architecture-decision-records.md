@@ -4,7 +4,7 @@ Record the constraints, rejected alternatives and revisit conditions that future
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-01-25. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 25 January 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 An engineer finds a queue between two modules and asks why a local function call was not enough. The code shows how the queue works. A diagram shows where it sits. Neither explains the requirement that made asynchronous delivery worth its operational cost.
 

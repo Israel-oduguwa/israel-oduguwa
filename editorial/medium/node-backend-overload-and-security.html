@@ -1,7 +1,7 @@
 <h1>A Node.js backend designed for overload, failure and hostile input</h1>
 <h2>Set resource budgets, transaction boundaries and security controls before choosing how to scale a production backend.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2025-05-22. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 22 May 2025. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A backend can handle a large request count and still be easy to overwhelm. One expensive export can monopolize database connections. A retry storm can consume capacity intended for new requests. A valid authenticated user can submit work whose cost is much greater than its price or quota.</p>
 <p>I would design a Node.js backend around resource ownership and business invariants. Horizontal scaling matters after those boundaries are understood. Adding replicas to an unbounded design can increase the rate at which it overloads its database.</p>
 <p>This is a reference architecture for a transactional SaaS with interactive requests, background jobs and external integrations. It targets Node.js 22-era behavior as of May 2025. It is a set of decisions to adapt and validate, not a claim that one topology is perfect for every large application.</p>

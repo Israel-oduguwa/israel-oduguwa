@@ -4,7 +4,7 @@ Control dependency growth, shared-component variation and migration cost without
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-01-23. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 23 January 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 A shared table begins with sorting and pagination. Six teams add bulk actions, inline editing, grouped rows, custom filters and several permission models. The table now has dozens of flags, and changing one behavior requires checking unrelated products.
 

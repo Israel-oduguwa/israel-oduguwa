@@ -4,7 +4,7 @@ Set resource budgets, transaction boundaries and security controls before choosi
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-05-22. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 22 May 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 A backend can handle a large request count and still be easy to overwhelm. One expensive export can monopolize database connections. A retry storm can consume capacity intended for new requests. A valid authenticated user can submit work whose cost is much greater than its price or quota.
 

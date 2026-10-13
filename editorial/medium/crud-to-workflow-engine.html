@@ -1,7 +1,7 @@
 <h1>From CRUD to a workflow engine: state, actors and irreversible effects</h1>
 <h2>Model commands, permissions, concurrency and external effects when several people and services share a business process.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2024-04-18. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 18 April 2024. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A product starts with an application form and a status column. Then a reviewer must approve it, finance must collect payment, an applicant can withdraw, and support must reopen a rejected case. Two people can act at once. Payment confirmation arrives later, sometimes twice.</p>
 <p>At that point, allowing an API client to update status is an architectural liability. The product has commands with preconditions, actors with different authority, and effects that cannot be undone by changing a row back to its previous value.</p>
 <p>The useful transition from CRUD to a workflow engine is making those rules explicit and executable. A state-machine library can help describe them. It does not supply transaction boundaries, authorization or recovery semantics on its own.</p>

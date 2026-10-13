@@ -4,7 +4,7 @@ Use workload economics, failure-mode capacity and reversible experiments to remo
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-06-20. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 20 June 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 A service runs at 25% average CPU utilization. The obvious proposal is to halve its instances. Whether that saves money safely depends on what the other 75% represents: idle waste, burst capacity, a slow scaling controller, deployment overlap or the capacity needed after an availability-zone failure.
 

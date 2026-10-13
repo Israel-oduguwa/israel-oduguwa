@@ -6,6 +6,9 @@ mkdirSync(directory, { recursive: true });
 const exports = [];
 const escape = (text) => text.replace(/[&<>\"]/g,
   (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
+const displayDate = (value) => new Intl.DateTimeFormat("en-GB", {
+  day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+}).format(new Date(`${value}T00:00:00Z`));
 const inline = (text) => {
   const pattern = /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g;
   let html = "", index = 0;
@@ -78,7 +81,7 @@ for (const file of readdirSync("articles").filter((name) => name.endsWith(".md")
     ? "This article was written with AI assistance. The linked experiment includes runnable code and recorded results."
     : "This article was edited with AI assistance.";
   const contextNote = contextDate
-    ? `Technical context: ${contextDate}. Published ${field("date")}; the context date describes the technical era examined.`
+    ? `Technical context: ${displayDate(contextDate)}. Published ${displayDate(field("date"))}; the context date describes the technical era examined.`
     : "";
   writeFileSync(resolve(directory, `${slug}.md`),
     `# ${title}\n\n${field("description")}\n\n${disclosure}\n\n${contextNote ? `${contextNote}\n\n` : ""}${body}\n\nOriginally published on [Israel Oduguwa's website](${url}).\n`);

@@ -1,7 +1,7 @@
 <h1>SaaS billing as a financial workflow: changes, entitlements and reconciliation</h1>
 <h2>Separate commercial agreements, invoices, payments and access while handling plan changes, duplicate events and uncertain outcomes.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2026-01-22. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 22 January 2026. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A customer upgrades midway through a billing period while the current invoice is unpaid. The payment provider creates a credit and a new charge. A webhook arrives twice, an older subscription event arrives later, and the application's isPaid flag no longer explains what access the customer should have.</p>
 <p>Billing becomes difficult when several different facts are collapsed into one boolean. A commercial agreement, invoice, payment attempt, credit, refund and entitlement have different lifecycles. They must be connected without pretending that they are the same record.</p>
 <p>I would design billing as an auditable workflow with explicit acceptance, external effects and reconciliation. This article uses Stripe as the provider example and established behavior relevant to January 2026. API versions and webhook schemas must be pinned and verified in the integration; illustrative code below is not a complete Stripe application.</p>

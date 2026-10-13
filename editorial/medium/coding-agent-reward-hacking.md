@@ -4,7 +4,7 @@ Eight deliberately flawed transfer implementations show which graders catch miss
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-06-26. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 26 June 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 An evaluator is a program with an attack surface. If its score depends on a success message, a candidate can print success. If it checks only a public fixture, a candidate can hard-code that fixture. If candidate code can alter the timer or comparison function, reported performance may have little relationship to the requested computation.
 

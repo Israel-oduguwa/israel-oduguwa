@@ -1,7 +1,7 @@
 <h1>Changing a large system through incremental migrations</h1>
 <h2>Design coexistence, data ownership and rollback before replacing a live system one boundary at a time.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2024-10-10. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 10 October 2024. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A rewrite promises clean code and a simpler architecture. The existing system still receives orders, holds customer history and serves integrations whose behavior nobody has fully documented. Replacing it means reproducing enough of those contracts while the business keeps changing.</p>
 <p>The hard engineering work is making old and new behavior coexist safely. A migration can be incremental in its deployment schedule and still be dangerous if both systems believe they own the same write.</p>
 <p>I would plan a migration around a sequence of ownership transfers. Each step should deliver useful behavior, expose evidence that its contracts hold, and have a recovery path that accounts for data already written. The running example is a hypothetical move from a legacy order module to a new fulfillment boundary.</p>

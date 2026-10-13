@@ -4,7 +4,7 @@ Evaluate a service extraction by the constraint it removes and the distributed f
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-05-23. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 23 May 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 A large repository is not, by itself, a reason to create microservices. A small repository can have severe deployment coupling, and a large modular application can serve a substantial workload with clear ownership and straightforward recovery.
 

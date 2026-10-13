@@ -4,7 +4,7 @@ Connect tenant consumption, capacity steps and product limits so growth increase
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-03-20. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 20 March 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 A SaaS doubles its paying customers and triples its infrastructure bill. The explanation may be simple growth, but it may also be a change in workload: larger imports, more retained data, expensive exports or a small group of customers using an unlimited feature far more heavily than everyone else.
 

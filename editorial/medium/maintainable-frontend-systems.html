@@ -1,7 +1,7 @@
 <h1>Keeping frontend systems maintainable as teams and features grow</h1>
 <h2>Control dependency growth, shared-component variation and migration cost without turning every product change into framework work.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2025-01-23. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 23 January 2025. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A shared table begins with sorting and pagination. Six teams add bulk actions, inline editing, grouped rows, custom filters and several permission models. The table now has dozens of flags, and changing one behavior requires checking unrelated products.</p>
 <p>The problem is not that the component has become large. Its contract now contains several capabilities with different owners and incompatible assumptions. Maintainability depends on controlling those contracts and the cost of changing them.</p>
 <p>This article focuses on team-level frontend evolution: shared APIs, dependency direction, performance budgets and migrations. It complements module-level architecture by asking how a codebase remains changeable after many contributors and several product generations.</p>

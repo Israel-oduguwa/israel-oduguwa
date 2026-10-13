@@ -4,7 +4,7 @@ Use trusted tenant context, database policies and tenant-aware resource boundari
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-08-15. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 15 August 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 The request handler checks that a user belongs to a tenant. Its repository function adds `WHERE tenant_id = ?`. Later, a bulk export calls a lower-level query helper and forgets the filter. The user remains authenticated; the export contains another customer's data.
 

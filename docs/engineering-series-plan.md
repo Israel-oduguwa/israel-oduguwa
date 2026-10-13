@@ -40,4 +40,8 @@ Medium requires an accurate AI-assistance disclosure in the opening paragraphs. 
 
 ## Completion record
 
-Research and manuscript preparation in progress. No articles from this 19-piece collection have been published yet. Update this record with source, example and publication verification before final delivery.
+All nineteen manuscripts and their primary references are complete. The executable examples pass their four tests; the full repository passes all fourteen tests, lint, type checking and production build. The collection is live on the website from commit `ad0a2a6`, with successful GitHub checks and Vercel deployment. All nineteen public titles, canonical URLs, context labels and real publication metadata were verified.
+
+Nine articles were published on Medium and checked against every source paragraph and code block. Medium then rejected further publication and scheduling because of its rolling 24-hour limit. The remaining ten are complete saved drafts, each reloaded and checked. Their exact URLs and state are recorded in `editorial/medium/engineering-series-queue.json` and `publication-ledger.md`.
+
+The existing daily 09:00 Africa/Lagos automation is active and will finish this explicitly approved backlog from 15 October 2026, respecting any further platform limit. It continues to prepare newly authored daily articles for review. Medium publication of the remaining ten is pending; it is not represented as complete.

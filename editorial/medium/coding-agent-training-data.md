@@ -4,7 +4,7 @@ Build reproducible tasks and evidence-based labels before converting expert work
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-02-20. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 20 February 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 A coding dataset can contain elegant explanations, valid syntax and thousands of green test runs while teaching the wrong behavior. The prompt may omit a requirement, the reference patch may depend on an unrecorded environment, or the preference label may reward confidence over correctness.
 

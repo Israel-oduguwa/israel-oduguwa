@@ -1,7 +1,7 @@
 <h1>Web security architecture across browser, service and database boundaries</h1>
 <h2>Trace authority and data across a production web system, then verify where each threat is prevented, detected and contained.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2025-09-18. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 18 September 2025. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A web system can use HTTPS, verified tokens and parameterized queries while still allowing a tenant administrator to download another tenant's export. Security depends on how authority crosses boundaries, not just whether a list of controls appears in the stack.</p>
 <p>I would review the system as a sequence of decisions: who supplied this input, which identity has been established, which capability is being exercised, what data may cross the boundary, and what happens if that decision is wrong.</p>
 <p>The example is a hypothetical multi-tenant application with browser sessions, server commands, background exports and private object storage. It uses established security practices available by September 2025. The design is a review framework; demonstrating compliance or security requires testing the actual implementation and deployment.</p>

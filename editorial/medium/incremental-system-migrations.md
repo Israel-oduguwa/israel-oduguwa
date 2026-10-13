@@ -4,7 +4,7 @@ Design coexistence, data ownership and rollback before replacing a live system o
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-10-10. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 10 October 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 A rewrite promises clean code and a simpler architecture. The existing system still receives orders, holds customer history and serves integrations whose behavior nobody has fully documented. Replacing it means reproducing enough of those contracts while the business keeps changing.
 

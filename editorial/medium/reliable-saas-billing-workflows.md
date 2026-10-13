@@ -4,7 +4,7 @@ Separate commercial agreements, invoices, payments and access while handling pla
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2026-01-22. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 22 January 2026. Published 13 October 2026; the context date describes the technical era examined.
 
 A customer upgrades midway through a billing period while the current invoice is unpaid. The payment provider creates a credit and a new charge. A webhook arrives twice, an older subscription event arrives later, and the application's `isPaid` flag no longer explains what access the customer should have.
 

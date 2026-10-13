@@ -1,7 +1,7 @@
 <h1>Choosing a rendering strategy in Next.js 16</h1>
 <h2>Choose static, request-time, streamed and browser-owned rendering by freshness, authorization scope and failure behavior.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2025-11-20. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 20 November 2025. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A product page contains a public description, a frequently changing price, live availability and a signed-in customer's discount. Asking whether the page should use static rendering or server-side rendering hides the fact that these pieces have different contracts.</p>
 <p>Rendering strategy is a decision about when work happens, what can be reused, whose data it contains and how failure reaches the user. Framework features implement that decision; they do not choose the acceptable staleness of a price or the authorization scope of a discount.</p>
 <p>This article considers the Next.js 16 release model available in November 2025, including opt-in Cache Components. It separates that model from older App Router defaults. The examples are design sketches; version and cache behavior should be verified against the application's pinned framework release.</p>

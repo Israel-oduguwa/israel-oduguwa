@@ -4,7 +4,7 @@ Trace authority and data across a production web system, then verify where each 
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-09-18. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 18 September 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 A web system can use HTTPS, verified tokens and parameterized queries while still allowing a tenant administrator to download another tenant's export. Security depends on how authority crosses boundaries, not just whether a list of controls appears in the stack.
 

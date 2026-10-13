@@ -4,7 +4,7 @@ Separate waiting from work, locate the first saturated resource, and verify a fi
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-02-22. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 22 February 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 A service responds in 80 milliseconds during a quiet test. At the busiest hour, its slowest requests take several seconds. CPU utilization looks unremarkable, database queries are individually fast, and adding application instances provides only temporary relief.
 

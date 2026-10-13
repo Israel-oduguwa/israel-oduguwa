@@ -4,7 +4,7 @@ Separate domain policy, server data access and browser interaction so a growing 
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-07-17. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 17 July 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 A frontend becomes difficult to change when a billing component imports database types, decides who may refund an invoice, fetches its own data and manages an unrelated navigation modal. Splitting it into smaller components may reduce file length while leaving every dependency intact.
 

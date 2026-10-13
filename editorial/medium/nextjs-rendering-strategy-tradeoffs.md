@@ -4,7 +4,7 @@ Choose static, request-time, streamed and browser-owned rendering by freshness, 
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2025-11-20. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 20 November 2025. Published 13 October 2026; the context date describes the technical era examined.
 
 A product page contains a public description, a frequently changing price, live availability and a signed-in customer's discount. Asking whether the page should use static rendering or server-side rendering hides the fact that these pieces have different contracts.
 

@@ -42,6 +42,12 @@ After these topics, choose the next article from documented gaps, user feedback 
 
 ## Medium cross-posts
 
+### Approved engineering collection
+
+On 13 October 2026 Israel explicitly authorized writing and publishing the nineteen engineering articles listed in `editorial/engineering-series.md`. All nineteen are published on the website. Nine were published on Medium before its rolling 24-hour publishing and scheduling limit blocked the next story. Ten complete Medium drafts were saved, reloaded and verified.
+
+From 15 October 2026, the existing daily 09:00 Africa/Lagos workflow may publish only this already-approved backlog using `editorial/medium/engineering-series-queue.json`. Open the exact saved draft URLs, preserve user edits, verify content and canonical URLs, record actual publication URLs, and respect further limits. Do not create duplicates or backdate publication. Once the queue is empty, only the ordinary review-first daily workflow remains. This approval does not extend to newly authored daily drafts.
+
 Use each published website article as the canonical source. Medium's official import tool creates a draft from the URL and automatically sets the canonical link and original date. Inspect the imported body before publishing: title, subtitle, lists, code, links, author text and any duplicated page navigation. If importing fails, use the prepared Markdown version and set the canonical link through Medium's story settings.
 
 Keep a publication ledger in `editorial/medium/publication-ledger.md`. Record actual Medium URLs only after verifying them. Distinguish exported, imported draft and published states. Check for existing stories before importing to avoid duplicates.

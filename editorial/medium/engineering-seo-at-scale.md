@@ -4,7 +4,7 @@ Build a finite, discoverable public URL space with meaningful HTML, consistent m
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2026-02-19. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 19 February 2026. Published 13 October 2026; the context date describes the technical era examined.
 
 A catalog has 50,000 useful product pages and several million filter combinations. Most crawler requests reach sorted or empty variants. New products take longer to appear in search, the origin spends capacity generating low-value pages, and the team responds by adding more metadata.
 

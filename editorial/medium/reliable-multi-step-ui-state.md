@@ -4,7 +4,7 @@ Prevent stale validation, lost drafts and duplicate submissions by modeling owne
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-09-19. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 19 September 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 A user edits a form while remote validation is running. The old result returns after the edit and enables the Next button. Later, the final submission times out, so the user clicks again. The interface has two separate correctness problems: it accepted evidence for an obsolete draft and it treated an unknown server outcome as a failed operation.
 

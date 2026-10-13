@@ -1,6 +1,6 @@
 # Engineering collection review
 
-13 October 2026. Nineteen articles, each with a distinct engineering decision, concrete failure cases and primary references. Historical context dates span 25 January 2024 through 19 February 2026. Actual website publication dates remain 13 October 2026. Medium publication verification will be appended after publication.
+13 October 2026. Nineteen articles, each with a distinct engineering decision, concrete failure cases and primary references. Historical context dates span 25 January 2024 through 19 February 2026. Actual website publication dates remain 13 October 2026. All nineteen are live on the website. Nine are published on Medium; ten verified saved drafts await its rolling 24-hour limit resetting.
 
 ## Writing review
 
@@ -40,8 +40,12 @@ All nineteen original-to-final preservation checks passed, including frontmatter
 
 ## Browser evidence
 
+- GitHub checks and Vercel deployment passed for `ad0a2a6`. All nineteen live pages have the expected title, full content, canonical URL, context label, Open Graph publication date and JSON-LD publication date.
+- Every paragraph and code block in nine published Medium stories was compared with the source. Canonical URLs, disclosures and actual publication timestamps were verified. The ten remaining saved drafts passed the same content checks after reload. The original seven drafts and existing posts were preserved.
+- Medium rejected further publishing and scheduling under its rolling 24-hour limit. The exact draft queue is retained, and the active 09:00 Africa/Lagos automation will finish only this approved collection from 15 October. Newly written daily articles remain review-only. This is an external publication limit; the ten pending stories are not claimed as published.
 - All nineteen routes checked at 320, 390 and 1440 pixels in both themes: 114 layout checks, with no document or prose overflow. Long code and text diagrams scroll locally.
 - All 156 table-of-contents links clicked and their URL fragments verified. All nineteen index links and nineteen return links clicked. The index contains 25 entries numbered 01 through 25.
+- All forty-five distinct article reference links were clicked. Primary-source research verified their destinations and version scope; representative browser destinations were also inspected. Links to the teaching examples now resolve to committed public source.
 - Theme toggle works in both modes; mobile menu opens and closes; keyboard Enter activates the skip link to main-content. Existing shared controls retain the prior reviewed handlers and focus styles.
 - No captured browser console errors during the collection checks. Header descriptions and date bylines measure 5.94:1 in light mode and 8.90:1 in dark mode. Body and code colors retain the previously verified palette.
 

@@ -4,7 +4,7 @@ Model commands, permissions, concurrency and external effects when several peopl
 
 This article was written with AI assistance. Sources and example verification are linked where relevant.
 
-Technical context: 2024-04-18. Published 2026-10-13; the context date describes the technical era examined.
+Technical context: 18 April 2024. Published 13 October 2026; the context date describes the technical era examined.
 
 A product starts with an application form and a status column. Then a reviewer must approve it, finance must collect payment, an applicant can withdraw, and support must reopen a rejected case. Two people can act at once. Payment confirmation arrives later, sometimes twice.
 

@@ -1,7 +1,7 @@
 <h1>Designing training data for coding agents: tasks, demonstrations and preferences</h1>
 <h2>Build reproducible tasks and evidence-based labels before converting expert work into supervised or preference-training examples.</h2>
 <p>This article was written with AI assistance. Sources and example verification are linked where relevant.</p>
-<p>Technical context: 2025-02-20. Published 2026-10-13; the context date describes the technical era examined.</p>
+<p>Technical context: 20 February 2025. Published 13 October 2026; the context date describes the technical era examined.</p>
 <p>A coding dataset can contain elegant explanations, valid syntax and thousands of green test runs while teaching the wrong behavior. The prompt may omit a requirement, the reference patch may depend on an unrecorded environment, or the preference label may reward confidence over correctness.</p>
 <p>The engineering unit is a reproducible task with a defensible behavioral contract. Demonstrations and preferences are derived from that unit. If its environment or grader is unreliable, scaling annotation increases the volume of unreliable evidence.</p>
 <p>This article proposes a data-production workflow for repository-based coding agents, using methods available by February 2025. It contains no proprietary task material, production training metrics or claim that the proposed pipeline has improved a model.</p>
