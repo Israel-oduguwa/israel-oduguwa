@@ -8,7 +8,7 @@
 
 <img align="right" src="./.github/profile/portrait.png" alt="Israel Oduguwa" width="125">
 
-I build web products and the services behind them. My work includes healthcare marketplaces, enrollment and payment workflows, and AI model evaluation.
+I'm a senior full-stack software engineer. I build web products and the services behind them. My work includes healthcare marketplaces, enrollment and payment workflows, and AI model evaluation.
 
 I work across React and Next.js, Node.js APIs and databases. I also guide engineering teams through architecture decisions, code review and production migrations. The work I care about makes a product easier to use, less expensive to operate, or easier to recover when something fails.
 
@@ -18,7 +18,13 @@ I'm the creator of **SafeStripe**, a TypeScript reliability layer for Stripe app
 
 <br clear="right">
 
-<img src="./.github/profile/focus.svg" alt="TypeScript, React and Next.js, Node.js and Express, payments, AI evaluation" width="852">
+<p>
+  <img src="./.github/profile/typescript.svg" alt="TypeScript" width="141">
+  <img src="./.github/profile/react.svg" alt="React and Next.js" width="174">
+  <img src="./.github/profile/node.svg" alt="Node.js and Express" width="193">
+  <img src="./.github/profile/payments.svg" alt="Payments" width="140">
+  <img src="./.github/profile/ai-evaluation.svg" alt="AI evaluation" width="164">
+</p>
 
 ## Selected work
 
