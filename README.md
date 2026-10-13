@@ -1,7 +1,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./.github/profile/header-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="./.github/profile/header-light.svg">
-  <img src="./.github/profile/header-light.svg" alt="Israel Oduguwa. Senior Full Stack Software Engineer building SaaS products, payment systems and applied AI." width="1200">
+  <img src="./.github/profile/coverImage.png" alt="Israel Oduguwa. Senior Full Stack Software Engineer building SaaS products, payment systems and applied AI." width="1200">
 </picture>
 
 <br>
