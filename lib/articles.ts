@@ -7,6 +7,7 @@ export type Article = {
   description: string;
   date: string;
   updatedAt?: string;
+  contextDate?: string;
   coverImage?: string;
   tags: string[];
   body: string;
@@ -79,6 +80,8 @@ function readArticle(fileName: string): Article {
     date: String(metadata.date ?? ""),
     updatedAt:
       typeof metadata.updatedAt === "string" ? metadata.updatedAt : undefined,
+    contextDate:
+      typeof metadata.contextDate === "string" ? metadata.contextDate : undefined,
     coverImage:
       typeof metadata.coverImage === "string" ? metadata.coverImage : undefined,
     tags: Array.isArray(metadata.tags) ? metadata.tags : [],
@@ -94,7 +97,9 @@ export function getAllArticles() {
     .readdirSync(articlesDirectory)
     .filter((fileName) => fileName.endsWith(".md"))
     .map(readArticle)
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => b.date.localeCompare(a.date)
+      || (b.contextDate || b.date).localeCompare(a.contextDate || a.date)
+      || a.title.localeCompare(b.title));
 }
 
 export function getArticleBySlug(slug: string) {

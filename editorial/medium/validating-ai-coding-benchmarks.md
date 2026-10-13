@@ -2,6 +2,8 @@
 
 An executable frontend evaluation example, a protocol for validating graders, and a statistical design for comparing coding agents.
 
+This article was written with AI assistance. The linked experiment includes runnable code and recorded results.
+
 A coding agent can earn a perfect score on a test suite while its implementation still violates the requested behavior. The evaluator may have checked the final screen state and missed an earlier write from an obsolete request. Every assertion passes; the user still sees the wrong result.
 
 That is a failure in the measurement. Increasing the number of tasks will make the reported score more precise without repairing what it measures.

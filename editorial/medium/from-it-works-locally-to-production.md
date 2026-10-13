@@ -2,6 +2,8 @@
 
 A deployment review focused on failure recovery, observable state and the cost of running the product.
 
+This article was edited with AI assistance.
+
 Local development makes a lot of things feel immediate. The database is nearby, the browser belongs to you, and restarting the process is cheap. A production workflow has slower dependencies, other users and work that must survive a restart.
 
 Before a release, I want to understand how the workflow behaves when a dependency stops responding. A successful happy-path test is necessary, but it does not answer what the business should do with an unfinished enrollment, a pending payment or a render job whose worker disappeared.

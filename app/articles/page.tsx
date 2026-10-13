@@ -27,7 +27,7 @@ export default function ArticlesPage() {
         <div className="writing-list">
           {getAllArticles().map((article, index) => (
             <Link key={article.slug} href={`/articles/${article.slug}`}>
-              <span className="writing-number">0{index + 1}</span>
+              <span className="writing-number">{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <p>
                   {article.tags.join(" · ")} · {article.readingTime}
@@ -37,6 +37,7 @@ export default function ArticlesPage() {
                 <p className="article-date">
                   Published {article.date}
                   {article.updatedAt ? ` · Revised ${article.updatedAt}` : ""}
+                  {article.contextDate ? ` · Technical context ${article.contextDate}` : ""}
                 </p>
               </div>
             </Link>

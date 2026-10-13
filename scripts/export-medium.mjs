@@ -67,21 +67,28 @@ for (const file of readdirSync("articles").filter((name) => name.endsWith(".md")
   };
   const slug = field("slug");
   const title = field("title");
+  const contextDate = header[1].match(/^contextDate:\s*"([^"]+)"/m)?.[1] ?? null;
   const url = `https://israel-oduguwa.vercel.app/articles/${slug}`;
   const body = source.slice(header[0].length).trim()
     .replace(/\]\((\/(?!\/)[^)]+)\)/g,
       "](https://israel-oduguwa.vercel.app$1)");
-  writeFileSync(resolve(directory, `${slug}.md`),
-    `# ${title}\n\n${field("description")}\n\n${body}\n\nOriginally published on [Israel Oduguwa's website](${url}).\n`);
-  const disclosure = slug === "validating-ai-coding-benchmarks"
+  const disclosure = contextDate
+    ? "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    : slug === "validating-ai-coding-benchmarks"
     ? "This article was written with AI assistance. The linked experiment includes runnable code and recorded results."
     : "This article was edited with AI assistance.";
+  const contextNote = contextDate
+    ? `Technical context: ${contextDate}. Published ${field("date")}; the context date describes the technical era examined.`
+    : "";
+  writeFileSync(resolve(directory, `${slug}.md`),
+    `# ${title}\n\n${field("description")}\n\n${disclosure}\n\n${contextNote ? `${contextNote}\n\n` : ""}${body}\n\nOriginally published on [Israel Oduguwa's website](${url}).\n`);
   // Medium rejected these body links; import still retains the canonical URL.
   const mediumBody = toHtml(body).replace(
     /<a href="https:\/\/israel-oduguwa\.vercel\.app[^\"]*">([\s\S]*?)<\/a>/g, "$1");
   writeFileSync(resolve(directory, `${slug}.html`),
-    `<h1>${escape(title)}</h1>\n<h2>${escape(field("description"))}</h2>\n<p>${disclosure}</p>\n${mediumBody}\n<p>Originally published on Israel Oduguwa's website.</p>\n`);
+    `<h1>${escape(title)}</h1>\n<h2>${escape(field("description"))}</h2>\n<p>${disclosure}</p>\n${contextNote ? `<p>${contextNote}</p>\n` : ""}${mediumBody}\n<p>Originally published on Israel Oduguwa's website.</p>\n`);
   exports.push({ slug, title, canonicalUrl: url, originalDate: field("date"),
+    contextDate,
     updatedAt: header[1].match(/^updatedAt:\s*"([^"]+)"/m)?.[1] ?? null,
     markdown: `${slug}.md`, html: `${slug}.html`, disclosure });
 }

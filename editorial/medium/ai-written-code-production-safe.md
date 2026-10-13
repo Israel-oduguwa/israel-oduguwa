@@ -2,6 +2,8 @@
 
 How I assess a proposed implementation against the repository, the task and the system's failure boundaries.
 
+This article was edited with AI assistance.
+
 A proposed implementation can compile and still solve the wrong problem. It may use an API the repository does not support, assume a permission the caller does not have or leave a failure path without recovery. Those problems matter whether the code came from a colleague, a model or your own first attempt.
 
 When evaluating generated work, I start with the task and the source material. A confident explanation is not evidence that the implementation matches either one.

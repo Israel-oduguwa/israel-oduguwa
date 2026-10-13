@@ -1,0 +1,123 @@
+---
+slug: "maintainable-frontend-systems"
+title: "Keeping frontend systems maintainable as teams and features grow"
+description: "Control dependency growth, shared-component variation and migration cost without turning every product change into framework work."
+date: "2026-10-13"
+contextDate: "2025-01-23"
+tags:
+  - Frontend systems
+  - Maintainability
+  - Technical leadership
+---
+
+A shared table begins with sorting and pagination. Six teams add bulk actions, inline editing, grouped rows, custom filters and several permission models. The table now has dozens of flags, and changing one behavior requires checking unrelated products.
+
+The problem is not that the component has become large. Its contract now contains several capabilities with different owners and incompatible assumptions. Maintainability depends on controlling those contracts and the cost of changing them.
+
+This article focuses on team-level frontend evolution: shared APIs, dependency direction, performance budgets and migrations. It complements module-level architecture by asking how a codebase remains changeable after many contributors and several product generations.
+
+## Define maintainability as the cost of a real change
+
+Choose representative changes: add a field to a workflow, replace a data endpoint, update a shared control, or migrate an authentication integration. Track the scope, review effort, regression risk and time needed to deploy them.
+
+File count, component count and test coverage are incomplete proxies. A codebase can have many small files that all require coordinated edits. A large feature module can be maintainable if its public contract is narrow and its behavior is well tested.
+
+Look for recurring coordination points. Which shared modules force many teams to review routine changes? Which dependencies cause route-wide bundle growth? Which product variants require conditional logic throughout the tree?
+
+Use that evidence to prioritize architecture work. A speculative abstraction for a future product should not displace a measured problem in a widely used form or navigation system.
+
+## Keep shared primitives below product capabilities
+
+A button can own focus behavior, disabled state, loading presentation and visual variants. It should not decide whether a customer can cancel a subscription. A billing capability composes primitives and owns that policy's presentation.
+
+Separate design primitives, interaction patterns and domain components. A dialog's focus management can be shared. A refund-confirmation dialog's data and command semantics belong to billing. Extracting both into a universal “action dialog” can create a contract too broad to reason about.
+
+Use composition when behavior varies meaningfully. A table primitive can provide accessible structure and selection hooks while a feature owns its bulk actions. Avoid a boolean for every product difference.
+
+```typescript
+type Selection =
+  | { mode: 'none' }
+  | {
+      mode: 'multiple';
+      selectedIds: ReadonlySet<string>;
+      onSelectionChange: (ids: ReadonlySet<string>) => void;
+    };
+```
+
+This illustrative type makes a required callback explicit when selection is enabled. It is preferable to optional `selectable`, `selectedIds` and `onChange` props that can form contradictory combinations. The feature still owns what selecting rows means for its business action.
+
+Do not create a shared package merely because two implementations look alike. Similar visual structure can conceal different lifecycle and accessibility requirements. Keep duplication until a stable shared contract is clear, then extract with ownership and tests.
+
+## Enforce dependency direction with tools and review
+
+Define which layers may import which others. Product features can depend on shared primitives and explicit contracts. Shared primitives should not import product features. Server-only access modules should not enter browser dependency graphs.
+
+Use lint or build checks to catch forbidden imports. Review can then focus on semantic coupling that static tools cannot recognize. A legal import can still expose too much domain knowledge through a broad data type.
+
+Avoid circular barrels that re-export every module. They obscure the dependency graph, can pull unexpected code into bundles and make initialization behavior harder to diagnose. Public entry points should expose an intentional API.
+
+Monorepos and package boundaries help only if they express useful ownership. Twenty packages published in lockstep can have the same coordination burden as one repository plus additional versioning work. Choose boundaries that permit coherent changes and controlled compatibility.
+
+Keep dependency upgrades routine. A year of deferred framework updates can turn a small compatibility change into a large migration. Pin versions, review release behavior and maintain a clear path for security and bug-fix updates.
+
+## Assign state and contracts to an owner
+
+Server data, form drafts, URL filters and temporary UI state need different lifetimes. A global store that receives all of them becomes a hidden dependency for unrelated features.
+
+Keep drafts local to the workflow that owns them, with an explicit persistence contract when resumption is required. Use the URL for state users need to share or revisit. Use a remote-data cache when its invalidation and scope are understood.
+
+The [React state-structure guidance](https://react.dev/learn/choosing-the-state-structure) describes avoiding redundant and contradictory state. Across a growing product, that means avoiding duplicate authoritative copies in several stores and components.
+
+Define API response contracts rather than importing database entities into every view. Runtime validation belongs at external boundaries. A stable view contract lets the backend evolve storage without forcing presentation changes everywhere.
+
+Error contracts deserve equal attention. Features should distinguish input errors, permission denial, conflict and dependency failure. A shared toast helper should present an outcome, not infer business semantics from an arbitrary exception string.
+
+## Use a testing portfolio that matches ownership
+
+Test shared primitives for their reusable obligations: keyboard interaction, focus, disabled behavior and accessible naming. Test domain policies independently of the browser. Test feature components through user-visible interactions and controlled async schedules.
+
+Keep a small number of end-to-end tests for high-value workflows. They verify that contracts connect correctly across routes, server commands and persistence. A broad end-to-end suite that tests every internal permutation can become slow and difficult to diagnose.
+
+Avoid tests that mirror implementation structure. A test asserting that a particular hook was called can pass while the user sees stale data. Test the observable contract: a late request must not overwrite the current selection, or a denied action must not mutate state.
+
+Visual regression testing can catch unintended layout changes, but it needs stable fixtures and meaningful review. Do not automatically approve a large snapshot update simply because a shared component changed. Inspect representative states, including long content, errors and small screens.
+
+React's [memo reference](https://react.dev/reference/react/memo) describes memoization as a performance optimization. Tests and correctness should not depend on a component avoiding a render; rendering must remain pure and safe when it happens again.
+
+## Treat accessibility as a shared contract
+
+Shared controls can reduce repeated accessibility work if their contract is clear. They can also distribute a defect to every product. Assign ownership for keyboard behavior, focus management, semantics and announcements.
+
+Test composed workflows, not just isolated controls. A dialog can be accessible alone while a nested flow traps focus incorrectly. A form field can have a label while its validation message is never announced.
+
+Design for content variation: long labels, localization, zoom and reduced motion. A component API that assumes every label is two short English words will become a maintenance problem as the product grows.
+
+Make the default path accessible. Requiring every consumer to remember several accessibility props recreates the same convention problem as an authorization filter. Allow customization without making the safe behavior optional by accident.
+
+## Budget performance by route and interaction
+
+Track client bundle size, loading behavior and interaction responsiveness for important route classes. A shared package can increase the cost of every route even when only one feature needs its expensive dependency.
+
+Keep heavy optional code near the feature that uses it and load it according to the interaction. Inspect what actually ships; a folder boundary does not guarantee bundle separation. Measure on representative devices and network conditions.
+
+Set budgets with evidence and owners. An arbitrary kilobyte limit can block a valuable feature while missing a costly render loop. Connect the budget to user experience and the workload, then record justified exceptions and follow-up work.
+
+Profile before adding memoization everywhere. An unstable prop identity can defeat memoization, while an unnecessary remote waterfall may dominate the user's wait. Choose the intervention that changes the measured bottleneck.
+
+## Make shared-API migrations incremental
+
+When a shared component contract changes, provide a compatibility interval or a small adapter. Document the new semantics, identify consumers and migrate them in bounded groups. A mechanical codemod can help with syntax; it cannot decide whether the new behavior is correct for each feature.
+
+Use deprecation warnings and usage inventory where practical. Give the old API a removal owner and condition. An indefinite compatibility layer becomes another permanent contract to maintain.
+
+Test old and new consumers during the transition. Deployment overlap matters when server contracts or independently released clients change. Keep schema additions compatible and avoid removing fields before supported consumers have migrated.
+
+Record important decisions near the relevant package: why an API uses composition, which states it supports, and which product logic remains outside. Future contributors need the reason, not merely a rule forbidding another prop.
+
+## Keep architecture work tied to product change
+
+Review the dependency graph and shared APIs periodically using actual change history. Remove abstractions that no longer earn their complexity. Split a shared component when its consumers have diverged, even if that increases some duplication.
+
+Assign ownership for shared code and provide a way for feature teams to request changes. A central team that becomes a bottleneck can encourage local forks; a shared package that accepts every request can become incoherent. A clear contract makes those decisions easier.
+
+The useful outcome is predictable change scope. An engineer should know which contract owns a behavior, which tests protect it, and which teams need to participate when it changes. That remains valuable as frameworks, contributors and product requirements evolve.

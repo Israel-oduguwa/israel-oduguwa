@@ -2,6 +2,8 @@
 
 How SafeStripe uses leases, ownership checks and transactions to recover work after a payment worker crashes.
 
+This article was edited with AI assistance.
+
 A worker claims a payment update, starts processing and disappears. The queue still contains the work, but the process that claimed it will never release it. Another worker needs permission to continue without letting the old one later overwrite its result.
 
 I built SafeStripe to handle this kind of recovery. The TypeScript library saves accepted work, leases jobs to workers and checks ownership before committing local effects. The [0.3 preview](https://israel-oduguwa.vercel.app/work/safestripe) includes tests and a sandbox where you can inspect that behavior.

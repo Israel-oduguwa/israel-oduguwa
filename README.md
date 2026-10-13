@@ -68,6 +68,8 @@ I use the same approach in application work: follow a request through the fronte
 
 ## Technical writing
 
+- [Engineering article collection](./editorial/engineering-series.md): 19 articles on production architecture, frontend systems, coding-agent evaluation, billing and SaaS economics, with primary references and executable teaching examples.
+- [Testing an evaluator with deceptive implementations](https://israel-oduguwa.vercel.app/articles/coding-agent-reward-hacking): eight deliberate faults, seven behavioral probes and a reproducible detection matrix.
 - [Validating AI coding benchmarks](https://israel-oduguwa.vercel.app/articles/validating-ai-coding-benchmarks): a runnable grader experiment, task sampling, judge calibration and decision rules for coding-agent evaluations.
 - [Stripe idempotency does not finish the payment workflow](https://israel-oduguwa.vercel.app/articles/stripe-idempotency-your-app-still-needs-it): where request retries, webhook deduplication and business effects meet.
 - [What a crashed payment worker leaves behind](https://israel-oduguwa.vercel.app/articles/worker-ownership-and-payment-recovery): leases, ownership checks and the transaction boundary behind recovery.

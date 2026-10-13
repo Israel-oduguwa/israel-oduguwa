@@ -2,6 +2,8 @@
 
 Checking ownership, tenant scope and resource state at the point where an application changes data.
 
+This article was edited with AI assistance.
+
 A route that checks `user.role === "admin"` can still authorize the wrong action. An administrator may belong to a different organization. A student may own an enrollment but not be allowed to change its paid status. A caregiver may edit a profile but not another person's verification result.
 
 The question is more specific than “does this person have a role?” It is “can this actor perform this action on this resource in its current state?” That question needs the relevant data and a clear enforcement point.

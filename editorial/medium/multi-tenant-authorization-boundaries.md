@@ -1,0 +1,141 @@
+# Multi-tenant authorization beyond application filters
+
+Use trusted tenant context, database policies and tenant-aware resource boundaries to contain authorization mistakes.
+
+This article was written with AI assistance. Sources and example verification are linked where relevant.
+
+Technical context: 2024-08-15. Published 2026-10-13; the context date describes the technical era examined.
+
+The request handler checks that a user belongs to a tenant. Its repository function adds `WHERE tenant_id = ?`. Later, a bulk export calls a lower-level query helper and forgets the filter. The user remains authenticated; the export contains another customer's data.
+
+This failure comes from placing tenant isolation in a convention that every caller must remember. The application still needs authorization checks, but a growing system benefits from another boundary that constrains ordinary data access even when a query omits its tenant predicate.
+
+PostgreSQL row-level security can provide that boundary. It works only when database roles, request context, pooling and policy composition are designed together. An enabled policy under the wrong runtime role can provide no isolation at all.
+
+The design below targets PostgreSQL 16 and a service that multiplexes tenants through a shared database. SQL snippets illustrate the design; they have been checked against versioned documentation rather than executed against a PostgreSQL server in the accompanying example repository.
+
+## Define the tenant boundary separately from the user permission
+
+Tenant isolation answers which organization's data a request may touch. Business authorization answers which action an actor may perform on a particular resource. A tenant member may be allowed to view an invoice while only a finance administrator can refund it.
+
+Keep both decisions explicit. Resolve the requested tenant through authenticated membership or a server-owned integration mapping. Then evaluate the action, resource relationship and workflow state. A URL segment is a tenant selection request, not evidence of membership.
+
+Do not infer ownership from the resource ID's shape or uniqueness. An unguessable identifier reduces accidental discovery; it does not authorize access. Fetching by ID must still operate within the authorized tenant boundary and action policy.
+
+Define the exceptions as named capabilities. Support access, cross-tenant analytics and platform migrations have different purposes and risk. Sending all of them through a universal administrator flag makes the normal boundary difficult to test and the exceptional access difficult to audit.
+
+## Give the runtime a role that policies can actually constrain
+
+Create tables and migrations with an owner role that ordinary request handlers do not use. The runtime role should not be a superuser, own the tables, have `BYPASSRLS`, or inherit a role that allows bypass.
+
+The [PostgreSQL 16 row-security documentation](https://www.postgresql.org/docs/16/ddl-rowsecurity.html) states that superusers and `BYPASSRLS` roles bypass row security. Owners normally bypass it too; `FORCE ROW LEVEL SECURITY` can subject an owner to policies, but an owner still controls their definition. Role separation remains important.
+
+A basic tenant policy is:
+
+```sql
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY invoice_tenant ON invoices
+  TO app_runtime
+  USING (
+    tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid
+  )
+  WITH CHECK (
+    tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid
+  );
+```
+
+`USING` constrains existing rows available to the operation. `WITH CHECK` constrains the proposed row for inserts and updates. Missing context evaluates to null and does not authorize a row. Malformed context should fail the operation rather than select a default tenant. The [CREATE POLICY reference](https://www.postgresql.org/docs/16/sql-createpolicy.html) specifies these checks.
+
+Grant only the table privileges the runtime needs. Row policies supplement ordinary privileges; they do not replace them. Whole-table operations such as `TRUNCATE` are outside row-security filtering, so a runtime role should not receive them casually.
+
+## Bind context to a transaction on one connection
+
+A pooled connection may serve tenant A and then tenant B. Session-wide tenant settings that survive checkout can contaminate the next request. Set the tenant locally inside the transaction and execute every protected query on that same checked-out connection.
+
+```javascript
+const client = await pool.connect();
+try {
+  await client.query('BEGIN');
+  await client.query(
+    "SELECT set_config('app.tenant_id', $1, true)",
+    [authorizedTenantId],
+  );
+  const result = await client.query(
+    'SELECT id, total_minor FROM invoices WHERE id = $1',
+    [invoiceId],
+  );
+  await client.query('COMMIT');
+  return result.rows[0] ?? null;
+} catch (error) {
+  await client.query('ROLLBACK');
+  throw error;
+} finally {
+  client.release();
+}
+```
+
+This is a connection-lifecycle sketch for a PostgreSQL client pool. The application must handle rollback failure or a broken connection according to its driver, discarding an unusable connection rather than returning it to circulation. Transaction pooling also requires checking the pooler's supported session features.
+
+Do not call `pool.query` for the protected statement after setting context on `client`; it may use another connection. Wrap this lifecycle in a small server-owned API so repository functions receive a tenant-scoped transaction handle rather than a global pool.
+
+The tenant setting is an application assertion. A service role allowed to set arbitrary tenant values can still select another tenant if its SQL execution is compromised. This pattern contains omitted filters; it does not contain arbitrary SQL injection or stolen runtime credentials that can set their own context. Parameterized queries, protected membership resolution and narrowly scoped credentials remain necessary.
+
+For stronger isolation requirements, evaluate separate database roles, databases or service boundaries. Choose the threat model first. Calling a shared connection setting “zero trust” does not change who can assert it.
+
+## Make relationships tenant-safe at the schema level
+
+Tenant columns on individual rows do not prevent a row from referencing another tenant's parent unless the relationship is constrained.
+
+Use composite keys or unique constraints that include tenant ownership:
+
+```sql
+ALTER TABLE projects
+  ADD CONSTRAINT projects_tenant_id_unique UNIQUE (tenant_id, id);
+
+ALTER TABLE invoices
+  ADD CONSTRAINT invoices_project_same_tenant
+  FOREIGN KEY (tenant_id, project_id)
+  REFERENCES projects (tenant_id, id);
+```
+
+The policy filters access; the foreign key preserves a relationship invariant. Indexes should support the actual tenant-scoped access patterns. A policy that causes every request to scan a large shared table can become a performance and noisy-neighbor problem.
+
+Review uniqueness semantics. A tenant-specific external reference should usually be unique within a tenant, not globally, unless the business domain requires global uniqueness. A global constraint can expose another tenant's record existence through a conflict response.
+
+PostgreSQL documents that referential-integrity checks bypass row security to preserve integrity. They can therefore create information channels through constraint errors. Keep error responses scoped and review the schema's observable behavior; policies alone do not make every database interaction non-disclosing.
+
+## Review policies as a composition, including views and functions
+
+PostgreSQL policies are permissive by default and combine with OR. Adding an apparently narrow “support can read” policy can broaden access if its predicate is too loose. Restrictive policies combine with AND, but still require an applicable permissive policy. Review the combined result for each runtime role and command.
+
+Include views, stored functions and triggers in the access inventory. A security-definer function executes with its owner's privileges, which can cross the intended boundary. Restrict who can create objects, qualify trusted objects, set a safe search path, and narrow function execution privileges. PostgreSQL's [function-security guidance](https://www.postgresql.org/docs/16/perm-functions.html) explains the risk from untrusted objects in the search path.
+
+Treat privileged reporting paths as separate products. A cross-tenant analytics service may need broad reads, but the interactive API should not acquire those credentials for convenience. Prefer derived, minimized analytics data when it satisfies the reporting requirement.
+
+Schema migrations need policy review too. A newly added tenant table without row security can create a gap even when older tables are correct. CI can inventory expected tables and policies, but the integration tests must run as the actual runtime role. Tests executed as the table owner can accidentally bypass the very protection they intend to verify.
+
+## Follow the boundary beyond PostgreSQL
+
+A private response can still leak through a cache, search index, object-storage key or background job. Tenant isolation is a property of the resource path, not just the primary database.
+
+Cache identity must include every relevant scope. A key such as `invoice:123` can be unsafe if IDs are only tenant-unique, and even globally unique IDs do not remove permission-dependent response differences. Avoid caching a privileged representation and serving it to less privileged users.
+
+Search results should be scoped before they reach a client, including counts, facets and snippets. Filtering only the displayed records can reveal another tenant through aggregate metadata. Object downloads need server-validated ownership before issuing a bounded access URL; an object path supplied by a caller is not an authorization decision.
+
+Jobs should carry a tenant identity and the authority relevant to the operation. Decide whether a queued action uses current permissions or an explicitly recorded capability accepted at enqueue time. If a user's membership is revoked before an export starts, the policy must say whether it still runs. A stale serialized user object should not make that decision accidentally.
+
+## Test the denial path and the connection handoff
+
+Create two tenants with deliberately similar resource IDs and names. Run the test suite using the request runtime role. Verify omitted tenant filters, cross-tenant IDs, insert attempts with the wrong tenant, and updates that try to move a row between tenants.
+
+Exercise tenant A and tenant B sequentially on reused connections, after commit, rollback and a forced query failure. Then test concurrently. Missing context must deny access. A failed transaction must not leave the next request with stale authorization context.
+
+Test joins, aggregate queries, exports, search and storage URLs. Verify that support credentials are unavailable to the ordinary request path and that support actions produce an audit record with actor, tenant, purpose and resource scope.
+
+Measure policy overhead with realistic tenant sizes and skew. A tiny fixture verifies semantics but does not establish that the policy's membership lookup scales. Avoid a per-row network authorization call; keep database policy evaluation within a well-understood, bounded access path.
+
+The goal is a system where one forgotten repository predicate causes a denied or empty result, and where a reviewer can identify every route that intentionally crosses tenants. That is a stronger operational boundary than asking every future engineer to remember one more filter.
+
+Originally published on [Israel Oduguwa's website](https://israel-oduguwa.vercel.app/articles/multi-tenant-authorization-boundaries).

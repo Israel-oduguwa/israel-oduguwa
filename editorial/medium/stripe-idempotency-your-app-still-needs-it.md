@@ -2,6 +2,8 @@
 
 How request retries, repeated webhooks and local business effects need separate identities and recovery rules.
 
+This article was edited with AI assistance.
+
 Consider a customer paying for a course. Stripe accepts the payment, but your server loses the response before it updates the enrollment record. The customer sees an error. Your application sees a timeout. Neither observation tells you whether the money moved.
 
 In this example, “try again” can mean retrying the Stripe request, handling a repeated webhook or granting access to the course. Each operation needs its own identity and recovery rule.

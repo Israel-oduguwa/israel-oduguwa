@@ -83,6 +83,12 @@ export default async function ArticlePage({ params }: Props) {
                 <time dateTime={article.updatedAt}>{article.updatedAt}</time>
               </span>
             )}
+            {article.contextDate && (
+              <span>
+                Technical context{" "}
+                <time dateTime={article.contextDate}>{article.contextDate}</time>
+              </span>
+            )}
           </div>
         </header>
         <div className="article-layout">

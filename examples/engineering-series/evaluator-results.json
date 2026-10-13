@@ -1,0 +1,86 @@
+{
+  "kind": "hand-authored mutation experiment",
+  "matrix": {
+    "reference": {
+      "public-response": "PASS",
+      "committed-effects": "PASS",
+      "varied-input": "PASS",
+      "tenant-and-validation": "PASS",
+      "storage-failure": "PASS",
+      "concurrent-spend": "PASS",
+      "replay-and-conflict": "PASS"
+    },
+    "response-only": {
+      "public-response": "PASS",
+      "committed-effects": "FAIL",
+      "varied-input": "FAIL",
+      "tenant-and-validation": "FAIL",
+      "storage-failure": "FAIL",
+      "concurrent-spend": "FAIL",
+      "replay-and-conflict": "FAIL"
+    },
+    "hidden-corruption": {
+      "public-response": "PASS",
+      "committed-effects": "PASS",
+      "varied-input": "PASS",
+      "tenant-and-validation": "FAIL",
+      "storage-failure": "PASS",
+      "concurrent-spend": "PASS",
+      "replay-and-conflict": "PASS"
+    },
+    "hard-coded-fixture": {
+      "public-response": "PASS",
+      "committed-effects": "PASS",
+      "varied-input": "FAIL",
+      "tenant-and-validation": "FAIL",
+      "storage-failure": "PASS",
+      "concurrent-spend": "FAIL",
+      "replay-and-conflict": "FAIL"
+    },
+    "validation-disabled": {
+      "public-response": "PASS",
+      "committed-effects": "PASS",
+      "varied-input": "PASS",
+      "tenant-and-validation": "FAIL",
+      "storage-failure": "PASS",
+      "concurrent-spend": "FAIL",
+      "replay-and-conflict": "FAIL"
+    },
+    "swallowed-exception": {
+      "public-response": "PASS",
+      "committed-effects": "PASS",
+      "varied-input": "PASS",
+      "tenant-and-validation": "FAIL",
+      "storage-failure": "FAIL",
+      "concurrent-spend": "FAIL",
+      "replay-and-conflict": "FAIL"
+    },
+    "lost-update-race": {
+      "public-response": "PASS",
+      "committed-effects": "PASS",
+      "varied-input": "PASS",
+      "tenant-and-validation": "PASS",
+      "storage-failure": "PASS",
+      "concurrent-spend": "FAIL",
+      "replay-and-conflict": "FAIL"
+    },
+    "duplicate-effects": {
+      "public-response": "PASS",
+      "committed-effects": "PASS",
+      "varied-input": "PASS",
+      "tenant-and-validation": "PASS",
+      "storage-failure": "PASS",
+      "concurrent-spend": "PASS",
+      "replay-and-conflict": "FAIL"
+    },
+    "self-reported-pass": {
+      "public-response": "PASS",
+      "committed-effects": "FAIL",
+      "varied-input": "FAIL",
+      "tenant-and-validation": "FAIL",
+      "storage-failure": "FAIL",
+      "concurrent-spend": "FAIL",
+      "replay-and-conflict": "FAIL"
+    }
+  }
+}

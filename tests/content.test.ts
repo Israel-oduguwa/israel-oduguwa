@@ -24,6 +24,12 @@ test("published article URLs survive the refresh and dates remain explicit", () 
     assert.match(article.date, /^\d{4}-\d{2}-\d{2}$/);
     assert.ok(article.body.length > 1000);
     assert.ok(!article.body.includes("images.unsplash.com"));
+    if (article.contextDate) {
+      assert.match(article.contextDate, /^\d{4}-\d{2}-\d{2}$/);
+      assert.ok(article.contextDate >= "2024-01-01");
+      assert.ok(article.contextDate <= "2026-02-28");
+      assert.ok(article.contextDate < article.date);
+    }
   }
 });
 
