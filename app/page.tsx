@@ -80,8 +80,7 @@ export default function Home() {
             </h1>
             <p className="hero-description">
               I architect and build production platforms, payment infrastructure
-              and AI systems. I’ve led seven developers and migrated 5,000+ user
-              accounts while preserving access.
+              and AI systems.
             </p>
             <div className="hero-client-links" aria-label="Recent projects">
               <a href="#work">SafeStripe</a>
