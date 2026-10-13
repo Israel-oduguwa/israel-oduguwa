@@ -18,8 +18,7 @@ I also maintain [SafeStripe](https://github.com/Israel-oduguwa/SafeStripe), a Ty
 
 <br clear="right">
 
-## Selected work
-
+## My works
 ### SafeStripe
 
 Payment recovery for Node.js, Express and Next.js.
