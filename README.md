@@ -8,7 +8,7 @@
 
 <img align="right" src="./.github/profile/portrait.png" alt="Israel Oduguwa" width="125">
 
-I'm Israel, a senior full-stack software engineer. I build web applications and the services behind them. I've worked on healthcare hiring, student enrollment and payment recovery, and reviewed generated code on an AI evaluation project.
+I'm Israel, a senior full stack software engineer. I build web applications and the services behind them. I've worked on healthcare hiring, student enrollment and payment recovery, and reviewed generated code on an AI evaluation project.
 
 Most of my application work uses React, Next.js and Node.js, with Python for data and recommendation services. At KinsCare, I guided a seven-developer team through frontend modernization and an identity migration. At Excel Health Careers, I connected registration, Stripe payments and student records.
 
