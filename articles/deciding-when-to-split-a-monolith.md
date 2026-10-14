@@ -3,6 +3,7 @@ slug: "deciding-when-to-split-a-monolith"
 title: "When to split a monolith: ownership, deployment and data boundaries"
 description: "Evaluate a service extraction by the constraint it removes and the distributed failure modes it introduces."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2024-05-23"
 tags:
   - System architecture
@@ -101,6 +102,34 @@ That decision should state what it improves and what it costs. Media jobs become
 Record the conditions that would change the decision. A larger team may need a stable billing ownership boundary. A new compliance requirement may require credential isolation. A measured reporting bottleneck may justify another data store. Revisit based on those signals, not a general aspiration to have more services.
 
 Avoid splitting by technical layer: one service for controllers, another for validation and another for database access. Such a topology distributes one business operation across several deployments while offering little independent ownership.
+
+## Extract media processing without distributing every read
+
+For the hypothetical SaaS, let the application own job admission and tenant authorization. It records an accepted job and dispatch intent together, then returns the job reference. The media worker receives a bounded input reference and a job identity. It does not need permission to update account roles or read billing tables.
+
+The result contract includes job identity, input revision, output reference and processing outcome. A repeated result can be applied once under a uniqueness or version rule. A result from an obsolete input revision should not replace a newer accepted output. Keep cancellation explicit: stopping future processing and deleting already generated output are different actions.
+
+This can begin as a separate worker deployment from the same repository. The application still reads its own job projection to show status, so each page does not synchronously call the worker. A future independently deployed service can preserve that contract. The meaningful first boundary is accepted work and result ownership, not a network endpoint for every internal function.
+
+The worker's failure should leave the rest of the product useful. Account management continues; media jobs remain pending with age and recovery state visible. If a job's completion is required for a time-sensitive product promise, reserve capacity and alert on age. Calling it asynchronous does not remove the deadline.
+
+## A shared database can conceal an unfinished extraction
+
+A service may own its deployment while another application still updates its tables. Every schema change now requires coordinated knowledge, and either deployment can violate the other's invariant. Record direct writers and readers as migration obligations, including reports and support scripts outside the main repository.
+
+Moving reads to a projection can reduce this coupling. The owning service publishes the facts consumers need; each consumer builds its own representation under a versioned interpretation. Keep lag visible and define where stale reads are acceptable. A projection appropriate for a dashboard may be inappropriate for permission revocation or a financial command.
+
+Avoid rebuilding the shared schema through an enormous event payload. Sending every database column to every consumer expands the compatibility and privacy surface. Publish a domain fact with a stable identity and the fields needed by the supported contract. Consumers needing additional facts should request a reviewed contract, rather than importing internal storage shapes again through JSON.
+
+Independence includes restoration. If a service can restore only when the rest of the fleet stops writing, the operational boundary is still shared. Test backup/rebuild procedures and the reconciliation needed after restoring an older local snapshot while newer events exist elsewhere.
+
+## Count the coordination the split removes and adds
+
+Use an actual business change as the unit: introducing a new media format, changing an invoice rule or adding a report field. Trace the required code, schema, deployment and support updates. After extraction, compare the same kind of change. More deployment pipelines are not evidence of less coordination if all of them must release together.
+
+Keep organizational assumptions in the decision. A team needs enough ownership to operate its service, including incidents and compatibility. If the same small group owns every component, distribution may add cognitive and operational load without creating independent delivery. A narrower process boundary can still provide useful scaling or security isolation.
+
+For a proposed service, name the constraint removed, its authoritative data, critical dependencies and failure policy. Then ask for a failure exercise that would demonstrate isolation. If nobody can specify what remains available when the service is down, the independence claim is not ready to justify the split.
 
 ## Verify that the split delivered independence
 

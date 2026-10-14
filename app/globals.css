@@ -1351,10 +1351,18 @@ h2 {
 .article-content figure figcaption {
   font-size: 11px;
 }
+.article-content .article-diagram figcaption {
+  font-size: 13px;
+}
 .article-toc {
   align-self: start;
   position: sticky;
   top: 125px;
+  max-height: calc(100dvh - 150px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 12px;
+  scrollbar-width: thin;
 }
 .article-toc nav > p {
   font-size: 13px;

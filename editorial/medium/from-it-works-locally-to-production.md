@@ -2,7 +2,7 @@
 
 A deployment review focused on failure recovery, observable state and the cost of running the product.
 
-This article was edited with AI assistance.
+Written with AI assistance.
 
 Local development makes a lot of things feel immediate. The database is nearby, the browser belongs to you, and restarting the process is cheap. A production workflow has slower dependencies, other users and work that must survive a restart.
 
@@ -37,6 +37,22 @@ Google's [SRE monitoring chapter](https://sre.google/sre-book/monitoring-distrib
 Infrastructure cost is a product constraint. Track what drives it: continuously running compute, database access patterns, media processing, storage, data transfer and external API usage. A cheaper component is not automatically a cheaper system if it adds operational work or causes repeated processing.
 
 At KinsCare, I worked on frontend modernization and infrastructure changes together. Infrastructure spend fell by over 75% during that work period. The [case study](https://israel-oduguwa.vercel.app/work/kinscare) describes the migration and the results.
+
+## Recovery after restore is a reconciliation problem
+
+Restore the application database to yesterday while the payment provider still holds today's completed charges. The restored state may contain queued work whose remote effect already happened. A worker that treats local absence as proof of remote absence can repeat it.
+
+Identify the recovery observation point and reconcile external effects before replaying uncertain commands. Retain provider references and stable operation identities outside short-lived logs. If the restore also removes those records, the runbook needs another evidence source and a reviewed repair path.
+
+The same issue occurs with a generated media file or sent notification. A local rollback cannot unsend an email or erase a provider's accepted render. Decide whether the recipient can deduplicate, the output can be looked up, or the unresolved operation requires manual review. That decision should exist before the first restore drill.
+
+## Deployment overlap is part of production behavior
+
+During a rolling release, old and new application instances can consume the same records and messages. Additive schema changes are often easier to keep compatible than removing a field immediately, but a preserved field can still change meaning. Test the interpretation, not only deserialization.
+
+An old worker may process a command created by a new API. A browser can submit from an earlier page after the server deploys. Define the supported compatibility interval and keep error outcomes actionable. Requiring every client to refresh at exactly the deployment moment is rarely a credible contract.
+
+Test reduced capacity during replacement and the initialization load of new instances. Connection establishment, cache warmup and job claims can create a burst even when customer demand is unchanged. A release that passes a quiet smoke test can still overload its database when the fleet changes together.
 
 ## Release with a recovery path
 

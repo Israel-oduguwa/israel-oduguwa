@@ -2,7 +2,7 @@
 
 How request retries, repeated webhooks and local business effects need separate identities and recovery rules.
 
-This article was edited with AI assistance.
+Written with AI assistance.
 
 Consider a customer paying for a course. Stripe accepts the payment, but your server loses the response before it updates the enrollment record. The customer sees an error. Your application sees a timeout. Neither observation tells you whether the money moved.
 
@@ -46,6 +46,22 @@ The local payment state, an effect guard and an intent to notify another service
 An outbox records what still needs delivery. It gives the application a recoverable queue of downstream intent. It cannot make the recipient accept a request exactly once: the recipient might accept it while the response disappears, leaving the sender unable to distinguish success from failure.
 
 That boundary calls for at-least-once delivery and recipient-side deduplication. Hiding it behind an “exactly once” promise makes the next incident harder to reason about.
+
+## Keep three identities in the operator's view
+
+The purchase identity represents the commercial intention. The provider request identity protects a supported API attempt. The webhook event identity deduplicates a notification. Keep their relationship visible rather than using one string everywhere and hoping their lifetimes match.
+
+For access delivery, add the business effect identity: granting a particular entitlement because a particular payment was accepted. Several events can refer to that same effect. One event can also lead to several different local decisions. A unique event row is useful admission evidence, but it cannot express every business uniqueness rule.
+
+Store the request fingerprint with the local operation. Replaying an identity with identical input can return its result; changed amount, customer or currency needs an explicit conflict. Otherwise a caller may accidentally retrieve the outcome of a different intention, or a worker may use an old provider identity with new parameters.
+
+## Reconciliation should not send another payment as a side effect
+
+A reconciliation operation reads provider evidence and compares it with local records. If it finds an accepted payment with missing access, it can produce or repair the appropriate local effect under the business policy. If it finds no conclusive payment evidence, that uncertainty should remain visible.
+
+Keep money-changing repair commands separate and authorized. A job named `syncCustomer` should not silently issue a new refund or charge merely because one local row is absent. Give such commands a purpose, stable identity and retained evidence, then subject them to the ordinary financial invariant and concurrency checks.
+
+Prioritize unresolved cases by age and customer impact. An accepted payment whose access has not been granted is different from a duplicate notification already represented correctly. Showing both as “webhook failure” hides what the operator needs to repair.
 
 ## What to test
 

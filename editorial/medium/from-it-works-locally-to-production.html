@@ -1,6 +1,6 @@
 <h1>What changes when a workflow reaches production</h1>
 <h2>A deployment review focused on failure recovery, observable state and the cost of running the product.</h2>
-<p>This article was edited with AI assistance.</p>
+<p>Written with AI assistance.</p>
 <p>Local development makes a lot of things feel immediate. The database is nearby, the browser belongs to you, and restarting the process is cheap. A production workflow has slower dependencies, other users and work that must survive a restart.</p>
 <p>Before a release, I want to understand how the workflow behaves when a dependency stops responding. A successful happy-path test is necessary, but it does not answer what the business should do with an unfinished enrollment, a pending payment or a render job whose worker disappeared.</p>
 <h2>Follow one workflow all the way through</h2>
@@ -18,6 +18,14 @@
 <h2>Review the running cost</h2>
 <p>Infrastructure cost is a product constraint. Track what drives it: continuously running compute, database access patterns, media processing, storage, data transfer and external API usage. A cheaper component is not automatically a cheaper system if it adds operational work or causes repeated processing.</p>
 <p>At KinsCare, I worked on frontend modernization and infrastructure changes together. Infrastructure spend fell by over 75% during that work period. The case study describes the migration and the results.</p>
+<h2>Recovery after restore is a reconciliation problem</h2>
+<p>Restore the application database to yesterday while the payment provider still holds today's completed charges. The restored state may contain queued work whose remote effect already happened. A worker that treats local absence as proof of remote absence can repeat it.</p>
+<p>Identify the recovery observation point and reconcile external effects before replaying uncertain commands. Retain provider references and stable operation identities outside short-lived logs. If the restore also removes those records, the runbook needs another evidence source and a reviewed repair path.</p>
+<p>The same issue occurs with a generated media file or sent notification. A local rollback cannot unsend an email or erase a provider's accepted render. Decide whether the recipient can deduplicate, the output can be looked up, or the unresolved operation requires manual review. That decision should exist before the first restore drill.</p>
+<h2>Deployment overlap is part of production behavior</h2>
+<p>During a rolling release, old and new application instances can consume the same records and messages. Additive schema changes are often easier to keep compatible than removing a field immediately, but a preserved field can still change meaning. Test the interpretation, not only deserialization.</p>
+<p>An old worker may process a command created by a new API. A browser can submit from an earlier page after the server deploys. Define the supported compatibility interval and keep error outcomes actionable. Requiring every client to refresh at exactly the deployment moment is rarely a credible contract.</p>
+<p>Test reduced capacity during replacement and the initialization load of new instances. Connection establishment, cache warmup and job claims can create a burst even when customer demand is unchanged. A release that passes a quiet smoke test can still overload its database when the fleet changes together.</p>
 <h2>Release with a recovery path</h2>
 <p>A release should include a way to identify incomplete work, a way to retry only the appropriate operation, and a way to stop writes if the system's history is no longer trustworthy. Database restore scenarios deserve particular attention because external systems may have progressed beyond the restored local state.</p>
 <p>Write down who can make that decision and what evidence they need. Then exercise the path in a disposable environment. A runbook becomes useful when another engineer can follow it under pressure, not when it contains every command the author happened to run.</p>

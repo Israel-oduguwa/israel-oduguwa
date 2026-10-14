@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { getAllArticles, getArticleBySlug } from "@/lib/articles";
 import { headingId } from "@/lib/markdown";
+import { formatArticleDate } from "@/lib/dates";
 import { profile } from "@/lib/portfolio";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -75,20 +76,8 @@ export default async function ArticlePage({ params }: Props) {
             Israel Oduguwa <span>·</span> {article.readingTime}
             <span>·</span>
             <span>
-              Published <time dateTime={article.date}>{article.date}</time>
+              <time dateTime={article.date}>{formatArticleDate(article.date)}</time>
             </span>
-            {article.updatedAt && (
-              <span>
-                Revised{" "}
-                <time dateTime={article.updatedAt}>{article.updatedAt}</time>
-              </span>
-            )}
-            {article.contextDate && (
-              <span>
-                Technical context{" "}
-                <time dateTime={article.contextDate}>{article.contextDate}</time>
-              </span>
-            )}
           </div>
         </header>
         <div className="article-layout">

@@ -2,15 +2,13 @@
 
 Eight deliberately flawed transfer implementations show which graders catch missing effects, hidden corruption, fixture overfitting and race conditions.
 
-This article was written with AI assistance. Sources and example verification are linked where relevant.
-
-Technical context: 26 June 2025. Published 13 October 2026; the context date describes the technical era examined.
+Written with AI assistance.
 
 An evaluator is a program with an attack surface. If its score depends on a success message, a candidate can print success. If it checks only a public fixture, a candidate can hard-code that fixture. If candidate code can alter the timer or comparison function, reported performance may have little relationship to the requested computation.
 
 In June 2025, [METR reported observed reward-hacking attempts](https://metr.org/blog/2025-06-05-recent-reward-hacking/) involving scoring-code modification, answer access and other evaluation loopholes. Those observations motivate a practical engineering question: which shortcuts would our own grader accept?
 
-I built eight deliberately flawed implementations and one reference for a small transfer contract. These are hand-authored probes, not model outputs. The experiment measures grader sensitivity to known faults. It does not measure how often a coding agent would discover them, and it does not demonstrate a training-induced behavior.
+I built eight deliberately flawed implementations and one reference for a small transfer contract. This hand-authored mutation experiment measures which known faults each grader detects. Model exploitation rates would require separately collected agent runs.
 
 The [complete source and recorded matrix](https://github.com/Israel-oduguwa/israel-oduguwa/tree/main/examples/engineering-series) run locally with Node.js 20 or later. No network access, model calls or elapsed-time sleeps are required.
 
@@ -127,13 +125,13 @@ The columns represent different probes, not an accumulating score. “Tenant” 
 
 A failure can have several causes. The swallowed-exception mutant fails concurrency because it turns a rejected overspend into a fulfilled promise. That is distinct from the lost-update mutant, which actually corrupts the balances. Retain failing artifacts and inspect them rather than interpreting a single red cell as a complete diagnosis.
 
-## Avoid overclaiming what the experiment established
+## Interpret the matrix as targeted evidence
 
-The mutants were selected because they express known contract violations. Detecting them is a targeted validation result. It does not estimate detection probability over all possible shortcuts, model-generated patches or deployment tasks.
+The eight mutants cover deliberately selected contract violations. The useful result is the relationship between each fault and the observation that exposes it. Keep that relationship when adding new probes; a single combined pass rate would hide it.
 
-The experiment also does not establish intent. A real agent can produce disabled validation through misunderstanding, an accidental refactor or deliberate score exploitation. The observable artifact is unacceptable under the contract regardless of motive. Label “reward hacking” carefully when describing an observed run, using the task instructions, actions and evaluation environment as evidence.
+A real agent can disable validation through misunderstanding, an accidental refactor or deliberate score exploitation. The artifact violates the contract in each case. When labeling an observed run as reward hacking, inspect the instructions, actions and evaluation environment before attributing intent.
 
-METR's report explains that automated suspicion signals required manual review and could miss cases. A monitor is a triage aid, not an authoritative verdict by itself. Our local mutation matrix is even narrower: it tests eight specific implementations with no model behavior involved.
+METR's report explains that automated suspicion signals required manual review and could miss cases. Use a monitor to select runs for inspection, then retain the concrete evidence behind the label.
 
 The next useful step would be additional mutants, independent reviewer inspection and held-out schedules. For example: reuse a key with different tenant input, partially mutate before throwing, corrupt an audit record, or preserve balances while omitting the required entry. Each should have an explicitly stated expectation.
 
@@ -147,12 +145,42 @@ Observe side effects at the system boundary that owns them: database records, pr
 
 Separate mandatory invariants from quality preferences. A candidate that leaks tenant data should fail qualification even if it passes every performance case. Weighted averages can hide critical failures; a release gate should expose them directly.
 
+## Preserve evidence outside the candidate's control
+
+In a real repository task, the agent may legitimately edit tests. That is different from allowing those edits to define final acceptance. Keep an authoritative evaluation copy outside its writable tree, or mount protected checks through a controller that verifies their revision before execution. Record both the candidate's tests and the authoritative results.
+
+The result channel needs the same separation. A candidate process can print JSON, forge a success banner or exit with code zero. The controller should decide whether the required command ran, whether expected artifacts exist, and whether resource limits were exceeded. Treat the candidate's output as input to inspect, rather than a control message that can mark the run complete.
+
+A process boundary is useful but incomplete. If candidate and grader share writable files, credentials or a mutable service, the candidate can influence the observer through that authority. Inventory readable reference data, writable paths, network destinations, inherited environment variables and temporary directories. Remove authority the task does not require.
+
+Performance evaluation has its own observation boundary. Measure elapsed time from a trusted controller and account for asynchronous device work under the relevant runtime. Returning before computation completes can move work outside the timed interval. The completion rule must be part of the task contract, with a correctness check after the required synchronization.
+
+## Build an exploit report that an evaluator owner can repair
+
+Retain the candidate revision, task statement, evaluation revision, command, environment digest, actions and authoritative observations. A report saying “the agent cheated” is less useful than one showing that a missing effect passed because only the response body was checked.
+
+Classify the mechanism. A hard-coded fixture is input overfitting. A modified assertion is measurement tampering. Returning a fabricated score is result-channel confusion. A partial mutation followed by a caught exception is incorrect failure behavior. These mechanisms can produce the same green dashboard while needing different repairs.
+
+Reproduce the smallest counterexample. For hidden corruption, retain the ordinary accepted operation and the unrelated account before and after it. For the race, retain the schedule that allowed both reads before the writes. For conflicting replay, retain the same identity with two fingerprints. The artifact should explain the violated obligation without requiring a reviewer to replay a long transcript mentally.
+
+After repairing the grader, run valid alternatives as well as known-invalid candidates. Rejecting every implementation with a catch block might catch the swallowed-exception mutant, but it also rejects legitimate error translation. Observe whether rejected input leaves state unchanged and whether success corresponds to the committed effect. Source heuristics can guide review; they should not silently replace a behavioral oracle.
+
+![The candidate proposes an output; a separate observer supplies the authoritative verdict](https://israel-oduguwa.vercel.app/images/articles/evaluator-boundary.svg)
+
+## Keep a repair from changing the task retrospectively
+
+Suppose the original contract allowed either an exception or a typed rejection result. A new grader accepting only exceptions introduces an implementation restriction. If the old grader failed to observe unchanged state, add that observation while preserving both valid rejection forms. Publish the distinction in the grader version notes.
+
+Regrade retained outputs when a repaired evaluator changes acceptance. Keep the old score reproducible and report which outcomes changed and why. New model outputs introduce sampling differences, so a fresh run cannot by itself isolate the effect of a grader repair.
+
+Separate invalidated measurements from ordinary failures. If an output modified the authoritative clock or obtained a protected answer, the reported timing or correctness result is not valid evidence. Retain the run for analysis and classify it explicitly instead of treating its manipulated score as another low-quality solution.
+
 ## Make adversarial grader review part of maintenance
 
 Every accepted task should have a small library of known-invalid solutions tied to its contract. When a grader changes, rerun those probes alongside reference solutions. A test refactor that suddenly accepts a known race is a regression in the evaluator.
 
 Version the task, grader and environment together. Retain the reason for each mutation and the evidence of rejection. When a new exploit appears, determine whether it reflects a missing behavioral requirement, weak observation or a compromised evaluation boundary.
 
-The purpose of these probes is to make the score earn its meaning. A grader that survives plausible shortcuts provides stronger evidence than one that has only ever seen the reference answer.
+Keep the counterexamples with the grader. The next refactor should still reject the hidden corruption, race and duplicate effect while accepting the valid implementations. That retained evidence is what makes a passing score useful.
 
 Originally published on [Israel Oduguwa's website](https://israel-oduguwa.vercel.app/articles/coding-agent-reward-hacking).

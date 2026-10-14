@@ -2,15 +2,13 @@
 
 Set resource budgets, transaction boundaries and security controls before choosing how to scale a production backend.
 
-This article was written with AI assistance. Sources and example verification are linked where relevant.
-
-Technical context: 22 May 2025. Published 13 October 2026; the context date describes the technical era examined.
+Written with AI assistance.
 
 A backend can handle a large request count and still be easy to overwhelm. One expensive export can monopolize database connections. A retry storm can consume capacity intended for new requests. A valid authenticated user can submit work whose cost is much greater than its price or quota.
 
 I would design a Node.js backend around resource ownership and business invariants. Horizontal scaling matters after those boundaries are understood. Adding replicas to an unbounded design can increase the rate at which it overloads its database.
 
-This is a reference architecture for a transactional SaaS with interactive requests, background jobs and external integrations. It targets Node.js 22-era behavior as of May 2025. It is a set of decisions to adapt and validate, not a claim that one topology is perfect for every large application.
+The reference architecture uses Node.js 22 and PostgreSQL for a transactional SaaS with interactive requests, background jobs and external integrations. Its capacity choices depend on the workload and failure budget described below.
 
 ## Start with the workload and the failure budget
 
@@ -129,6 +127,44 @@ Distinguish liveness from readiness. Restarting every instance because a shared 
 Deploy backward-compatible schema and event changes. Old and new instances coexist during rollout. A worker can receive a message created by an earlier version. Keep compatibility tests and a rollback plan that accounts for data already written.
 
 Backups, provider reconciliation and queue recovery need drills. Verify restore time, application compatibility and the treatment of accepted work after recovery. A backup-success notification does not demonstrate that customers can resume their workflow.
+
+## Budget the fleet against the smallest shared dependency
+
+Suppose a hypothetical database budget permits 180 application connections after operational access is reserved. The deployment can temporarily run twelve old API instances and twelve replacements. A pool of ten connections on each already exposes 240 possible connections before workers are counted. Autoscaling the API during that rollout can make the overload worse.
+
+Work backward from the shared dependency. Reserve a worker budget, a deployment-overlap budget and a recovery allowance. Then constrain the API's aggregate demand through instance limits, smaller pools or a pooler appropriate to the workload. A connection proxy changes connection management; it does not increase how much query work the database can safely execute.
+
+For different operation classes, budget expensive work separately. A reporting task that holds a connection for seconds should not consume the final slot needed to acknowledge a webhook durably. Keep reporting concurrency bounded and give protected operations a minimum capacity allocation. Measure starvation as queue age by class and tenant, not only total queue length.
+
+Fair scheduling requires a policy under sustained excess demand. A tenant with a thousand waiting exports should not gain a thousand times the chance of service merely because every queued item is individually valid. Weighted or tenant-rotating scheduling can help, but the weights are product decisions. Keep an upper bound on per-tenant retained work, including memory and stored output.
+
+## Make authentication failure predictable under provider trouble
+
+Authentication has dependencies too. If every token verification fetches signing keys remotely, an identity-provider slowdown can occupy the entire API. Use the verification library's documented key cache and rotation behavior, bound network requests and distinguish an invalid token from temporarily unavailable verification evidence.
+
+The acceptable fallback is constrained by authority. A cached valid signing key may still verify a token under the configured policy. An unavailable key is not a reason to accept an unverified token or treat the caller as an administrator. For high-risk actions, also account for revocation and current membership; a cryptographically valid token can outlive an authorization change.
+
+Avoid letting arbitrary issuer or key URLs from request input direct a privileged fetch. Configure trusted issuers and audiences, permitted algorithms and the key-discovery path. Record safe failure categories without storing full bearer tokens. The [JWT security recommendations](https://www.rfc-editor.org/rfc/rfc8725.html) cover algorithm verification and mutually exclusive validation rules for different token kinds.
+
+Service-to-service identity needs a purpose as well as a valid signature. A token intended for a metrics endpoint should not authorize a refund command. Validate audience and the required capability at the resource boundary. Separating credentials for read projections, command handlers and migration jobs reduces the authority available through a compromised component.
+
+## Keep deployments from creating their own overload event
+
+Readiness should represent whether an instance can take useful traffic. Startup is not complete merely because the port is bound. Initialization may include configuration validation, dependency setup and safe warmup. Bound warmup so twenty new instances do not perform the same expensive origin fetch at once.
+
+Shutdown has two clocks: the platform's termination window and each operation's remaining useful deadline. Stop new admission, drain eligible requests and end the process within the platform budget. Preserve durable jobs for reclamation when they cannot finish in time. Letting every worker continue until its longest job ends can exceed termination grace and still end in a forced kill.
+
+Do not declare a job complete during shutdown simply because its provider request was sent. Store a verified outcome or leave a recoverable uncertainty record. A later worker should inspect the operation identity and provider evidence before initiating another mutation. The shutdown path should obey the same fencing rules as ordinary execution.
+
+Record a deployment as a versioned operating condition in load tests. Test old and new instances together, reduced capacity while replacements initialize, and a rollback with messages produced by the new version still waiting. This often exposes a compatibility defect before an ideal steady-state benchmark does.
+
+## A production review should have disprovable acceptance criteria
+
+For this reference architecture, I would ask for a retained run showing constant offered traffic, bounded resource ownership, a slow database, a killed worker and one missing instance. For the important command, the test must also show which operation was accepted, where its durable result lives, and how a lost response is recovered. Throughput without those records is insufficient for a transactional service.
+
+Add security cases to the same operational review: a revoked user attempting an action, a cross-tenant identifier, an oversized compressed body, an invalid signing-key path, and a queued export whose authority changes. Verify safe failure and resource cleanup. An error response that leaves a connection or slot occupied is still an availability defect.
+
+Keep thresholds tied to measured workload and product objectives. A sample diagram cannot justify a universal request count, availability percentage or security claim. What it can provide is a set of boundaries the team can implement, test and explain before increasing exposure.
 
 ## Verify the architecture through controlled failure
 

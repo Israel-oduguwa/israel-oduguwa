@@ -3,6 +3,7 @@ slug: "maintainable-frontend-systems"
 title: "Keeping frontend systems maintainable as teams and features grow"
 description: "Control dependency growth, shared-component variation and migration cost without turning every product change into framework work."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2025-01-23"
 tags:
   - Frontend systems
@@ -14,7 +15,7 @@ A shared table begins with sorting and pagination. Six teams add bulk actions, i
 
 The problem is not that the component has become large. Its contract now contains several capabilities with different owners and incompatible assumptions. Maintainability depends on controlling those contracts and the cost of changing them.
 
-This article focuses on team-level frontend evolution: shared APIs, dependency direction, performance budgets and migrations. It complements module-level architecture by asking how a codebase remains changeable after many contributors and several product generations.
+The difficult cases emerge after many contributors and several product generations. Shared APIs, dependency direction and migration ownership determine whether an ordinary product change stays local or spreads through the codebase.
 
 ## Define maintainability as the cost of a real change
 
@@ -114,10 +115,38 @@ Test old and new consumers during the transition. Deployment overlap matters whe
 
 Record important decisions near the relevant package: why an API uses composition, which states it supports, and which product logic remains outside. Future contributors need the reason, not merely a rule forbidding another prop.
 
+## Split a shared component when its obligations diverge
+
+The table from the opening example has two difficult consumers. Finance needs stable selection across pages for an audited bulk action. Support needs a live list where incoming records can change the visible order. One universal selection rule cannot satisfy both without defining what happens when a selected record disappears, becomes unauthorized or changes revision.
+
+Keep shared rendering and keyboard behavior where the contract remains common. Move selection semantics into each feature. Finance can submit explicit resource identities with expected revisions and receive per-item outcomes. Support can use a temporary visible selection for a local interaction. Making these different APIs visible is preferable to adding `financeMode`, `liveMode` and another dozen interactions to a primitive.
+
+Review a proposed shared prop by asking who owns its invariant. `onSelectionChange` is an interaction contract. `canRefundSelectedRows` belongs to billing policy. A generic callback can still carry too much domain authority if consumers assume the shared component has performed authorization. Name and test the boundary so that presentation cannot silently become the command gate.
+
+An extraction has a maintenance budget. Its owner needs representative consumers, accessible states and a migration plan. If every new product change requires modifying the shared package, the abstraction may be centralizing variation instead of reducing it. Keep the contract small enough that a reviewer can describe its supported states without knowing every product in the repository.
+
+## Turn a performance budget into a review decision
+
+Suppose a new shared date control adds a large parser to every route. Its source file is small and its component test is fast, but the browser pays for the dependency even on screens that never open it. Inspect emitted route bundles and the interaction that loads the control. A dependency graph in the source tree does not establish when the browser downloads or executes that code.
+
+A useful budget identifies the route class, representative device, measurement method and owner. If a change crosses it, the review asks whether loading can be deferred, whether a smaller representation is possible, or whether the product benefit justifies the cost. Record that exception rather than relaxing the budget for every route.
+
+Keep rendering correctness separate from performance tuning. React's [external-store API](https://react.dev/reference/react/useSyncExternalStore) requires immutable, stable snapshots until the store changes. A store returning a new object on every read can create unnecessary work; a store mutating the same object can conceal an update. Adding memoization around consumers does not repair the snapshot contract.
+
+Measure real interactions after changes to a shared layer: opening a large menu, typing in a form while background data refreshes, switching tenants and rendering long content. A fast initial screenshot says little about those costs. Retain profiles that identify where time went, with the tested data size and device, so the next optimization can challenge the same hypothesis.
+
+## Make a shared migration observable
+
+For a replacement field API, inventory consumers and their behavioral requirements before writing a codemod. One consumer may rely on immediate validation, another on validation after blur, and another on a remote result tied to a draft revision. A syntax-only migration can preserve compilation while changing the product.
+
+Provide a narrow adapter for the old API when it buys a safe compatibility interval. Mark it with an owner and removal condition. Track usage through static checks or build reports, then migrate representative consumers before the easiest ones. A difficult early consumer reveals missing semantics while the replacement is still affordable to change.
+
+Retain accessibility and interaction tests around the adapter. If focus, labels or error announcements differ between old and new consumers, examine the difference rather than approving a snapshot update wholesale. The change should leave a simpler public contract after retirement, not two permanently supported ways of expressing the same field.
+
 ## Keep architecture work tied to product change
 
 Review the dependency graph and shared APIs periodically using actual change history. Remove abstractions that no longer earn their complexity. Split a shared component when its consumers have diverged, even if that increases some duplication.
 
 Assign ownership for shared code and provide a way for feature teams to request changes. A central team that becomes a bottleneck can encourage local forks; a shared package that accepts every request can become incoherent. A clear contract makes those decisions easier.
 
-The useful outcome is predictable change scope. An engineer should know which contract owns a behavior, which tests protect it, and which teams need to participate when it changes. That remains valuable as frameworks, contributors and product requirements evolve.
+Use the next product change to check the architecture: identify its owning contract, its protecting tests and the teams required to release it. If an ordinary field change still touches unrelated features, the dependency problem remains.

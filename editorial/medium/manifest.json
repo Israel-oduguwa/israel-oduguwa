@@ -5,10 +5,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/coding-agent-reward-hacking",
     "originalDate": "2026-10-13",
     "contextDate": "2025-06-26",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "coding-agent-reward-hacking.md",
     "html": "coding-agent-reward-hacking.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "coding-agent-tests-and-task-correctness",
@@ -16,10 +16,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/coding-agent-tests-and-task-correctness",
     "originalDate": "2026-10-13",
     "contextDate": "2024-12-12",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "coding-agent-tests-and-task-correctness.md",
     "html": "coding-agent-tests-and-task-correctness.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "coding-agent-training-data",
@@ -27,10 +27,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/coding-agent-training-data",
     "originalDate": "2026-10-13",
     "contextDate": "2025-02-20",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "coding-agent-training-data.md",
     "html": "coding-agent-training-data.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "crud-to-workflow-engine",
@@ -38,10 +38,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/crud-to-workflow-engine",
     "originalDate": "2026-10-13",
     "contextDate": "2024-04-18",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "crud-to-workflow-engine.md",
     "html": "crud-to-workflow-engine.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "debugging-production-under-load",
@@ -49,10 +49,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/debugging-production-under-load",
     "originalDate": "2026-10-13",
     "contextDate": "2024-02-22",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "debugging-production-under-load.md",
     "html": "debugging-production-under-load.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "deciding-when-to-split-a-monolith",
@@ -60,10 +60,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/deciding-when-to-split-a-monolith",
     "originalDate": "2026-10-13",
     "contextDate": "2024-05-23",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "deciding-when-to-split-a-monolith.md",
     "html": "deciding-when-to-split-a-monolith.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "engineering-seo-at-scale",
@@ -71,10 +71,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/engineering-seo-at-scale",
     "originalDate": "2026-10-13",
     "contextDate": "2026-02-19",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "engineering-seo-at-scale.md",
     "html": "engineering-seo-at-scale.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "incremental-system-migrations",
@@ -82,10 +82,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/incremental-system-migrations",
     "originalDate": "2026-10-13",
     "contextDate": "2024-10-10",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "incremental-system-migrations.md",
     "html": "incremental-system-migrations.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "infrastructure-cost-and-reliability",
@@ -93,10 +93,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/infrastructure-cost-and-reliability",
     "originalDate": "2026-10-13",
     "contextDate": "2024-06-20",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "infrastructure-cost-and-reliability.md",
     "html": "infrastructure-cost-and-reliability.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "maintainable-frontend-systems",
@@ -104,10 +104,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/maintainable-frontend-systems",
     "originalDate": "2026-10-13",
     "contextDate": "2025-01-23",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "maintainable-frontend-systems.md",
     "html": "maintainable-frontend-systems.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "multi-tenant-authorization-boundaries",
@@ -115,10 +115,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/multi-tenant-authorization-boundaries",
     "originalDate": "2026-10-13",
     "contextDate": "2024-08-15",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "multi-tenant-authorization-boundaries.md",
     "html": "multi-tenant-authorization-boundaries.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "nextjs-rendering-strategy-tradeoffs",
@@ -126,10 +126,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/nextjs-rendering-strategy-tradeoffs",
     "originalDate": "2026-10-13",
     "contextDate": "2025-11-20",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "nextjs-rendering-strategy-tradeoffs.md",
     "html": "nextjs-rendering-strategy-tradeoffs.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "node-backend-overload-and-security",
@@ -137,10 +137,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/node-backend-overload-and-security",
     "originalDate": "2026-10-13",
     "contextDate": "2025-05-22",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "node-backend-overload-and-security.md",
     "html": "node-backend-overload-and-security.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "production-web-security-architecture",
@@ -148,10 +148,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/production-web-security-architecture",
     "originalDate": "2026-10-13",
     "contextDate": "2025-09-18",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "production-web-security-architecture.md",
     "html": "production-web-security-architecture.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "react-nextjs-architecture-boundaries",
@@ -159,10 +159,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/react-nextjs-architecture-boundaries",
     "originalDate": "2026-10-13",
     "contextDate": "2025-07-17",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "react-nextjs-architecture-boundaries.md",
     "html": "react-nextjs-architecture-boundaries.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "reliable-multi-step-ui-state",
@@ -170,10 +170,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/reliable-multi-step-ui-state",
     "originalDate": "2026-10-13",
     "contextDate": "2024-09-19",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "reliable-multi-step-ui-state.md",
     "html": "reliable-multi-step-ui-state.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "reliable-saas-billing-workflows",
@@ -181,10 +181,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/reliable-saas-billing-workflows",
     "originalDate": "2026-10-13",
     "contextDate": "2026-01-22",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "reliable-saas-billing-workflows.md",
     "html": "reliable-saas-billing-workflows.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "saas-scaling-and-unit-economics",
@@ -192,10 +192,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/saas-scaling-and-unit-economics",
     "originalDate": "2026-10-13",
     "contextDate": "2025-03-20",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "saas-scaling-and-unit-economics.md",
     "html": "saas-scaling-and-unit-economics.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "useful-architecture-decision-records",
@@ -203,10 +203,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/useful-architecture-decision-records",
     "originalDate": "2026-10-13",
     "contextDate": "2024-01-25",
-    "updatedAt": null,
+    "updatedAt": "2026-10-14",
     "markdown": "useful-architecture-decision-records.md",
     "html": "useful-architecture-decision-records.html",
-    "disclosure": "This article was written with AI assistance. Sources and example verification are linked where relevant."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "validating-ai-coding-benchmarks",
@@ -217,7 +217,7 @@
     "updatedAt": null,
     "markdown": "validating-ai-coding-benchmarks.md",
     "html": "validating-ai-coding-benchmarks.html",
-    "disclosure": "This article was written with AI assistance. The linked experiment includes runnable code and recorded results."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "worker-ownership-and-payment-recovery",
@@ -225,10 +225,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/worker-ownership-and-payment-recovery",
     "originalDate": "2026-10-09",
     "contextDate": null,
-    "updatedAt": "2026-10-13",
+    "updatedAt": "2026-10-14",
     "markdown": "worker-ownership-and-payment-recovery.md",
     "html": "worker-ownership-and-payment-recovery.html",
-    "disclosure": "This article was edited with AI assistance."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "from-it-works-locally-to-production",
@@ -236,10 +236,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/from-it-works-locally-to-production",
     "originalDate": "2026-04-21",
     "contextDate": null,
-    "updatedAt": "2026-10-13",
+    "updatedAt": "2026-10-14",
     "markdown": "from-it-works-locally-to-production.md",
     "html": "from-it-works-locally-to-production.html",
-    "disclosure": "This article was edited with AI assistance."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "ai-written-code-production-safe",
@@ -247,10 +247,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/ai-written-code-production-safe",
     "originalDate": "2025-08-13",
     "contextDate": null,
-    "updatedAt": "2026-10-13",
+    "updatedAt": "2026-10-14",
     "markdown": "ai-written-code-production-safe.md",
     "html": "ai-written-code-production-safe.html",
-    "disclosure": "This article was edited with AI assistance."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "authorization-architecture-beyond-roles",
@@ -258,10 +258,10 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/authorization-architecture-beyond-roles",
     "originalDate": "2025-05-22",
     "contextDate": null,
-    "updatedAt": "2026-10-13",
+    "updatedAt": "2026-10-14",
     "markdown": "authorization-architecture-beyond-roles.md",
     "html": "authorization-architecture-beyond-roles.html",
-    "disclosure": "This article was edited with AI assistance."
+    "disclosure": "Written with AI assistance."
   },
   {
     "slug": "stripe-idempotency-your-app-still-needs-it",
@@ -269,9 +269,9 @@
     "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/stripe-idempotency-your-app-still-needs-it",
     "originalDate": "2024-05-21",
     "contextDate": null,
-    "updatedAt": "2026-10-13",
+    "updatedAt": "2026-10-14",
     "markdown": "stripe-idempotency-your-app-still-needs-it.md",
     "html": "stripe-idempotency-your-app-still-needs-it.html",
-    "disclosure": "This article was edited with AI assistance."
+    "disclosure": "Written with AI assistance."
   }
 ]

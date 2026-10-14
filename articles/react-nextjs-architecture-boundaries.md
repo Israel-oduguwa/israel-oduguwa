@@ -3,6 +3,7 @@ slug: "react-nextjs-architecture-boundaries"
 title: "Architecture boundaries in a large React and Next.js application"
 description: "Separate domain policy, server data access and browser interaction so a growing frontend stays secure and changeable."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2025-07-17"
 tags:
   - React
@@ -116,6 +117,44 @@ End-to-end tests should cover a few meaningful workflows across those boundaries
 Add import-boundary checks and inspect client bundle changes. A new dependency can accidentally move a heavy package into a commonly visited route. Measure route-level loading and interaction performance on representative devices, including less capable ones.
 
 Use contract fixtures for API evolution. A field added by the server should not require every browser to refresh instantly. During deployment overlap, old clients and new servers may interact. Commands and responses need a compatibility policy.
+
+## Follow one refund through all the boundaries
+
+The page query returns invoice revision 7 and says a refund is available. The user enters an amount. While the form is open, another authorized actor records a refund. The first browser now submits against an obsolete financial state. A disabled button or a server-rendered permission flag cannot resolve that race.
+
+The command receives the expected invoice revision and a stable operation identity. It resolves the actor again, checks the current remaining refundable amount, and accepts the operation through a conditional transactional write. A conflict returns a typed outcome the form can present while preserving the user's input. It does not automatically retry against revision 8 with the same intention if that intention now violates the invariant.
+
+On acceptance, return the operation reference and the committed invoice revision. The UI can show the accepted command immediately while refreshing the invoice projection. Keep “command accepted” distinct from “provider refund confirmed.” A refetch returning an older cached revision should not overwrite the accepted operation state or make a duplicate refund available.
+
+This is a useful place for a response contract:
+
+```typescript
+type RefundOutcome =
+  | { kind: 'accepted'; operationId: string; invoiceRevision: number }
+  | { kind: 'conflict'; currentRevision: number }
+  | { kind: 'invalid'; fieldErrors: Record<string, string> }
+  | { kind: 'denied' };
+```
+
+The shape is illustrative. Add an explicit unknown-outcome path in the transport/controller layer if a response can be lost. Avoid using a broad catch block to convert every exception into `invalid`; a network interruption supplies no evidence that the amount was rejected.
+
+## Shared caches need an authority model
+
+A query contract can include sensitive fields even when its identifier is globally unique. Cache keys must account for any difference in the authorized representation. A finance administrator's invoice view might include internal notes that an ordinary member cannot receive. Reusing the former view for the latter bypasses a correctly written data-access function.
+
+One design caches a permission-independent, tenant-scoped domain record on the server and creates the minimized response after current authorization. Another caches the final representation under an explicit scope with a defined invalidation policy. The latter needs attention to membership and privilege changes. Cache identity alone cannot keep a permission decision current indefinitely.
+
+Treat browser query caches as account-scoped resources. On sign-out or tenant change, cancel owned work, remove sensitive entries and prevent late responses from repopulating the old scope. A route transition may preserve a layout and its provider; placing the cache there can unintentionally extend its lifetime across accounts.
+
+The server-client boundary also applies to error and diagnostic data. A safe `denied` outcome can coexist with a detailed server trace. Do not serialize that trace, provider payload or raw database exception simply because the frontend type accepts an arbitrary object.
+
+## Measure the cost of a boundary before extracting it
+
+A new package can enforce ownership, but it can also make a simple product change require several releases. Before extracting billing contracts, inventory who consumes them, how they deploy and which compatibility guarantee they need. A monorepo package used only by one application may benefit from explicit imports without needing an independent release process.
+
+Use one upcoming change as a test: introducing a second refund reason or changing the invoice display model. Which modules must change? Which tests identify a broken contract? Which releases must overlap? If the architecture requires edits to unrelated features, the dependency direction still needs work. If every tiny change requires a committee to alter a universal abstraction, the shared API is too broad.
+
+At KinsCare I guided seven developers through system design and code review across frontend, backend and integrations. That team-level responsibility is why I value boundaries an engineer can explain during a real change. A folder taxonomy is useful when it reduces the number of assumptions a reviewer must recover from memory.
 
 ## Make ownership visible to the next team
 

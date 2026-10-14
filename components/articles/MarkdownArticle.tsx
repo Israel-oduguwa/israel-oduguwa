@@ -1,5 +1,7 @@
 import React from "react";
 import { headingId } from "@/lib/markdown";
+import { codeBackground, highlightCode } from "@/lib/highlighting";
+import { articleImageSizes } from "@/lib/article-images";
 
 type Block =
   | { type: "heading"; depth: 1 | 2 | 3; text: string }
@@ -198,28 +200,31 @@ function renderInline(text: string) {
   return nodes;
 }
 
-function CodeBlock({ code, language }: { code: string; language: string }) {
-  const lines = code.split("\n");
-  const label = language === "txt" ? "text" : language;
+async function CodeBlock({ code, language }: { code: string; language: string }) {
+  const { lines, label } = await highlightCode(code, language);
 
   return (
-    <figure className="my-9 overflow-hidden rounded-xl border border-slate-800 bg-[#0b1020]">
+    <figure className="article-code my-9 min-w-0 overflow-hidden rounded-xl border border-slate-800" style={{ backgroundColor: codeBackground }}>
       <figcaption className="border-b border-white/10 bg-white/[0.04] px-4 py-3">
         <span className="font-mono text-xs text-slate-300">
           {label}
         </span>
       </figcaption>
-      <pre className="overflow-x-auto p-0 text-[0.86rem] leading-7 text-slate-100">
+      <pre tabIndex={0} aria-label={`${label} code example, scroll horizontally for long lines`} className="overflow-x-auto p-0 text-[0.86rem] leading-7 text-slate-100">
         <code className="block min-w-full py-5">
           {lines.map((line, index) => (
             <span
-              key={`${index}-${line}`}
+              key={index}
               className="grid grid-cols-[3.25rem_1fr] px-4 transition-colors hover:bg-white/[0.035]"
             >
-              <span className="select-none pr-4 text-right font-mono text-xs text-slate-400">
+              <span aria-hidden="true" className="select-none pr-4 text-right font-mono text-xs text-slate-400">
                 {index + 1}
               </span>
-              <span className="whitespace-pre font-mono">{line || " "}</span>
+              <span className="code-line whitespace-pre font-mono">
+                {line.length ? line.map((token, tokenIndex) => (
+                  <span key={tokenIndex} style={{ color: token.color }}>{token.content}</span>
+                )) : " "}
+              </span>
             </span>
           ))}
         </code>
@@ -229,18 +234,22 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
 }
 
 function ImageBlock({ alt, src }: { alt: string; src: string }) {
+  const dimensions = articleImageSizes[src];
   return (
-    <figure className="my-10 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_24px_70px_rgba(15,23,42,0.08)] dark:border-white/10 dark:bg-white/[0.04]">
-      <div className="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
+    <figure className={`article-diagram my-10 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-white/10 ${dimensions ? "mx-auto max-w-lg" : ""}`}>
+      <div className="w-full overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt={alt}
-          loading="eager"
+          width={dimensions?.width}
+          height={dimensions?.height}
+          loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover"
+          className="h-auto w-full"
         />
       </div>
+      <figcaption className="border-t border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700">{alt}</figcaption>
     </figure>
   );
 }

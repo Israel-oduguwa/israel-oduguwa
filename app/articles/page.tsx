@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { getAllArticles } from "@/lib/articles";
+import { formatArticleDate } from "@/lib/dates";
 
 export const metadata = {
   title: "Engineering notes | Israel Oduguwa",
@@ -35,9 +36,7 @@ export default function ArticlesPage() {
                 <h3>{article.title}</h3>
                 <span>{article.description}</span>
                 <p className="article-date">
-                  Published {article.date}
-                  {article.updatedAt ? ` · Revised ${article.updatedAt}` : ""}
-                  {article.contextDate ? ` · Technical context ${article.contextDate}` : ""}
+                  <time dateTime={article.date}>{formatArticleDate(article.date)}</time>
                 </p>
               </div>
             </Link>

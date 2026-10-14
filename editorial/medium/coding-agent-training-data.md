@@ -2,15 +2,13 @@
 
 Build reproducible tasks and evidence-based labels before converting expert work into supervised or preference-training examples.
 
-This article was written with AI assistance. Sources and example verification are linked where relevant.
-
-Technical context: 20 February 2025. Published 13 October 2026; the context date describes the technical era examined.
+Written with AI assistance.
 
 A coding dataset can contain elegant explanations, valid syntax and thousands of green test runs while teaching the wrong behavior. The prompt may omit a requirement, the reference patch may depend on an unrecorded environment, or the preference label may reward confidence over correctness.
 
 The engineering unit is a reproducible task with a defensible behavioral contract. Demonstrations and preferences are derived from that unit. If its environment or grader is unreliable, scaling annotation increases the volume of unreliable evidence.
 
-This article proposes a data-production workflow for repository-based coding agents, using methods available by February 2025. It contains no proprietary task material, production training metrics or claim that the proposed pipeline has improved a model.
+The workflow below uses public research and an illustrative repository task. It covers task production, demonstration review, preference collection and release controls. The proposed pipeline's model impact would be evaluated separately on held-out tasks.
 
 ## Define the behavior the dataset is intended to teach
 
@@ -126,6 +124,44 @@ Pilot tasks with experts and baseline configurations. Track completion rate, tim
 Include easy tasks that teach safe routine behavior, harder tasks requiring composition, and diagnostic tasks that isolate known weaknesses. Their sampling weights should reflect the intended training objective. A diagnostic collection full of rare adversarial cases is valuable, but it is not automatically representative of deployment demand.
 
 Expert review is most useful at the boundaries: ambiguity, hidden side effects, concurrency, permissions and compatibility. Purely stylistic cleanup should not consume the same review budget as deciding whether a transaction preserves a financial invariant.
+
+## Build one task family without leaking its answer
+
+Take the transfer-replay task. A demonstration can teach preserving a stable operation identity, comparing its fingerprint and returning the recorded result. If evaluation uses the same function with renamed accounts, the split may test template recognition rather than transfer to another engineering problem.
+
+Design the family before assigning rows. Keep the original issue, all generated variants, reference patch, grader mutations and reviewer corrections in one lineage group. Assign that group to a split together. Then choose a different held-out task, such as a provisioned resource whose provider response is lost, with an independently authored contract and environment. The shared concept is operation identity; the evaluation should require applying it in a new setting.
+
+A transfer task and a provisioning task can still leak through shared scaffolding or copied correction text. Deduplicate at several levels: prompt, starting code, reference patch, test fixture and trajectory. Keep reviewable similarity matches instead of assuming one embedding threshold establishes independence.
+
+![Task lineage is assigned to a split before demonstrations and preferences are released](https://israel-oduguwa.vercel.app/images/articles/training-lineage.svg)
+
+## Keep the expert correction and the supervised target separate
+
+A reviewer can explain why a patch is wrong with access to protected tests. That explanation is valuable evidence, but copying it verbatim into a public prompt or demonstration can disclose the hidden input. Preserve the correction in the review record, then author the demonstration under the deployment-visible context.
+
+The demonstration should show actions the target agent can perform. If the expert used a private production trace to locate a race, either provide an allowed trace in the task or reconstruct the diagnosis from available code and controlled tests. An answer reached through unavailable evidence is not a faithful trajectory target.
+
+Retain actual tool observations. A cleaned explanation can summarize a long log, but it should not claim an unexecuted test passed. Keep the raw run artifact linked to the summary and mark any deliberately omitted detail. A concise final answer is compatible with a complete audit record.
+
+Loss masking deserves an example. The model may receive a test failure as context and learn the next diagnostic action. It should not be trained to fabricate that failure as its own output. Record which messages supply observations and which assistant action tokens are targets, including tool-call serialization. Changing that format between training and deployment can alter the behavior being learned.
+
+## Measure label quality with an adjudication set
+
+Create a small set with known behavioral outcomes and carefully reviewed tradeoffs. Include a correct but verbose patch, a concise invalid patch, two correct implementations using different structures, and a pair where environment evidence is missing. These cases reveal whether reviewers follow the rubric or reward presentation shortcuts.
+
+Counterbalance order and keep the evidence identical. Ask for criterion-level labels before an overall preference. A disagreement on whether a denied action mutated state calls for an execution check. A disagreement between two valid designs may call for a clearer maintenance or cost criterion. Combining both into one agreement percentage conceals the remedy.
+
+Use disagreement to improve the source task, not just to train reviewers to agree. If experts disagree because the prompt omits replay retention or cancellation semantics, repair the contract and re-review affected records. Preserve the earlier label version so the dataset release can explain the correction.
+
+Audit accepted records as well as rejected ones. A pipeline that samples only failures can miss fluent demonstrations carrying incorrect claims of verification. Sample by risk and task slice: concurrency, authorization, data migration and external side effects often merit additional evidence review.
+
+## Release a dataset with evidence about what is missing
+
+A release manifest should include accepted and quarantined record counts, task-family splits, source permissions, duplicate-review outcomes, environment success rates and rubric versions. Counts are operational records, not a substitute for held-out model evaluation. Record which fields were mandatory and which checks each record actually passed.
+
+Keep quarantine reasons actionable: ambiguous requirement, unstable environment, incorrect reference, unresolved preference or insufficient provenance. Each needs a different owner and repair. Deleting them without a record makes it difficult to discover a systematic production problem.
+
+After training, evaluate under the intended tool access and budget. Inspect whether the policy preserves operation identity on a new task, handles failed evidence accurately and avoids forbidden effects. A better-looking explanation is useful only alongside those behaviors. The data pipeline's purpose is to make that evaluation possible without rediscovering how every label was produced.
 
 ## Close the loop with an independent evaluation set
 

@@ -2,9 +2,7 @@
 
 Use trusted tenant context, database policies and tenant-aware resource boundaries to contain authorization mistakes.
 
-This article was written with AI assistance. Sources and example verification are linked where relevant.
-
-Technical context: 15 August 2024. Published 13 October 2026; the context date describes the technical era examined.
+Written with AI assistance.
 
 The request handler checks that a user belongs to a tenant. Its repository function adds `WHERE tenant_id = ?`. Later, a bulk export calls a lower-level query helper and forgets the filter. The user remains authenticated; the export contains another customer's data.
 
@@ -125,6 +123,34 @@ Cache identity must include every relevant scope. A key such as `invoice:123` ca
 Search results should be scoped before they reach a client, including counts, facets and snippets. Filtering only the displayed records can reveal another tenant through aggregate metadata. Object downloads need server-validated ownership before issuing a bounded access URL; an object path supplied by a caller is not an authorization decision.
 
 Jobs should carry a tenant identity and the authority relevant to the operation. Decide whether a queued action uses current permissions or an explicitly recorded capability accepted at enqueue time. If a user's membership is revoked before an export starts, the policy must say whether it still runs. A stale serialized user object should not make that decision accidentally.
+
+## An export is a separate authorization path
+
+An export can pass the ordinary row-access test and still disclose information. Consider a tenant-scoped list endpoint that uses RLS correctly. The export worker executes with a reporting role, writes a CSV to private storage, and hands the browser a signed URL. The weak boundary is now the worker's authority and the object it produced.
+
+Record the tenant and purpose when admitting the job. Decide whether the job represents a capability accepted at admission or an action that must be reauthorized at execution. For sensitive data, current membership and export permissions may need another check before the file is generated and before a download URL is issued. Keep those two moments explicit: a job can finish after a user loses access.
+
+The worker should obtain credentials that constrain its normal purpose. If a broad reporting role is genuinely required, isolate it from the interactive API and make its use auditable. A job argument such as `tenantId` is not an isolation mechanism when the worker can ignore it and query everything.
+
+Give each output an ownership record independent of its storage path. Validate that record when issuing the download capability. Short-lived URLs limit the lifetime of an exposed capability, but revoking database membership does not necessarily revoke a URL already issued. Choose expiration and delivery behavior against that fact, and keep private output out of shared CDN caches.
+
+## Treat schema access paths as part of the policy surface
+
+A view can change which role's privileges and row policies govern access. PostgreSQL 16's [CREATE VIEW reference](https://www.postgresql.org/docs/16/sql-createview.html) documents `security_invoker`: when enabled, underlying access uses the invoking user's permissions. Review the chosen semantics instead of assuming a view is just a harmless saved query. Views intended as a security boundary may also require attention to evaluation behavior and `security_barrier`.
+
+Put the relevant view and function paths in the test inventory. Querying a base table with the runtime role is insufficient if the API actually exposes a privileged view. Likewise, a stored function that returns a tenant-scoped object may have an unscoped aggregate or lookup inside it. Review the entire result, including counts and error messages.
+
+Administrative access needs equally concrete boundaries. A support session can require an approved tenant, a reason and an expiry. That context should be established by a trusted service, not a query parameter that any caller can provide. Record both the human actor and the effective tenant capability. Otherwise an audit trail of a shared `support_service` identity cannot explain who accessed a customer.
+
+## Compare isolation designs against a declared compromise
+
+Application filtering, shared-database RLS and a database per tenant protect different failures. Start with a scenario: one query omits its tenant filter; an attacker gains arbitrary SQL execution through the runtime role; a reporting credential is stolen; or a restore operation mixes customer data. Then ask which boundary still holds.
+
+Shared RLS with an application-controlled session setting is strong against an omitted predicate under the constrained runtime role. It is weaker against arbitrary SQL that can set its own context. A database per tenant changes that boundary only if credentials and routing are also scoped. One credential able to connect to every database recreates broad authority through another interface.
+
+Separate databases can make some customer-specific restore and retention operations easier, while adding connection management, migration orchestration and fleet monitoring. Separate schemas still share a database and need careful privileges. The right choice follows from the required isolation and operating model; customer count by itself does not decide it.
+
+Document the accepted compromise in plain language. For example: the normal service role can assert tenant context, so runtime compromise has fleet-wide confidentiality implications; support access is isolated; backups are protected separately. That statement gives security reviewers something testable. A label such as “enterprise isolation” does not.
 
 ## Test the denial path and the connection handoff
 

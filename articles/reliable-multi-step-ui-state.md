@@ -3,6 +3,7 @@ slug: "reliable-multi-step-ui-state"
 title: "Reliable UI state for multi-step workflows"
 description: "Prevent stale validation, lost drafts and duplicate submissions by modeling ownership, revisions and uncertain outcomes explicitly."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2024-09-19"
 tags:
   - Frontend engineering
@@ -14,7 +15,7 @@ A user edits a form while remote validation is running. The old result returns a
 
 Multi-step interfaces need a model of what is current, what is proven and what has been accepted remotely. A step index and several booleans are rarely enough once validation, autosave and submission overlap.
 
-This article uses React 18-compatible reducer patterns and a hypothetical application workflow. The [executable reducer example](https://github.com/Israel-oduguwa/israel-oduguwa/tree/main/examples/engineering-series) verifies that a validation result cannot apply to a newer draft. Persistence and submission are separate boundaries, described below.
+The hypothetical workflow uses React 18-compatible reducers. Its [executable example](https://github.com/Israel-oduguwa/israel-oduguwa/tree/main/examples/engineering-series) verifies draft-revision ownership; saving and submission require the separate server contracts developed below.
 
 ## Separate the draft from the accepted workflow
 
@@ -124,6 +125,42 @@ Announce meaningful asynchronous status without announcing every keystroke. “S
 Preserve user input after an error. Unexpectedly clearing a form can make recovery harder than the original failure. For sensitive fields whose retention is restricted, explain the required re-entry at the point where it matters.
 
 Avoid making the step indicator the only navigation control. Buttons need clear labels, visible focus and enough space to operate on small screens. A complex state model is worthwhile only if the interface communicates its transitions clearly.
+
+## A changed field can invalidate more than one step
+
+Consider a booking draft with address, service, price quote and consent. The price is validated for address revision 4 and service revision 2. The user changes the address on an earlier step. Returning to the review screen should not display the old quote as current merely because that screen's own fields were untouched.
+
+Represent the inputs used to obtain derived evidence. A quote can carry its address revision, service revision, expiry and provider reference. `canSubmit` checks those against the current draft and server policy. Store the evidence; derive whether it is usable. Keeping a separate `quoteIsValid` boolean invites disagreement after an edit or timer event.
+
+![An edit invalidates validation evidence before the next request can own it](/images/articles/ui-validation.svg)
+
+Expiry is a transition too. A quote valid when rendered may expire while the user reads the review. The UI should show the changed state and refresh deliberately; the server still validates the accepted command. Use a recorded timestamp and a server-defined expiry rule, rather than assuming the browser clock alone decides a financial fact.
+
+## Resolve a save conflict without losing the local draft
+
+Three representations are useful: the base snapshot the edit began from, the local draft, and the newly fetched server snapshot. For each field, compare local and remote changes against the base. If only one side changed, a merge may be straightforward. If both changed differently, preserve both values and ask for a decision appropriate to the field.
+
+Arrays and domain operations need more care. Reordering two applicants is not always equivalent to replacing an entire array. Removing a dependent field may invalidate another edit. A generic shallow merge cannot determine whether an accepted appointment, role change or payment detail remains valid.
+
+When a user resolves the conflict, create a new draft revision based on the reviewed server version. Invalidate evidence affected by the resolution and save under the concurrency contract. A “retry save” action that quietly adopts the new version but keeps every local value is an overwrite policy, not conflict resolution.
+
+Keep the recovery usable on a small screen. Show changed fields with clear labels and retain a way to inspect the server value. Focus should move to the conflict summary, then to the field the user chooses to resolve. An error toast that disappears while the user is comparing values is not enough.
+
+## Scope persistence to the account and schema
+
+A locally stored draft needs an identity that includes account, tenant, workflow and draft schema version. Clearing the visible form on sign-out while keeping an unscoped storage record allows the next user of that browser to restore it. Review both in-memory state and persistent state during scope changes.
+
+Versioned drafts need migration rules. Suppose version 1 stores a free-text service name and version 2 requires a service identifier. Restoring the old string into an empty identifier field is misleading. Resolve it against an allowed current choice or return the user to that step with their original input preserved for reference.
+
+For sensitive workflows, decide whether local persistence is appropriate at all. If it is, bound its lifetime and record the deletion behavior. Browser storage is not a secure vault for arbitrary credentials or private documents. Upload references also need server-side ownership and expiry checks when a draft resumes.
+
+## Recover a lost submission response by identity
+
+After a timeout, retain the submission identity and the input fingerprint. Query the server's operation endpoint under current authorization. If the operation exists, show its actual accepted state. If it was definitively rejected, present the actionable errors. If no conclusive result is available, retain an unknown state and a bounded recovery action.
+
+A fresh page load should use that same identity. Creating another identity during mount converts a transport retry into a new business operation. The server must also distinguish identical replay from conflicting reuse, because another tab or an interrupted browser can repeat the request without the UI's disabled button.
+
+The user-facing message should describe what is known: “Your submission is being checked. Reference X.” Avoid a success message before acceptance or a failure message based only on a lost response. Good state architecture is visible in those details. It lets the user recover without having to infer the server's history from a spinner.
 
 ## Test event histories rather than screenshots alone
 

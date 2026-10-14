@@ -1,6 +1,6 @@
 # Engineering article collection
 
-Nineteen articles about production architecture, frontend systems, coding-agent evaluation, SaaS economics, billing and search. Published 13 October 2026. Each technical context date identifies the era examined; it is not an earlier publication claim.
+Nineteen articles about production architecture, frontend systems, coding-agent evaluation, SaaS economics, billing and search. Published 13 October 2026 and expanded on 14 October with failure histories, recovery analysis, architecture diagrams and a recorded load-admission experiment.
 
 | Article | Technical context |
 | --- | --- |

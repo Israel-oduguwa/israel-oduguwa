@@ -6,9 +6,6 @@ mkdirSync(directory, { recursive: true });
 const exports = [];
 const escape = (text) => text.replace(/[&<>\"]/g,
   (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
-const displayDate = (value) => new Intl.DateTimeFormat("en-GB", {
-  day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
-}).format(new Date(`${value}T00:00:00Z`));
 const inline = (text) => {
   const pattern = /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g;
   let html = "", index = 0;
@@ -37,6 +34,13 @@ const toHtml = (body) => {
       while (i < lines.length && !lines[i].startsWith("```")) code.push(lines[i++]);
       if (i === lines.length) throw new Error("Unclosed code block");
       blocks.push(`<pre>${escape(code.join("\n"))}</pre>`); i++; continue;
+    }
+    const image = lines[i].match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (image) {
+      if (!/^https:\/\//.test(image[2])) throw new Error(`Unsupported image: ${image[2]}`);
+      const source = image[2].replace(/\.svg$/, ".png");
+      blocks.push(`<figure><img src="${escape(source)}" alt="${escape(image[1])}"/><figcaption>${escape(image[1])}</figcaption></figure>`);
+      i++; continue;
     }
     const heading = lines[i].match(/^(#{1,3})\s+(.+)$/);
     if (heading) {
@@ -75,21 +79,14 @@ for (const file of readdirSync("articles").filter((name) => name.endsWith(".md")
   const body = source.slice(header[0].length).trim()
     .replace(/\]\((\/(?!\/)[^)]+)\)/g,
       "](https://israel-oduguwa.vercel.app$1)");
-  const disclosure = contextDate
-    ? "This article was written with AI assistance. Sources and example verification are linked where relevant."
-    : slug === "validating-ai-coding-benchmarks"
-    ? "This article was written with AI assistance. The linked experiment includes runnable code and recorded results."
-    : "This article was edited with AI assistance.";
-  const contextNote = contextDate
-    ? `Technical context: ${displayDate(contextDate)}. Published ${displayDate(field("date"))}; the context date describes the technical era examined.`
-    : "";
+  const disclosure = "Written with AI assistance.";
   writeFileSync(resolve(directory, `${slug}.md`),
-    `# ${title}\n\n${field("description")}\n\n${disclosure}\n\n${contextNote ? `${contextNote}\n\n` : ""}${body}\n\nOriginally published on [Israel Oduguwa's website](${url}).\n`);
+    `# ${title}\n\n${field("description")}\n\n${disclosure}\n\n${body}\n\nOriginally published on [Israel Oduguwa's website](${url}).\n`);
   // Medium rejected these body links; import still retains the canonical URL.
   const mediumBody = toHtml(body).replace(
     /<a href="https:\/\/israel-oduguwa\.vercel\.app[^\"]*">([\s\S]*?)<\/a>/g, "$1");
   writeFileSync(resolve(directory, `${slug}.html`),
-    `<h1>${escape(title)}</h1>\n<h2>${escape(field("description"))}</h2>\n<p>${disclosure}</p>\n${contextNote ? `<p>${contextNote}</p>\n` : ""}${mediumBody}\n<p>Originally published on Israel Oduguwa's website.</p>\n`);
+    `<h1>${escape(title)}</h1>\n<h2>${escape(field("description"))}</h2>\n<p>${disclosure}</p>\n${mediumBody}\n<p>Originally published on Israel Oduguwa's website.</p>\n`);
   exports.push({ slug, title, canonicalUrl: url, originalDate: field("date"),
     contextDate,
     updatedAt: header[1].match(/^updatedAt:\s*"([^"]+)"/m)?.[1] ?? null,

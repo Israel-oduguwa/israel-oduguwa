@@ -14,7 +14,7 @@ test("published article URLs survive the refresh and dates remain explicit", () 
   ]) {
     const article = getArticleBySlug(slug);
     assert.ok(article);
-    assert.equal(article.updatedAt, "2026-10-13");
+    assert.ok(article.updatedAt && article.updatedAt >= "2026-10-13");
     assert.ok(article.date < article.updatedAt);
   }
   assert.equal(getArticleBySlug("../../package.json"), undefined);
@@ -45,8 +45,13 @@ test("project and credential assets exist and internal links resolve", () => {
     assert.ok(fs.existsSync(path.join(process.cwd(), "public", asset)), asset);
   }
   for (const article of getAllArticles()) {
-    for (const match of article.body.matchAll(/\]\((\/[^)]+)\)/g))
-      assert.ok(projectUrls.has(match[1]), match[1]);
+    for (const match of article.body.matchAll(/(!?)\[[^\]]+\]\((\/[^)]+)\)/g)) {
+      if (match[1] === "!") {
+        assert.ok(fs.existsSync(path.join(process.cwd(), "public", match[2])), match[2]);
+      } else {
+        assert.ok(projectUrls.has(match[2]), match[2]);
+      }
+    }
   }
 });
 

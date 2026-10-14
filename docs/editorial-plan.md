@@ -52,7 +52,9 @@ Use each published website article as the canonical source. Medium's official im
 
 Keep a publication ledger in `editorial/medium/publication-ledger.md`. Record actual Medium URLs only after verifying them. Distinguish exported, imported draft and published states. Check for existing stories before importing to avoid duplicates.
 
-Medium requires disclosure of generated or assisted written content within the first two paragraphs. The export includes a short accurate note for each story. Preserve that note on Medium. Do not put generated writing behind a paywall. The import tool can omit code blocks, so compare the imported draft with the Markdown source and restore missing code through the prepared HTML version before publishing.
+Medium requires disclosure of generated or assisted written content within the first two paragraphs. The export uses the concise note "Written with AI assistance." Preserve that note on Medium. Do not put generated writing behind a paywall. The import tool can omit code blocks, so compare the imported draft with the Markdown source and restore missing code through the prepared HTML version before publishing.
+
+The 14 October revision expands the collection and earlier notes, adds code highlighting and seven source-authored diagrams, and removes the separate technical-context date from article bylines and Medium bodies. Show one readable publication date. Retain actual publication and modification metadata; the archived context dates are editorial history. Future backlog runs must use the revised source and preserve any subsequent author edits. Never reintroduce the removed context-date paragraph or claim an earlier publication.
 
 On 2026-10-13 Medium rejected direct portfolio `vercel.app` links in the article body. The HTML export omits those body links; the imported canonical URL still points to the website and was verified after publication. Preserve technical citations to allowed primary sources.
 

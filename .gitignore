@@ -15,6 +15,7 @@
 /.playwright-cli/
 /output/playwright/
 /output/engineering-series/
+/output/article-revision/
 
 # next.js
 /.next/

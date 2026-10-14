@@ -1,6 +1,6 @@
 <h1>What a crashed payment worker leaves behind</h1>
 <h2>How SafeStripe uses leases, ownership checks and transactions to recover work after a payment worker crashes.</h2>
-<p>This article was edited with AI assistance.</p>
+<p>Written with AI assistance.</p>
 <p>A worker claims a payment update, starts processing and disappears. The queue still contains the work, but the process that claimed it will never release it. Another worker needs permission to continue without letting the old one later overwrite its result.</p>
 <p>I built SafeStripe to handle this kind of recovery. The TypeScript library saves accepted work, leases jobs to workers and checks ownership before committing local effects. The 0.3 preview includes tests and a sandbox where you can inspect that behavior.</p>
 <h2>A claim is temporary ownership</h2>
@@ -25,7 +25,15 @@ Completion using token A must be rejected</pre>
 <p>A process-level failure test creates a stronger recovery scenario than throwing an exception in a handler. The retained suite includes actual worker termination and subsequent recovery, alongside adapter conformance and contention tests.</p>
 <p>The question is what durable state remains: who owns the job, whether the effect was committed and whether the downstream intent exists. A successful HTTP response alone cannot establish those properties.</p>
 <p>The repository also keeps <a href="https://github.com/Israel-oduguwa/SafeStripe/actions/runs/37600727941">a Stripe sandbox lifecycle run</a> covering twelve journeys. In its duplicate replay, ten additional admissions preserved the original Firestore paid receipt and paid time.</p>
-<h2>The limits are part of the design</h2>
+<h2>Exercise the stale owner, not just the missing owner</h2>
+<p>Use two workers and an explicit schedule. Worker A claims a job and pauses. Its lease expires; worker B claims a newer generation and commits the supported effect. Resume A and attempt its completion with the original token. That conditional commit must be rejected without modifying B's accepted result.</p>
+<p>This differs from merely verifying that a job can be reclaimed. Reclamation proves another worker can acquire ownership after expiry. Fencing proves an earlier owner cannot subsequently publish through the protected local boundary. A lease timer alone cannot establish the second property.</p>
+<p>Repeat the test with the same process identifier receiving a new claim. Ownership should identify the claim generation, not only the worker name. Then inject failure before the transaction and after it commits. Inspect the effect record and outbox intent to establish which state is durable at each boundary.</p>
+<h2>External work remains a separate recovery contract</h2>
+<p>If A already sent a provider request before losing ownership, a local token cannot revoke that remote request. B must use the operation's stable provider identity and available outcome evidence. A design that fences the database while generating a fresh remote identity on every reclaim can still repeat the external effect.</p>
+<p>For an outbox receiver, duplicate delivery must preserve the receiver's business result under its own contract. The sender can retry after a lost response, but only the receiving boundary can recognize that it already accepted the operation. Retain the identity through every hop rather than replacing it with a transport message ID.</p>
+<p>The public SafeStripe contracts describe its supported local transaction and adapter scope. For an application table outside that scope, inspect how it participates before assuming atomicity. The recovery test should observe the actual effect storage and intent record used by the integration, not a mock that simply returns success.</p>
+<h2>Where the library's authority ends</h2>
 <p>SafeStripe cannot authorize an application's refund policy, make an external service participate in its local transaction or repair missing database history without remote reconciliation. Database backup and restore behavior still belongs in the application's recovery plan.</p>
 <p>The <a href="https://israel-oduguwa.github.io/SafeStripe/">architecture and reliability contracts</a> explain those responsibilities alongside the mechanisms. The sandbox run covers its recorded journeys, and each benchmark names its environment and workload. Independent security review and enterprise capacity testing remain outside that evidence.</p>
 <p>I want another engineer to be able to identify the transaction boundary and reproduce the recovery test. The tests give us something concrete to inspect when deciding how the payment integration behaves after a failure.</p>

@@ -2,9 +2,7 @@
 
 Connect tenant consumption, capacity steps and product limits so growth increases delivered value faster than operating cost.
 
-This article was written with AI assistance. Sources and example verification are linked where relevant.
-
-Technical context: 20 March 2025. Published 13 October 2026; the context date describes the technical era examined.
+Written with AI assistance.
 
 A SaaS doubles its paying customers and triples its infrastructure bill. The explanation may be simple growth, but it may also be a change in workload: larger imports, more retained data, expensive exports or a small group of customers using an unlimited feature far more heavily than everyone else.
 
@@ -106,6 +104,34 @@ Use spending and usage safeguards with a clear response policy. A hard global st
 Keep attribution evidence sufficient to distinguish customer demand from a software defect. Reconciliation should detect missing or duplicated usage records. The same usage data may influence invoices, so corrections need an audit trail rather than silent overwrites.
 
 Review the cost of recovery. Rebuilding an index, replaying a backlog or restoring a database can create a temporary spend spike. Budgeting only for normal operation can leave the team reluctant to perform necessary recovery work.
+
+## Reserve cost before beginning expensive work
+
+A job may have an estimated footprint before admission and an actual footprint afterward. Use a reservation record to connect them. For a document transformation, estimate from bounded input properties, reserve the permitted budget, then reconcile against the work actually delivered. The estimate and its error are part of the operating model.
+
+Reservation must be concurrency-safe. Two requests reading “ten units remaining” cannot each independently reserve ten. The authoritative budget needs an atomic conditional update or equivalent transactional admission. Give the reservation the logical job identity so a retry returns the existing reservation instead of consuming another allowance.
+
+Track reserved, consumed, released and unresolved amounts separately. A worker killed before performing paid work can release its reservation under a defined recovery rule. A worker killed after an uncertain provider call needs reconciliation before releasing it. Otherwise the customer can receive an effect while the system repeatedly returns its allowance.
+
+Do not let a reservation expiry erase business uncertainty. Expiry can reclaim scheduling ownership, but the completed or partially completed operation still needs a record. The same distinction appears in worker leases: time passing does not prove that the old owner stopped producing effects.
+
+## Forecast a growing cohort rather than the average customer
+
+Return to the hypothetical $100 plan. A cohort performing 1,000 jobs at $0.03 each contributes differently from one performing 10,000. If the second cohort is growing faster, last month's blended unit cost will understate next month's operating requirement.
+
+Forecast the mix, not just total customer count. For each cohort, include job distribution, retained data, retry yield and any provider quota. Then identify the shared capacity step. A small number of large accounts can force a larger database even when their aggregate request count appears modest.
+
+A sensitivity review should show what changes the decision: more expensive provider calls, a lower completion yield, larger inputs or a new retention promise. Keep prices dated and volumes labeled as forecasts. The purpose is to identify a threshold at which the product or architecture needs review, rather than present one precise prediction as certainty.
+
+Customer-facing limits should follow the sold value and an enforceable resource model. A concurrency cap can protect the service while allowing a job allowance to remain generous. A processed-page limit can reflect cost more accurately than a file count. Explain the chosen unit to customers before they submit expensive work.
+
+## A cost incident needs a containment path
+
+Suppose a deployment causes each accepted job to repeat a paid transformation because the provider response is not saved. Availability stays healthy and customers receive results, but attempts per logical operation rise. An ordinary uptime alert misses the defect.
+
+Instrument the paid effect under a stable operation identity and detect abnormal repetitions. A scoped kill switch can pause that job class while preserving accepted work. The repair should reconcile uncertain effects before replaying the backlog; otherwise the recovery procedure repeats the cost incident.
+
+Budget the replay as well. A day of retained jobs released at once can exhaust provider quotas and delay current work. Drain under a controlled concurrency and cost allowance, prioritize deadline-sensitive operations and keep customers informed through their durable job status. Recovery is another workload, with its own resource and economic footprint.
 
 ## Decide with comparable evidence
 

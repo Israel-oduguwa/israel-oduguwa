@@ -2,9 +2,7 @@
 
 Model commands, permissions, concurrency and external effects when several people and services share a business process.
 
-This article was written with AI assistance. Sources and example verification are linked where relevant.
-
-Technical context: 18 April 2024. Published 13 October 2026; the context date describes the technical era examined.
+Written with AI assistance.
 
 A product starts with an application form and a status column. Then a reviewer must approve it, finance must collect payment, an applicant can withdraw, and support must reopen a rejected case. Two people can act at once. Payment confirmation arrives later, sometimes twice.
 
@@ -135,6 +133,38 @@ Record the workflow definition version with an instance when behavior depends on
 Events need schema versions too. Consumers should tolerate additive fields and distinguish unknown event types from malformed known events. Define what happens when a delayed event from an older payment attempt reaches a newer application state. It should be correlated to the attempt it concerns, not interpreted as evidence for whichever attempt happens to be current.
 
 Use compatibility tests built from historical event fixtures. They should verify business interpretation, not just JSON deserialization. A field can keep the same type while its meaning changes.
+
+## A refund after withdrawal is another workflow
+
+Consider this history: a reviewer approves an application, the payment provider accepts the charge, the applicant withdraws, and only then does the payment confirmation arrive. There is no useful answer in the phrase “the latest event wins.” Withdrawal and payment describe different facts. Both can be true.
+
+Record the payment against its persisted attempt, even when the application is now withdrawn. Then let an explicit policy decide whether to refund, retain a fee or request review. A refund command creates a new operation with its own identity, amount, authorization and recovery state. It must not erase the charge record or reinterpret the confirmation as a failed payment.
+
+![A committed workflow decision records an effect before a worker contacts the provider](https://israel-oduguwa.vercel.app/images/articles/workflow-effects.svg)
+
+This separation changes support tooling. An operator should be able to see that the application was withdrawn, attempt P17 succeeded, and refund R4 is awaiting confirmation. A single `failed` label hides all three. A repair action should target R4 with a reason and current expected version, rather than resetting the whole application to a previous state.
+
+Compensation also needs a business definition. Sending another API request can reverse an amount, but it may not reverse fees, taxes, notifications or a service already delivered. The workflow should record what the reversal promises and what remains unresolved. When automatic compensation is inappropriate, route the case to a bounded review queue with a named owner and an age objective.
+
+## Put command identity in the storage contract
+
+An expected version protects a particular snapshot. An operation identity protects a particular intention across attempts. They should not be substituted for each other. A client may repeat the same command after losing its response, by which time the workflow version has already advanced because that command succeeded.
+
+In that case, look up the admitted command identity before deciding that the old version makes the request invalid. If the recorded fingerprint matches, return the recorded command result. If it differs, reject the identity reuse. If no record exists, authorize and evaluate the command against its expected version, then insert the identity and outcome atomically with the state change.
+
+The uniqueness scope deserves a design review. A key scoped only to an actor can collide across several workflows. A globally supplied key without tenant scope can reveal another customer's operation. A useful storage identity includes tenant, workflow and command purpose, together with the caller's stable key. PostgreSQL's [constraint reference](https://www.postgresql.org/docs/16/sql-createtable.html) defines how the database enforces the resulting uniqueness; the product determines the scope and reuse policy.
+
+Store enough of the result to answer a replay correctly. “Already processed” is ambiguous if the caller needs the payment-attempt reference created by the first request. Retention matters too: once an identity record is removed, an old client retry can be admitted again. Set a retention period against the maximum replay horizon, and use durable business constraints where repetition must remain impossible after that horizon.
+
+## Test the transition system as a history generator
+
+A table of allowed arrows catches local mistakes. A history generator can exercise combinations nobody thought to put in the table. Start with a valid instance, select from both allowed and forbidden commands, and check invariants after every accepted transition. Keep the rejected command in the trace so a failure remains reproducible.
+
+For this example, useful properties include an increasing version, no cross-tenant transition, no self-approval, no activation without payment evidence, and no second effect intent for a replayed command. Generate actor changes and duplicate delivery explicitly. A generator that always supplies the correct actor tests reachability while avoiding the authorization boundary.
+
+The persistence tests should control two concurrent commands at the read/write boundary. Let both read version 3, commit one, then allow the other conditional update. Assert one accepted change and one conflict, with one audit event and one effect intent. Repeat with the same operation identity and matching input; that history should produce one business decision and a replayed result. These are different concurrency cases.
+
+Finally, inject interruption between local commit and external delivery, then between remote acceptance and local outcome recording. AWS's [outbox guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html) discusses the local state/message gap and duplicate processing. Use the actual database and provider contract for the integration tests. A pure transition function can demonstrate the decision rule; only the connected persistence path can demonstrate atomic admission and recovery.
 
 ## Test histories and make stalled work visible
 

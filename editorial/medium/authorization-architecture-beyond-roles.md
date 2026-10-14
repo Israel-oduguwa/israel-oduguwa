@@ -2,7 +2,7 @@
 
 Checking ownership, tenant scope and resource state at the point where an application changes data.
 
-This article was edited with AI assistance.
+Written with AI assistance.
 
 A route that checks `user.role === "admin"` can still authorize the wrong action. An administrator may belong to a different organization. A student may own an enrollment but not be allowed to change its paid status. A caregiver may edit a profile but not another person's verification result.
 
@@ -48,6 +48,22 @@ A successful administrator request is only the easiest test. More informative ca
 A denial should not leak sensitive resource details. An audit record should explain the attempted action and its outcome without copying tokens, credentials or private request bodies into logs.
 
 The [OWASP authorization guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) is a useful primary reference for denying by default and validating permissions on every request. The implementation still depends on the application's resources and business rules.
+
+## Bind the decision to the version being changed
+
+Suppose two actors read an approved resource at version 6. One withdraws it; another confirms its completion. Their initial permissions can both be valid while their combined updates violate the workflow. The accepted command must check the current transition and expected version at the persistence boundary.
+
+For sensitive commands, a conditional write can establish that the accepted transition still applies to the expected resource state. If the policy depends on membership that can change concurrently, define the transaction, locking or capability semantics protecting that fact too. Checking authorization in a middleware function several seconds before writing does not establish all of those conditions.
+
+Do not automatically retry a conflict as the same action against the new version. A withdrawal may have changed what the action means. Return a scoped conflict, preserve the user's intention and let the product decide whether a new reviewed command is appropriate.
+
+## Separate support authority from normal application authority
+
+Support access should identify the human actor, allowed tenant, purpose, duration and action scope. A shared administrator credential makes it difficult to reconstruct who accessed a record and permits more than many support operations need.
+
+Use a dedicated path with narrower capabilities and audit evidence. The ordinary API should not acquire those credentials to make an inconvenient query succeed. If a worker legitimately acts under system policy, give that policy an explicit operation scope rather than storing a user-supplied `admin` flag in its job payload.
+
+Test the exceptional route independently. Verify that its capability expires, that another tenant is denied, and that the audit record identifies the initiating human and effective scope. A passing test for the ordinary user path gives no evidence about that broader authority.
 
 ## A boundary libraries cannot invent
 

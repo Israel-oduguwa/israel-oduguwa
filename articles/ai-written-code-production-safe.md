@@ -3,7 +3,7 @@ slug: "ai-written-code-production-safe"
 title: "Reviewing generated code before it reaches production"
 description: "How I assess a proposed implementation against the repository, the task and the system's failure boundaries."
 date: "2025-08-13"
-updatedAt: "2026-10-13"
+updatedAt: "2026-10-14"
 tags:
   - AI evaluation
   - Code review
@@ -49,6 +49,24 @@ A test that repeats the implementation's assumptions can make a flawed solution 
 For concurrency claims, use competing workers or processes when the distinction matters. An exception thrown inside one process does not reproduce every effect of that process disappearing.
 
 SafeStripe's [reliability work](/work/safestripe) records the tested scenarios and their recovery results. Another engineer can inspect the tests and decide which failure paths their own application still needs to cover.
+
+## Review a request history with controlled completions
+
+A search component issues A, then B. Resolve B first and verify that it owns the visible result. Now resolve A. The result should remain B through every state write, not only at the final assertion. Repeat with A failing after B succeeds: an obsolete error must not replace the current success with a failure screen.
+
+Then run A–B–A. The first and third requests contain the same text but have different lifetimes. A query-equality guard can admit the first completion after the third request starts. The contract concerns request ownership, so a counter, token or another valid identity mechanism needs to distinguish them.
+
+Cancellation is useful resource management. Keep the ownership guard even when the transport supports abort. A mocked transport can deliberately ignore cancellation to exercise that guard, and another asynchronous processing stage may already have begun. Test disposal and account switching as ownership changes too.
+
+Use an independently controlled recorder for publication. If the candidate supplies a log claiming that it ignored stale data, compare that claim with actual state writes or visible updates. An implementation-specific test expecting one variable name would reject valid alternatives while missing the behavior that matters.
+
+## Inspect changes that make the evidence weaker
+
+A generated patch can change the tests, installation command or mocks along with the feature. Some changes are necessary, but they alter what a passing run means. Retain an authoritative set of regression checks and inspect whether the patch bypassed validation, broadened credentials or replaced a real dependency contract with a constant answer.
+
+For a server command, observe both success and forbidden effects. A successful response after a caught exception may conceal an uncommitted operation. An error response may conceal a partial write. Keep pre-state and post-state, required audit evidence and provider-call identity in the review artifact.
+
+When a required environment cannot run, record that outcome separately. Do not infer that code is correct because the author supplied a convincing test transcript. Execute the command under the pinned repository revision and retain the actual exit status and artifacts.
 
 ## Keep the explanation tied to evidence
 

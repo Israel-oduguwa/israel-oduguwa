@@ -3,6 +3,7 @@ slug: "incremental-system-migrations"
 title: "Changing a large system through incremental migrations"
 description: "Design coexistence, data ownership and rollback before replacing a live system one boundary at a time."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2024-10-10"
 tags:
   - Architecture
@@ -14,7 +15,7 @@ A rewrite promises clean code and a simpler architecture. The existing system st
 
 The hard engineering work is making old and new behavior coexist safely. A migration can be incremental in its deployment schedule and still be dangerous if both systems believe they own the same write.
 
-I would plan a migration around a sequence of ownership transfers. Each step should deliver useful behavior, expose evidence that its contracts hold, and have a recovery path that accounts for data already written. The running example is a hypothetical move from a legacy order module to a new fulfillment boundary.
+At KinsCare, I planned and executed a Realm-to-Clerk identity migration covering more than 5,000 users with limited exportable identity data. Preserving access to existing accounts was a central requirement. That experience is the context for the ownership and compatibility questions here. The worked example uses a hypothetical order module so its data flow can be discussed in detail.
 
 ## State the outcome that justifies the migration
 
@@ -112,6 +113,38 @@ If reverse propagation is required, build and test it before moving the authorit
 Avoid destructive schema contraction during the same release that switches ownership. Retain a compatibility interval tied to real deployment and recovery needs. Backups are a last-resort recovery mechanism, not a convenient rollback for live customer edits made after the backup.
 
 Test a rollback drill on a representative environment: write through the new path, fail it, restore the old path, and verify that those accepted writes remain visible and correct. Record the time and operational steps required.
+
+## Identity migration exposes what rollback really means
+
+An identity provider's subject is not a durable replacement for the application's own user identity. If the application uses that subject as its business primary key, replacing the provider can spread a migration into orders, permissions, conversations and audit history. Keep an application-owned account identifier, then map each accepted provider subject to it.
+
+The linking decision is security-sensitive. An email match is a candidate relationship, not sufficient proof that two identities belong to the same person. Addresses can be unverified, reassigned or duplicated in historical data. Use a verified migration mapping or a recovery flow that proves control under the required policy. Ambiguous records should enter a review path, not quietly merge.
+
+A proposed mapping might record the application account, legacy subject, replacement subject, migration state and evidence used to accept the link. Protect uniqueness on each provider/subject pair. Preserve the original account's business references; changing authentication should not create a second caregiver profile or detach its conversation history.
+
+Now ask what happens after the new provider accepts a password reset or changes a verified email. Switching a feature flag back cannot undo those identity changes. The old provider may no longer have the current credential state. A safe fallback might preserve an existing legacy session for a limited period while routing new authentication through a recovery flow. The precise choice belongs to the identity contract, not an application deployment script.
+
+This is why “we can roll back” needs an object. You might roll back a profile-page implementation, a read projection or an authentication routing decision. You cannot assume every credential mutation is reversible. Define which accepted changes remain valid, which mappings survive a rollback, and which users need assisted recovery.
+
+## Use a cutover manifest with an explicit writer
+
+For each cohort, record the current writer, read source, projection watermark and fallback policy. Keep the selection stable across requests in the same operation. A message created before cutover should carry enough identity to be interpreted by the worker that processes it afterward.
+
+![A migration moves readers before transferring the authoritative writer](/images/articles/migration-cutover.svg)
+
+The watermark is evidence about propagation, not a magic proof of parity. A projection can have consumed every event and still interpret one field incorrectly. Require both a caught-up stream and business comparisons on representative records. Include deleted records and unusually large accounts; a sample of ordinary active rows can miss the cases that break after cutover.
+
+When backfill and live events overlap, use source versions or another declared ordering rule. A snapshot copied later is not automatically newer than an event processed earlier. A deletion needs a tombstone or equivalent rule that an old update cannot override. Write these histories as tests before running a large backfill.
+
+Choose a stop condition that preserves investigation time. If critical parity fails, pause cohort expansion and keep the recorded writer stable. Flipping ownership back and forth while events remain in flight can make the original defect much harder to distinguish from migration-induced divergence.
+
+## Remove the old path only after its callers have disappeared
+
+Instrument the compatibility facade with caller and operation classes. Keep labels bounded and avoid logging personal payloads. An unexpected legacy caller is a concrete removal blocker: identify its owner, upgrade it, then confirm the traffic has stopped over the relevant schedule. A monthly finance export will not appear during a two-day observation.
+
+Delayed jobs and stored browser drafts are consumers too. Record the oldest supported event and command schema, then check their remaining population. If the business chooses to stop supporting an old shape, make that an explicit failure and recovery policy. A deserialization exception in a background worker is a poor deprecation notice.
+
+The final cleanup includes operational material: dashboards, alerts, support runbooks, credentials, flags and restore procedures. A retired credential with broad access is still authority; an old recovery runbook can reintroduce a path that no longer obeys current ownership. Retire them with the same care as the code.
 
 ## Retire the temporary architecture with evidence
 

@@ -3,6 +3,7 @@ slug: "production-web-security-architecture"
 title: "Web security architecture across browser, service and database boundaries"
 description: "Trace authority and data across a production web system, then verify where each threat is prevented, detected and contained."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2025-09-18"
 tags:
   - Security architecture
@@ -14,7 +15,7 @@ A web system can use HTTPS, verified tokens and parameterized queries while stil
 
 I would review the system as a sequence of decisions: who supplied this input, which identity has been established, which capability is being exercised, what data may cross the boundary, and what happens if that decision is wrong.
 
-The example is a hypothetical multi-tenant application with browser sessions, server commands, background exports and private object storage. It uses established security practices available by September 2025. The design is a review framework; demonstrating compliance or security requires testing the actual implementation and deployment.
+The worked design is a hypothetical multi-tenant application with browser sessions, server commands, background exports and private object storage. Each boundary has a threat, an authority decision and a verification obligation.
 
 ## Draw authority as well as network connections
 
@@ -112,6 +113,34 @@ Separate build-time and runtime secrets. Browser-exposed configuration must be i
 Verify artifacts and deployment configuration, not just repository code. Headers, storage permissions, proxy trust and database roles can differ between preview and production. Tests should identify which environment they inspected.
 
 Prepare credential rotation and compromise response. The ability to revoke a session, disable an integration token and reconstruct sensitive actions is an architectural feature, not an incident-time improvisation.
+
+## Trace a revoked user through a background export
+
+The user is authorized when requesting an export. Before the worker starts, an administrator removes their tenant membership. The stored job still exists, the worker still has database credentials, and a browser may still hold an earlier session. This history tests several authority lifetimes at once.
+
+Choose whether the accepted job carries a bounded capability or requires current authorization. For a sensitive export, the product may require reauthorization at execution and delivery. Record the decision in the job contract. A copied role field cannot serve as evidence of current membership, and a worker's broad database role should not make the policy irrelevant.
+
+If a file already exists, issuing a new download URL is another authorized action. Validate the output's ownership record and current delivery policy. A previously issued signed URL can remain usable until its expiry under the storage mechanism's contract, so immediate revocation requires a different delivery design. Keep that consequence visible when choosing URL lifetime.
+
+Test all three moments: admission, execution and delivery. Then attempt a cross-tenant job identifier and inspect the response and audit records. A secure ordinary request handler does not establish that the asynchronous path obeys the same boundary.
+
+## Protect the importer from becoming a privileged network client
+
+An application that imports documents from URLs receives more than a filename. It receives a requested network destination. A public-looking hostname can resolve to a prohibited address, and an allowed destination can redirect somewhere else. Validate the resolved connection and each redirect under a narrow destination policy, with deployment egress controls as another boundary.
+
+Prefer integrations with a defined provider and resource identifier over arbitrary URL fetching. The latter requires handling address families, DNS changes, redirects, credentials and response limits correctly. The [OWASP SSRF guidance](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html) distinguishes allowlist approaches and network controls for these paths.
+
+Limit the response as it arrives. A declared content length is an input, not proof that the body will stay within it. Compressed bodies need a decompressed-size bound, and converters need execution and memory limits. Avoid sending ambient cookies, bearer tokens or internal headers to a supplied destination.
+
+Retain safe failure categories: destination denied, redirect denied, response too large, unsupported type or conversion timeout. They support diagnosis without logging secrets embedded in URLs. A failure should also release request slots, files and connections; otherwise a denied input can still consume availability.
+
+## Make containment an executable operation
+
+For a leaked integration credential, identify where it is used, which actions it authorizes, and how to rotate it without losing accepted work. Disable the compromised capability, replace the credential, inspect affected operation records and reconcile uncertain effects. A secret rotated in one deployment but left active in a worker or CI variable is an incomplete containment.
+
+For session compromise, exercise revocation against active requests, new requests and long-lived connections. Decide whether sockets must be closed or reauthorized before sensitive messages. Cached membership and permission decisions need a revocation policy too; deleting a session record cannot invalidate authority copied into unrelated caches automatically.
+
+Preserve audit evidence with a trusted actor identity, effective tenant, operation, outcome and correlation reference. Restrict who can alter it. An application log supplied entirely by the caller is not an authoritative record of a privileged action. During the drill, verify both that authority stops and that the accepted history remains reconstructible.
 
 ## Verify attack paths and recovery evidence
 

@@ -1,0 +1,32 @@
+{
+  "model": "deterministic identical-job queue; not a service benchmark",
+  "config": {
+    "count": 500,
+    "gapMs": 10,
+    "serviceMs": 80,
+    "slots": 4,
+    "deadlineMs": 250
+  },
+  "policies": [
+    {
+      "policy": "queue",
+      "offered": 500,
+      "admitted": 500,
+      "timely": 20,
+      "late": 480,
+      "rejected": 0,
+      "maximumAcceptedLatencyMs": 5040,
+      "lastCompletionMs": 10030
+    },
+    {
+      "policy": "deadline",
+      "offered": 500,
+      "admitted": 260,
+      "timely": 260,
+      "late": 0,
+      "rejected": 240,
+      "maximumAcceptedLatencyMs": 250,
+      "lastCompletionMs": 5230
+    }
+  ]
+}

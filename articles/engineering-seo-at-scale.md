@@ -3,6 +3,7 @@ slug: "engineering-seo-at-scale"
 title: "Engineering SEO at scale: rendering, crawl control and site architecture"
 description: "Build a finite, discoverable public URL space with meaningful HTML, consistent metadata and operational checks for indexing failures."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2026-02-19"
 tags:
   - Technical SEO
@@ -14,7 +15,7 @@ A catalog has 50,000 useful product pages and several million filter combination
 
 The primary engineering problem is the URL and rendering architecture. Search engines need to discover useful pages, retrieve meaningful content, interpret consistent signals and avoid wasting work on an uncontrolled space of variants.
 
-This article considers established Google Search guidance and web performance practices available by February 2026. The catalog is hypothetical. Search visibility also depends on content and demand; technical correctness makes useful pages eligible and discoverable rather than guaranteeing a ranking.
+The catalog is hypothetical. Google's guidance supplies the crawl and indexing constraints; the worked architecture turns them into URL, rendering and release contracts. Content quality and search demand still determine whether eligible pages deserve visibility.
 
 ## Define the public page inventory before generating URLs
 
@@ -68,7 +69,7 @@ Use the same canonical identity in internal links and the sitemap where appropri
 
 `noindex` needs to be visible to the crawler. Google's [noindex documentation](https://developers.google.com/search/docs/crawling-indexing/block-indexing) explains that a robots.txt block can prevent the crawler from seeing it. Robots.txt controls crawling; it does not secure private content or guarantee that a discovered URL cannot appear in search.
 
-Sitemaps should contain intended canonical public URLs with accurate modification information. Updating every `lastmod` value on every build makes it a poor description of actual content changes. Publication and revision dates should reflect real events, while a historical technical context date can be labeled separately.
+Sitemaps should contain intended canonical public URLs with accurate modification information. Updating every `lastmod` value on every build makes it a poor description of actual content changes. Publication and revision dates should reflect real events.
 
 Generate metadata and sitemap entries from the same content source as the page. Parallel manual registries drift. Add checks for missing pages, duplicate canonicals and URLs that return redirects or errors when the sitemap expects a successful canonical page.
 
@@ -108,6 +109,32 @@ Correlate origin health with crawling. Slow responses and errors can reduce usef
 
 Search Console can reveal discovered-but-unindexed pages, selected canonicals and rendering issues. Treat these as diagnostic signals, not a single score. Investigate representative URLs in the affected class and compare their actual content and response behavior.
 
+## Put page intent in one source of truth
+
+For a catalog, define a page record containing resource identity, publication state, canonical path, substantive content revision and indexing policy. Rendering, internal links and sitemaps should use that record. If each layer invents its own rules, a retired product can disappear from navigation while continuing to receive a fresh sitemap timestamp and a successful page response.
+
+Distinguish an unpublished resource from a removed one. A preview may require authentication and remain outside public discovery. A moved resource needs a meaning-preserving redirect. A permanently removed resource needs the chosen removal behavior. A temporary dependency failure should not change the registry's publication state.
+
+The substantive revision is separate from a build identifier. A deployment changing navigation CSS does not necessarily modify every product description. Update modification metadata when relevant content changes, and retain the underlying event. This makes sitemap information more useful without claiming that a search engine will obey it immediately.
+
+## Test a filter policy as a graph
+
+Take a retained category page with colour and size controls. Enumerate which controls generate crawlable links, which combinations are intended destinations, and which utility states remain outside that graph. Then traverse representative paths from the category and compare the discovered URLs against the intended registry.
+
+The test should preserve user navigation. A useful filter can still work without creating a crawlable destination for every arbitrary combination. Conversely, a curated search landing page needs a stable anchor path and meaningful content; hiding it behind browser state removes the very discovery route it was created to serve.
+
+Check normalization with reordered parameters, defaults, tracking values and impossible combinations. A canonical should identify equivalent content, not silently discard a filter that changes the page's purpose. If the filtered content is intentionally a distinct search destination, give it its own supported identity and linking policy.
+
+Empty and deep pagination states need a decision too. Do not generate endless “next” links into pages with no records. Preserve real pagination for subsequent content, and test changes in inventory so an old link does not become an accidental infinite crawl path.
+
+## Diagnose an indexing loss with retained URLs
+
+Choose affected URLs from one page class, together with unaffected controls. Compare the deployed status, initial HTML, rendered content, canonical, robots directives, internal links and sitemap membership. Keep the observation date and deployment revision. An index report is delayed evidence; it cannot alone identify which release caused a change.
+
+If the page is discovered but not indexed, inspect its actual usefulness and duplication as well as technical eligibility. If the selected canonical differs, compare the signals and content of both URLs. If rendering fails, investigate blocked resources and the data path. These are different hypotheses; changing every meta tag at once makes the result harder to interpret.
+
+Release a repair to a bounded page class where possible, retain the before/after responses and monitor over the search system's processing interval. Avoid claiming that a faster page or corrected canonical caused a ranking increase without evidence that separates other content and demand changes.
+
 ## Add SEO contracts to release verification
 
 Create representative fixtures for each page class: normal product, removed product, empty category, filter variant, paginated list, localized page and private route. Verify status, title, canonical, robots policy, key content and crawlable links.
@@ -118,4 +145,4 @@ Test robots and sitemap changes separately from routine content changes. A broad
 
 Keep a release inventory of added, moved and removed URLs. Redirects and internal links should change together. Monitor affected page classes after rollout, allowing for search processing delays rather than claiming immediate indexing results.
 
-The useful outcome is a public site whose URL space, rendering and metadata tell a consistent story. Search systems can then spend their effort on the pages the product actually intends people to find, while users receive meaningful content and reliable interactions.
+Keep the intended page inventory, deployed responses and discovery graph consistent. When an indexing problem appears, those records let you investigate a specific URL class instead of changing metadata across the entire site and hoping.

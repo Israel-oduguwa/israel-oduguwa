@@ -2,9 +2,7 @@
 
 Use workload economics, failure-mode capacity and reversible experiments to remove waste without buying a cheaper outage.
 
-This article was written with AI assistance. Sources and example verification are linked where relevant.
-
-Technical context: 20 June 2024. Published 13 October 2026; the context date describes the technical era examined.
+Written with AI assistance.
 
 A service runs at 25% average CPU utilization. The obvious proposal is to halve its instances. Whether that saves money safely depends on what the other 75% represents: idle waste, burst capacity, a slow scaling controller, deployment overlap or the capacity needed after an availability-zone failure.
 
@@ -101,6 +99,34 @@ Roll out to a bounded workload cohort. Record the configuration, observation win
 Set rollback triggers tied to behavior: rising queue age, a protected operation missing its objective, failed recovery or an increase in repeated work. Preserve enough capacity to reverse the change promptly. Deleting the old footprint before proving replacement capacity can turn a reversible experiment into a prolonged incident.
 
 Include deployment overlap and autoscaling lag in the test. An aggressively reduced minimum can look efficient overnight and fail at the first traffic burst. Measure how long capacity takes to become usable, including initialization, connection establishment and cache warmup.
+
+## The saving must survive a change in demand
+
+At KinsCare, my work record includes modernizing the platform and reducing infrastructure spend by more than 75%. That is a recorded result from my October 2022 to December 2025 work. It is useful context for why I care about cost, but it does not identify the marginal cost of the next customer or establish another product's safe capacity. Those require a workload model.
+
+For a new optimization, separate three effects: the amount of work, the resources needed per unit of work, and the price paid for those resources. A bill can decline because traffic declined. A unit cost can decline because an annual commitment changed the effective price. Neither demonstrates that an application became more efficient.
+
+Use a counterfactual at the new workload: what would the old configuration have cost to deliver the same accepted operations? Keep the workload mix fixed where possible. If a migration changes the mix, report separate cohorts such as small imports, large imports and interactive requests. A global average can hide a cost increase in the cohort that is growing fastest.
+
+The arithmetic becomes clearer with a sensitivity range. Suppose a hypothetical optimization removes $1,000 of fixed monthly capacity but adds $0.03 to each completed job. At 20,000 jobs it saves $400; at 40,000 jobs it costs $200 more. The break-even point is about 33,333 jobs. That is not a cloud quote. It is a reminder to state which demand range makes a proposal economical before treating it as a permanent improvement.
+
+## A fallback can consume the saving during an incident
+
+Replacing a database read with a cache hit often saves money in normal operation. If a cache failure sends all traffic to the database, the cheaper normal path now depends on the expensive path being able to absorb a much larger workload. The budget must include the recovery path's capacity, or the product must have a deliberate degradation policy.
+
+Do not leave the choice to an exception handler that silently calls the origin. Decide which operations can serve a bounded stale result, which can be deferred, and which must fail clearly. Authorization and financial mutations need different treatment from a public catalogue. A “best effort” fallback for a catalogue should not become an accidental policy for account permissions.
+
+Test the fallback under the concurrency it would see during a real failure. A single manually failed cache read does not exercise a simultaneous miss across every application instance. Check retries and timeout overlap too: if the slow cache attempt occupies resources before every request calls the database, the failure can consume both footprints.
+
+There is an operational cost to a rarely used fallback. It needs its own compatibility checks, capacity measurements and deployment ownership. If the team cannot keep it working, a simpler failure response can be more reliable than an untested second implementation. Include that maintenance obligation in the decision, rather than listing only the normal-path price.
+
+## Retain evidence that distinguishes saving from displaced work
+
+A smaller telemetry bill is useful if engineers can still reconstruct a failed operation. Retain authoritative operation records, then sample repetitive diagnostic detail. A smaller API fleet is useful if exports are not simply growing an unpaid queue elsewhere. Watch queue age and deferred work alongside the bill.
+
+For data changes, include write amplification, index maintenance and restore time. A smaller active table with a large archived history may improve reads, but recovery now depends on restoring both representations and reconnecting their references. A cheaper storage tier is part of the operating model only after that retrieval path has been exercised.
+
+Close the experiment with measured demand, successful outcomes and the configurations compared. Keep a short follow-up window that includes a deployment, a workload burst and the relevant failure drill. Savings earned by removing duplicated work usually continue as demand rises; savings earned by consuming spare capacity need an explicit review trigger.
 
 ## Make the result a decision record
 

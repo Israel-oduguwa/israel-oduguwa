@@ -3,6 +3,7 @@ slug: "debugging-production-under-load"
 title: "Debugging a production service that slows down under load"
 description: "Separate waiting from work, locate the first saturated resource, and verify a fix with realistic arrival rates and failure conditions."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2024-02-22"
 tags:
   - Backend engineering
@@ -16,7 +17,7 @@ This is a useful diagnostic scenario because several different failures produce 
 
 I would begin by accounting for the time in one request and the resources occupied by all requests. A flame graph answers where CPU time went. It cannot, by itself, explain five seconds spent waiting for a connection.
 
-The examples below assume a Node.js 20 service backed by PostgreSQL. The latency and capacity numbers are hypothetical; they describe a diagnosis to reproduce, not a production incident I am claiming to have observed.
+The worked diagnosis uses hypothetical latency and capacity numbers for a Node.js 20 service backed by PostgreSQL. The separate queue experiment records results from its stated model.
 
 ## Define the symptom precisely enough to falsify an explanation
 
@@ -121,6 +122,52 @@ Preserve the relevant workload mix: cache-hit ratio, expensive operations, tenan
 Increase offered load in steps, hold each step long enough to observe backlog and memory behavior, and then reduce it. Recovery is part of the test. A system that accepts a short burst but spends twenty minutes draining obsolete work has exceeded useful capacity even if it eventually completes everything.
 
 Include a slower dependency and loss of one application instance. Set a stop condition before testing a shared environment: error budget consumption, queue age, database connection pressure or a protected operation's latency. Load tests need an owner who can stop them.
+
+## Inspect a blocker before tuning the pool
+
+Pool wait and lock wait require different interventions. The pool owns requests that have not obtained a database connection. PostgreSQL can report only sessions that already have one. If the application reports a large acquisition queue while PostgreSQL shows few active sessions, start with the connection lifecycle, pool limits and connectivity. If many sessions are waiting on a lock, increasing the pool can add more waiters behind the same blocker.
+
+For PostgreSQL 16, this diagnostic query relates a waiting session to its blockers without exporting query text:
+
+```sql
+SELECT pid,
+       application_name,
+       state,
+       wait_event_type,
+       wait_event,
+       clock_timestamp() - xact_start AS transaction_age,
+       pg_blocking_pids(pid) AS blockers
+FROM pg_stat_activity
+WHERE datname = current_database()
+  AND pid <> pg_backend_pid()
+ORDER BY xact_start NULLS LAST;
+```
+
+The [activity view](https://www.postgresql.org/docs/16/monitoring-stats.html#MONITORING-PG-STAT-ACTIVITY-VIEW) describes session state and wait events; [pg_blocking_pids](https://www.postgresql.org/docs/16/functions-info.html#FUNCTIONS-INFO-SESSION-TABLE) identifies sessions blocking lock acquisition. Run it with an approved monitoring role. Transaction age is not query duration: an idle transaction can retain locks after its last query has finished. Likewise, a session waiting for a client is not necessarily waiting on storage. The event category determines the next investigation.
+
+Suppose the waiting updates all point to a connection tagged `billing-worker`, and that connection has an old transaction open. Inspect that worker's trace and operation record. It may be waiting for a provider response inside a transaction. Terminating it can release locks, but an accepted remote charge still needs reconciliation. Before taking that action, record the operation identity and confirm who will repair its uncertain outcome. Restoring throughput and preserving correctness are simultaneous incident responsibilities.
+
+A query-plan change has a different signature. Compare row estimates against actual rows on representative data, examine buffers and check parameter skew. A plan suitable for a tenant with fifty records may be poor for one with several million. Avoid collecting a convenient `EXPLAIN ANALYZE` for a destructive statement in production; reproduce it safely or use an approved observation mechanism.
+
+## Preserve the arrival rate when comparing fixes
+
+Imagine an endpoint whose useful capacity is fifty operations per second for one specific payload mix. At a hundred arrivals per second, a larger queue makes the service retain more unfinished work. It does not supply the missing capacity. A closed-loop client can disguise the deficit by waiting longer between new arrivals as responses slow down.
+
+The [queue experiment](https://github.com/Israel-oduguwa/israel-oduguwa/tree/main/examples/load-admission) makes that distinction visible with a deterministic model. It compares an unbounded wait policy with admission that rejects an operation when the modeled completion would miss its deadline. Every offered arrival remains in the results, including rejection and late completion. The model assumes fixed service time and identical requests; use it to inspect the accounting, then load-test the actual dependency and workload.
+
+The rejected request is still a customer outcome. A graph of accepted-request latency must therefore appear beside admission failures and useful completions. Otherwise a strict admission policy can appear to solve latency simply by hiding most of the population. Keep the offered workload constant, and show whether the intervention delivers more timely successes, reduces resource occupancy, or merely changes which requests fail.
+
+The recorded run offers 500 jobs ten milliseconds apart, with four slots and an 80 ms service time. The deadline is 250 ms from offered arrival. Unbounded admission completes 20 jobs on time and 480 late; its final completion occurs at 10,030 ms. Deadline admission completes 260 on time, rejects 240, and finishes at 5,230 ms. It has perfect knowledge of service duration in this model. Real admission must estimate cost and still account for prediction error.
+
+Once you reproduce the saturation point, change one control at a time. Shorter transaction ownership, a bounded export pool and a new index act on different resources. Changing them together can produce a faster service without explaining which change is necessary. During a severe incident, several mitigations may be justified; retain the timeline so subsequent controlled tests can separate their effects.
+
+## Check what happens after the traffic falls
+
+Recovery is where an apparently effective fix often fails. In an unbounded system, old requests continue to acquire connections after their callers have gone. Their retries arrive alongside fresh traffic. A new instance initially brings empty caches and may add another connection burst. The traffic chart can be falling while actual work at the database is rising.
+
+Measure the oldest waiting request, work completed after caller cancellation, attempt count per operation and the time until queue age returns to normal. Remove obsolete read work when its contract permits it. Preserve accepted mutations until their durable outcome is known. For an uncertain mutation, checking its operation record is safer than instructing every client to retry immediately.
+
+The rollout should include a return to the original load and a loss of capacity, not just a higher peak. A fix that depends on every replica remaining available has moved the threshold without addressing the incident's recovery mechanism. Keep the old setting available until the new path has demonstrated bounded backlog and an understood failure response.
 
 ## Choose the intervention that changes the limiting resource
 

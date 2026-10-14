@@ -1,6 +1,6 @@
 <h1>Validating AI coding benchmarks: grader sensitivity, task sampling and decision risk</h1>
 <h2>An executable frontend evaluation example, a protocol for validating graders, and a statistical design for comparing coding agents.</h2>
-<p>This article was written with AI assistance. The linked experiment includes runnable code and recorded results.</p>
+<p>Written with AI assistance.</p>
 <p>A coding agent can earn a perfect score on a test suite while its implementation still violates the requested behavior. The evaluator may have checked the final screen state and missed an earlier write from an obsolete request. Every assertion passes; the user still sees the wrong result.</p>
 <p>That is a failure in the measurement. Increasing the number of tasks will make the reported score more precise without repairing what it measures.</p>
 <p>I would validate a coding benchmark at two levels: whether the task and grader distinguish acceptable implementations from plausible failures, and whether the resulting sample supports the decision someone wants to make. Below, I use a runnable frontend experiment to develop that protocol, then extend it to model comparisons and expert data production.</p>

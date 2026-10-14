@@ -3,6 +3,7 @@ slug: "useful-architecture-decision-records"
 title: "Architecture decision records that support the next decision"
 description: "Record the constraints, rejected alternatives and revisit conditions that future engineers need when an architecture choice changes."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2024-01-25"
 tags:
   - Documentation
@@ -125,6 +126,32 @@ Do not rewrite an old decision to make it look as though the team always knew th
 Revisit conditions should be observable. “When we need more scale” is weak. “When dispatch lag misses the accepted job objective under the measured peak workload” tells the team what to monitor. Avoid arbitrary numeric thresholds without a workload or business basis.
 
 Temporary architecture needs retirement conditions too. A compatibility adapter should identify which consumers must migrate and how their disappearance will be verified. Otherwise, a transitional decision can remain indefinitely because nobody owns its removal.
+
+## Link the record to evidence without turning it into a dashboard
+
+The export ADR requires bulk work to preserve interactive capacity. Link the retained load-test artifact with its workload, environment and configuration, then summarize the result in the record. A chart URL alone is weak evidence: its time window can change, access can disappear, and the plotted series may no longer describe the configuration that was accepted.
+
+Give each important claim an evidence type. A product deadline is an approved requirement. A prototype duration is a measured result with a workload. A forecast is an assumption. A provider guarantee is a versioned external contract. Those distinctions help a reviewer decide which disagreement needs a product answer and which needs another experiment.
+
+Keep private incident and customer evidence in its controlled location. The public record can summarize the accepted constraint without copying account identifiers, personal data or internal logs. Privacy and reproducibility can coexist when the evidence has an owner, access policy and a stable summary of what it established.
+
+At KinsCare I guided seven developers through system design and code review. That kind of team work makes the reason behind a boundary valuable: a later contributor needs to understand whether a queue protects recovery, isolates bulk capacity or merely reflects an old implementation choice. The record should make those questions answerable without requiring the original author in every review.
+
+## Record disagreement precisely enough to resolve it
+
+Two engineers can agree on the goal and disagree about the failure model. One assumes a worker can safely retry an external call; another knows the response can be lost after acceptance. Write that unresolved condition into the proposed decision and identify the evidence required. A small provider experiment or contract review can settle it more effectively than another general debate about queues.
+
+Similarly, separate reversible implementation choices from irreversible commitments. Trying a queue library behind an internal contract is different from making its proprietary message format the public integration API. The latter affects consumers and migration cost. The record should identify that commitment and the compatibility obligation before acceptance.
+
+Preserve rejected alternatives in their strongest relevant form. A synchronous design with bounded duration might work for small exports; it fails the stated multi-minute accepted-work requirement. That explanation is useful. Calling it “unscalable” is not, because it hides the condition under which it could become the better choice again.
+
+## A revisit trigger needs an owner and a next action
+
+“Review dispatch lag” is only an invitation. Record who observes it, which job population matters, what objective has been agreed, and what happens if the condition is met. The action might be investigating claim contention or testing a separate dispatcher, rather than immediately replacing the architecture.
+
+Keep the trigger tied to the problem that justified the decision. If the original choice protected interactive capacity, measure that capacity under bulk demand. A rising count of queued jobs may simply reflect more successful admissions; job age and delivered outcomes tell a different story.
+
+When a trigger fires, add a new proposed record with current evidence. Link it to the earlier decision, preserve the earlier assumptions, and test the replacement's failure behavior. This gives a future engineer a history of decisions the system actually made, rather than a rewritten explanation that implies the final design was inevitable.
 
 ## Judge the record by the questions it helps answer
 

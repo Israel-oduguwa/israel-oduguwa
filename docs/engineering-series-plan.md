@@ -34,7 +34,7 @@ Run executable examples and retain results. Label simulations and deliberately f
 
 Use the named Antislop, anti-defensive-writing, Humanizer and Avoid AI Writing skills. Use a technical-blog context for the writing-quality detector. Review its flags by meaning, retain legitimate technical terms and protected content, and record actual editing passes. A detector result is a writing-quality diagnostic, not proof of authorship or a promise of detector evasion.
 
-Keep the established portfolio design, fonts and palette. ENERGY 2 / RHYTHM 2 / MOTION 2. Add labeled context dates to the existing article metadata and listings. Keep actual publication dates in structured data, social metadata, the sitemap and Medium imports.
+Keep the established portfolio design, fonts and palette. ENERGY 2 / RHYTHM 2 / MOTION 2. The 14 October revision uses one readable publication date in the listing and byline. Keep actual publication dates in structured data, social metadata, the sitemap and Medium imports, and retain archived context dates as editorial history.
 
 Medium requires an accurate AI-assistance disclosure in the opening paragraphs. Use the website as canonical source, restore code omitted by the import tool, and omit direct `vercel.app` body links that Medium rejects. Verify each published URL, title, canonical source and body. Preserve original Medium posts and drafts.
 

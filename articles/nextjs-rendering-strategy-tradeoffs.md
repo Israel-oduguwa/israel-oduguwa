@@ -3,6 +3,7 @@ slug: "nextjs-rendering-strategy-tradeoffs"
 title: "Choosing a rendering strategy in Next.js 16"
 description: "Choose static, request-time, streamed and browser-owned rendering by freshness, authorization scope and failure behavior."
 date: "2026-10-13"
+updatedAt: "2026-10-14"
 contextDate: "2025-11-20"
 tags:
   - Next.js
@@ -14,7 +15,7 @@ A product page contains a public description, a frequently changing price, live 
 
 Rendering strategy is a decision about when work happens, what can be reused, whose data it contains and how failure reaches the user. Framework features implement that decision; they do not choose the acceptable staleness of a price or the authorization scope of a discount.
 
-This article considers the Next.js 16 release model available in November 2025, including opt-in Cache Components. It separates that model from older App Router defaults. The examples are design sketches; version and cache behavior should be verified against the application's pinned framework release.
+The examples use Next.js 16 with opt-in Cache Components. That configuration matters: an application using the older rendering model has different caching behavior. Verify the choice against the pinned framework release and deployed cache.
 
 ## Begin with a contract for each piece of data
 
@@ -96,7 +97,7 @@ Once response headers are sent, later failures cannot always change the HTTP sta
 
 With Cache Components, a reusable public region can declare a cache boundary. The input should describe the content identity, not contain ambient authenticated state:
 
-```typescript
+```tsx
 async function ProductDescription({ productId }: { productId: string }) {
   'use cache';
   const description = await catalog.readPublicDescription(productId);
@@ -119,6 +120,36 @@ Avoid an unnecessary initial waterfall: load JavaScript, discover the page's dat
 Keep user drafts separate from remote snapshots. A background refresh must not erase an unsaved edit. An optimistic update should have a defined rollback or reconciliation outcome when the server rejects it. A browser cache is a view of remote state, not the authority for financial or permission-sensitive commands.
 
 Measure interaction latency on representative devices. Lower server latency does not compensate for a large client bundle that delays input handling. Rendering strategy should account for network, parsing, hydration and subsequent navigation together.
+
+## A cache miss is a concurrent workload
+
+A public page can be inexpensive on a warm cache and still overwhelm its origin during regeneration. If many visitors miss the same representation together, each may start the same database and provider work. Counting only warm response latency misses the resource cost of that transition.
+
+Vercel's [request-collapsing article](https://vercel.com/blog/cdn-request-collapsing), published in September 2025, explains how its CDN coordinates eligible regeneration requests. That is a hosting mechanism with a defined scope. It does not imply that every application-level fetch, private query or self-hosted deployment receives equivalent coordination.
+
+For an application-owned cache, define who performs a fill, what waiters receive on failure and how long ownership lasts. The fill should check whether another owner has already populated the value before doing expensive work. Scope identity correctly, and prevent an obsolete fill from overwriting a newer version. A lock that protects a cache key but never releases after failure can turn a stampede into an indefinite wait.
+
+Test cold generation under the same concurrency expected after publication or invalidation. Observe origin requests, wait time, failed fills and memory. A warm test followed by a single manually expired request is insufficient for a popular page.
+
+## Follow a price change from command to every representation
+
+The editor changes a product price. The database commit, editor response, public cached page and browser navigation cache can update at different moments. Write the intended behavior for each before choosing an invalidation API. The editor may need an immediate read of the committed revision; public visitors may accept a bounded delay; checkout must use the authoritative command path.
+
+Keep the changed product identity in the mutation outcome. That lets the interface reconcile what was accepted rather than inferring it from whichever cached read happens to return first. An old projection should not overwrite a newer accepted revision. If the product permits stale display, distinguish the display estimate from the amount that will be accepted at purchase.
+
+Invalidation has a failure mode. The database can accept the change while a cache notification is lost. A retryable intent, bounded cache lifetime or reconciliation job can provide recovery, depending on the required freshness. An operator needs to know which products remain stale and how to repair them without replaying the price mutation.
+
+Also test two editors changing the same product. Invalidating once after each command does not ensure that a fill started for the older revision cannot finish last. Use version-aware data or a documented cache mechanism that prevents obsolete materialization from becoming current.
+
+## Hydration must begin from the same story as the HTML
+
+An interactive region can receive a server-rendered snapshot and then replace it with browser data. If the browser begins from a different account, locale, time zone or cached revision, the initial output can disagree before the first deliberate interaction. Choose a stable initial representation and reconcile subsequent changes explicitly.
+
+Formatting time-sensitive values deserves attention. “Expires in five minutes” changes as time passes, while an absolute expiry is stable evidence. Render the recorded expiry consistently, then update the relative display after hydration if that improves the interaction. Avoid allowing a client clock difference to determine whether a server command is permitted.
+
+For a personalized region, inspect the HTML and serialized payload as an unauthorized user and after a tenant switch. A placeholder can hide sensitive data visually while the payload still contains it. The reuse boundary must protect both visible markup and the data sent for hydration.
+
+![Public reusable content and private request data meet only in the composed page](/images/articles/rendering-boundaries.svg)
 
 ## Validate the chosen strategy in production-like conditions
 
