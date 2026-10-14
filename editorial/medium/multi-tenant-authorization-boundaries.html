@@ -1,6 +1,5 @@
 <h1>Multi-tenant authorization beyond application filters</h1>
 <h2>Use trusted tenant context, database policies and tenant-aware resource boundaries to contain authorization mistakes.</h2>
-<p>Written with AI assistance.</p>
 <p>The request handler checks that a user belongs to a tenant. Its repository function adds WHERE tenant_id = ?. Later, a bulk export calls a lower-level query helper and forgets the filter. The user remains authenticated; the export contains another customer's data.</p>
 <p>This failure comes from placing tenant isolation in a convention that every caller must remember. The application still needs authorization checks, but a growing system benefits from another boundary that constrains ordinary data access even when a query omits its tenant predicate.</p>
 <p>PostgreSQL row-level security can provide that boundary. It works only when database roles, request context, pooling and policy composition are designed together. An enabled policy under the wrong runtime role can provide no isolation at all.</p>

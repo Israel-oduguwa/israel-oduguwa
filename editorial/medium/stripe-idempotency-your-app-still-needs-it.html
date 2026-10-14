@@ -1,6 +1,5 @@
 <h1>Stripe idempotency does not finish the payment workflow</h1>
 <h2>How request retries, repeated webhooks and local business effects need separate identities and recovery rules.</h2>
-<p>Written with AI assistance.</p>
 <p>Consider a customer paying for a course. Stripe accepts the payment, but your server loses the response before it updates the enrollment record. The customer sees an error. Your application sees a timeout. Neither observation tells you whether the money moved.</p>
 <p>In this example, “try again” can mean retrying the Stripe request, handling a repeated webhook or granting access to the course. Each operation needs its own identity and recovery rule.</p>
 <h2>What Stripe's key protects</h2>

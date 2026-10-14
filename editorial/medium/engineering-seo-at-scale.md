@@ -2,8 +2,6 @@
 
 Build a finite, discoverable public URL space with meaningful HTML, consistent metadata and operational checks for indexing failures.
 
-Written with AI assistance.
-
 A catalog has 50,000 useful product pages and several million filter combinations. Most crawler requests reach sorted or empty variants. New products take longer to appear in search, the origin spends capacity generating low-value pages, and the team responds by adding more metadata.
 
 The primary engineering problem is the URL and rendering architecture. Search engines need to discover useful pages, retrieve meaningful content, interpret consistent signals and avoid wasting work on an uncontrolled space of variants.

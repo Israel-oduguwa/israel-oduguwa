@@ -2,8 +2,6 @@
 
 Design coexistence, data ownership and rollback before replacing a live system one boundary at a time.
 
-Written with AI assistance.
-
 A rewrite promises clean code and a simpler architecture. The existing system still receives orders, holds customer history and serves integrations whose behavior nobody has fully documented. Replacing it means reproducing enough of those contracts while the business keeps changing.
 
 The hard engineering work is making old and new behavior coexist safely. A migration can be incremental in its deployment schedule and still be dangerous if both systems believe they own the same write.

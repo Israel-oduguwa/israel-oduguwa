@@ -43,4 +43,12 @@ Ten remaining stories are complete saved drafts. Each was reloaded and checked a
 | saas-scaling-and-unit-economics | Saved draft; full content verified after reload | [Draft](https://medium.com/p/fba8a1cd3787/edit) |
 | useful-architecture-decision-records | Saved draft; full content verified after reload | [Draft](https://medium.com/p/3084d0d9300b/edit) |
 
-The existing 9:00 AM Africa/Lagos automation is active. From 15 October 2026 it will finish only this explicitly approved collection using `engineering-series-queue.json`, then continue preparing new daily drafts for review. It will respect further platform limits and record each actual published URL before removing a queue item. Newly authored daily articles retain the review-before-publication rule.
+The existing 9:00 AM Africa/Lagos automation is active. The earlier backlog was eligible for another publication attempt from 15 October, subject to the platform limit. Israel's later instruction below adds a manual prerequisite. Newly authored daily articles retain the review-before-publication rule.
+
+## Expanded revisions, 14 October 2026
+
+The website revisions are live. Medium revisions remain private: pending edits of the fifteen existing cross-posts and the ten existing unpublished drafts. No new stories were created and no Medium revisions were published on this run. Original public stories retain their previous text and publication dates.
+
+Israel chose to add Medium's required disclosure himself, manually. The private revisions and local exports omit an assistant-added note. Keep all Medium changes unpublished until he has added his note and explicitly asks to proceed. The daily automation was updated through the app to respect this instruction while continuing review-only daily drafts. Do not automatically reinsert a note or use the earlier backlog approval to skip this prerequisite.
+
+The dated revision record and review-link index identify the existing editor URLs, source hashes and content checks. The review checks compare all prose and complete combined code after reloading, because Medium can split a source fence into several blocks. Image descriptions are checked after upload, when Medium may otherwise drop them. Canonical website settings on the original published posts were inspected before editing; no canonical settings were changed.

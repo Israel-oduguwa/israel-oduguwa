@@ -2,8 +2,6 @@
 
 Set resource budgets, transaction boundaries and security controls before choosing how to scale a production backend.
 
-Written with AI assistance.
-
 A backend can handle a large request count and still be easy to overwhelm. One expensive export can monopolize database connections. A retry storm can consume capacity intended for new requests. A valid authenticated user can submit work whose cost is much greater than its price or quota.
 
 I would design a Node.js backend around resource ownership and business invariants. Horizontal scaling matters after those boundaries are understood. Adding replicas to an unbounded design can increase the rate at which it overloads its database.

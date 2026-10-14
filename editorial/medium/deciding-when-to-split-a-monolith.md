@@ -2,8 +2,6 @@
 
 Evaluate a service extraction by the constraint it removes and the distributed failure modes it introduces.
 
-Written with AI assistance.
-
 A large repository is not, by itself, a reason to create microservices. A small repository can have severe deployment coupling, and a large modular application can serve a substantial workload with clear ownership and straightforward recovery.
 
 The useful question is whether a separate deployment and data boundary removes a concrete constraint that cannot be resolved economically inside the current system. The answer should include the new network, consistency and operational costs.

@@ -2,8 +2,6 @@
 
 Choose static, request-time, streamed and browser-owned rendering by freshness, authorization scope and failure behavior.
 
-Written with AI assistance.
-
 A product page contains a public description, a frequently changing price, live availability and a signed-in customer's discount. Asking whether the page should use static rendering or server-side rendering hides the fact that these pieces have different contracts.
 
 Rendering strategy is a decision about when work happens, what can be reused, whose data it contains and how failure reaches the user. Framework features implement that decision; they do not choose the acceptable staleness of a price or the authorization scope of a discount.

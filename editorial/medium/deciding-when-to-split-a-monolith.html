@@ -1,6 +1,5 @@
 <h1>When to split a monolith: ownership, deployment and data boundaries</h1>
 <h2>Evaluate a service extraction by the constraint it removes and the distributed failure modes it introduces.</h2>
-<p>Written with AI assistance.</p>
 <p>A large repository is not, by itself, a reason to create microservices. A small repository can have severe deployment coupling, and a large modular application can serve a substantial workload with clear ownership and straightforward recovery.</p>
 <p>The useful question is whether a separate deployment and data boundary removes a concrete constraint that cannot be resolved economically inside the current system. The answer should include the new network, consistency and operational costs.</p>
 <p>Consider a hypothetical SaaS with accounts, billing, reporting and media processing in one application. Media jobs consume most compute, reporting queries interfere with interactive traffic, and billing changes require extra review. Those are three different problems; they do not imply that every module needs a service.</p>

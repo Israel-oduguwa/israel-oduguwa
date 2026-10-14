@@ -2,8 +2,6 @@
 
 Use workload economics, failure-mode capacity and reversible experiments to remove waste without buying a cheaper outage.
 
-Written with AI assistance.
-
 A service runs at 25% average CPU utilization. The obvious proposal is to halve its instances. Whether that saves money safely depends on what the other 75% represents: idle waste, burst capacity, a slow scaling controller, deployment overlap or the capacity needed after an availability-zone failure.
 
 Cost engineering starts by distinguishing those explanations. A lower monthly bill is an outcome worth pursuing, but a capacity reduction that makes recovery impossible transfers cost into outages, emergency work and lost business.

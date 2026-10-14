@@ -2,8 +2,6 @@
 
 Separate waiting from work, locate the first saturated resource, and verify a fix with realistic arrival rates and failure conditions.
 
-Written with AI assistance.
-
 A service responds in 80 milliseconds during a quiet test. At the busiest hour, its slowest requests take several seconds. CPU utilization looks unremarkable, database queries are individually fast, and adding application instances provides only temporary relief.
 
 This is a useful diagnostic scenario because several different failures produce the same symptom. A database connection pool can make requests wait before a query starts. A slow dependency can occupy request slots. A synchronous callback can delay unrelated work on the Node.js event loop. Retries can multiply the workload after the initial slowdown.

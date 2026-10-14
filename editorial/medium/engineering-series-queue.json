@@ -2,7 +2,6 @@
   "collection": "Engineering article collection, 13 October 2026",
   "publicationAuthorizedInThisChat": true,
   "limitObservedOn": "2026-10-13",
-  "resumeAt": "2026-10-15T09:00:00+01:00",
   "reason": "Medium rejected further publication and scheduling under its rolling 24-hour limit.",
   "publishedCount": 9,
   "remaining": [
@@ -17,7 +16,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "0a0b996b7445b52f969f2fce5f714f8a1ae171e46cd5ed65b4eacad63e34033f",
+      "revisionVerifiedAt": "2026-10-14T10:13:40.172Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "multi-tenant-authorization-boundaries",
@@ -30,7 +34,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "7625551cb62c8642003e08ad82513d1a8aa0d85a2e7e6b3cb7a02dde334ba424",
+      "revisionVerifiedAt": "2026-10-14T10:14:03.295Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "nextjs-rendering-strategy-tradeoffs",
@@ -43,7 +52,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "31001554d4f4061347a69a9818e35af99dbd47e4263e6ee85441fba945e447bf",
+      "revisionVerifiedAt": "2026-10-14T10:15:09.454Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "node-backend-overload-and-security",
@@ -56,7 +70,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "e22485023c344fcf9d5802eaea594be67750006d4e64aff5c8b3bdc14f3b2a39",
+      "revisionVerifiedAt": "2026-10-14T10:14:58.462Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "production-web-security-architecture",
@@ -69,7 +88,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "bede4568770a14720b082aeecc3d25b0b479cacc8b917b8ed9f42f773159d63a",
+      "revisionVerifiedAt": "2026-10-14T10:15:47.736Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "react-nextjs-architecture-boundaries",
@@ -77,12 +101,17 @@
       "draftUrl": "https://medium.com/p/6ae7e95a3df5/edit",
       "canonicalUrl": "https://israel-oduguwa.vercel.app/articles/react-nextjs-architecture-boundaries",
       "contextDate": "2025-07-17",
-      "sourceBlocks": 2,
-      "savedBlocks": 2,
+      "sourceBlocks": 3,
+      "savedBlocks": 3,
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "0b36c804ba00daf2d56c166080cdcfe28512e619e2466f4ae81af2ae89311d20",
+      "revisionVerifiedAt": "2026-10-14T10:16:07.415Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "reliable-multi-step-ui-state",
@@ -95,7 +124,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "e71498d4d6ae272ac1810580cc274fa3c279752e8bd78934cc2b36b988a6cb27",
+      "revisionVerifiedAt": "2026-10-14T10:17:02.888Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "reliable-saas-billing-workflows",
@@ -108,7 +142,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "593a177f3b7b8f3dcdb0a54d89e68bd8feab95636348cad432e099bc615411d6",
+      "revisionVerifiedAt": "2026-10-14T10:17:59.273Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "saas-scaling-and-unit-economics",
@@ -121,7 +160,12 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "c2f7686a45c5840ae65dca55c18fb88396635e9bdebdb3e80ab8cad1cf23829b",
+      "revisionVerifiedAt": "2026-10-14T10:18:34.413Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     },
     {
       "slug": "useful-architecture-decision-records",
@@ -134,7 +178,16 @@
       "proseVerified": true,
       "codeVerified": true,
       "savedAfterReload": true,
-      "status": "ready; blocked by Medium 24-hour publishing limit"
+      "status": "saved private draft; awaiting author manual disclosure and instruction to proceed",
+      "sourceSha256": "529b2b1aabea661c7f8ebc71c8556eace9c5045943692bacbc90104386403b13",
+      "revisionVerifiedAt": "2026-10-14T10:19:07.436Z",
+      "contextParagraphRemoved": true,
+      "assistantNoteAbsent": true,
+      "imageAltVerified": true
     }
-  ]
+  ],
+  "publicationPrerequisite": "Israel will add the required Medium disclosure manually and then explicitly ask to proceed. Keep all queued stories private until then.",
+  "authorInstructionOn": "2026-10-14",
+  "quotaResumeAt": "2026-10-15T09:00:00+01:00",
+  "resumeAt": null
 }

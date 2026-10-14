@@ -2,8 +2,6 @@
 
 Use trusted tenant context, database policies and tenant-aware resource boundaries to contain authorization mistakes.
 
-Written with AI assistance.
-
 The request handler checks that a user belongs to a tenant. Its repository function adds `WHERE tenant_id = ?`. Later, a bulk export calls a lower-level query helper and forgets the filter. The user remains authenticated; the export contains another customer's data.
 
 This failure comes from placing tenant isolation in a convention that every caller must remember. The application still needs authorization checks, but a growing system benefits from another boundary that constrains ordinary data access even when a query omits its tenant predicate.

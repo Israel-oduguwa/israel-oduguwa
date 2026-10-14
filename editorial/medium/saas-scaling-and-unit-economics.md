@@ -2,8 +2,6 @@
 
 Connect tenant consumption, capacity steps and product limits so growth increases delivered value faster than operating cost.
 
-Written with AI assistance.
-
 A SaaS doubles its paying customers and triples its infrastructure bill. The explanation may be simple growth, but it may also be a change in workload: larger imports, more retained data, expensive exports or a small group of customers using an unlimited feature far more heavily than everyone else.
 
 The engineering problem is connecting product promises to resource consumption. Scaling capacity without understanding that relationship can make the service faster while making the business less sustainable.

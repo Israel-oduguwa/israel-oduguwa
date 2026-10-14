@@ -1,6 +1,5 @@
 <h1>Choosing a rendering strategy in Next.js 16</h1>
 <h2>Choose static, request-time, streamed and browser-owned rendering by freshness, authorization scope and failure behavior.</h2>
-<p>Written with AI assistance.</p>
 <p>A product page contains a public description, a frequently changing price, live availability and a signed-in customer's discount. Asking whether the page should use static rendering or server-side rendering hides the fact that these pieces have different contracts.</p>
 <p>Rendering strategy is a decision about when work happens, what can be reused, whose data it contains and how failure reaches the user. Framework features implement that decision; they do not choose the acceptable staleness of a price or the authorization scope of a discount.</p>
 <p>The examples use Next.js 16 with opt-in Cache Components. That configuration matters: an application using the older rendering model has different caching behavior. Verify the choice against the pinned framework release and deployed cache.</p>
@@ -73,7 +72,8 @@ export default nextConfig;</pre>
 <p>An interactive region can receive a server-rendered snapshot and then replace it with browser data. If the browser begins from a different account, locale, time zone or cached revision, the initial output can disagree before the first deliberate interaction. Choose a stable initial representation and reconcile subsequent changes explicitly.</p>
 <p>Formatting time-sensitive values deserves attention. “Expires in five minutes” changes as time passes, while an absolute expiry is stable evidence. Render the recorded expiry consistently, then update the relative display after hydration if that improves the interaction. Avoid allowing a client clock difference to determine whether a server command is permitted.</p>
 <p>For a personalized region, inspect the HTML and serialized payload as an unauthorized user and after a tenant switch. A placeholder can hide sensitive data visually while the payload still contains it. The reuse boundary must protect both visible markup and the data sent for hydration.</p>
-<figure><img src="https://israel-oduguwa.vercel.app/images/articles/rendering-boundaries.png" alt="Public reusable content and private request data meet only in the composed page"/><figcaption>Public reusable content and private request data meet only in the composed page</figcaption></figure>
+<img src="https://israel-oduguwa.vercel.app/images/articles/rendering-boundaries.png" alt="Public reusable content and private request data meet only in the composed page"/>
+<p><em>Public reusable content and private request data meet only in the composed page</em></p>
 <h2>Validate the chosen strategy in production-like conditions</h2>
 <p>Test cold and warm requests, cache invalidation, signed-in variation, tenant switching and dependency failure. Inspect HTML, response headers, network requests and navigation behavior. A development server does not establish production caching behavior.</p>
 <p>Measure first-byte time, meaningful content display, layout stability and interaction responsiveness. Break results down by page class and device. A site-wide average can conceal a heavily interactive route with poor performance.</p>

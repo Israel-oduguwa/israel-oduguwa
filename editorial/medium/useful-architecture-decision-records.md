@@ -2,8 +2,6 @@
 
 Record the constraints, rejected alternatives and revisit conditions that future engineers need when an architecture choice changes.
 
-Written with AI assistance.
-
 An engineer finds a queue between two modules and asks why a local function call was not enough. The code shows how the queue works. A diagram shows where it sits. Neither explains the requirement that made asynchronous delivery worth its operational cost.
 
 A useful architecture decision record preserves that explanation. It should let the next engineer decide whether the original constraints still hold and what would be endangered by reversing the choice.

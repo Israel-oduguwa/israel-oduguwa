@@ -1,6 +1,5 @@
 <h1>Reliable UI state for multi-step workflows</h1>
 <h2>Prevent stale validation, lost drafts and duplicate submissions by modeling ownership, revisions and uncertain outcomes explicitly.</h2>
-<p>Written with AI assistance.</p>
 <p>A user edits a form while remote validation is running. The old result returns after the edit and enables the Next button. Later, the final submission times out, so the user clicks again. The interface has two separate correctness problems: it accepted evidence for an obsolete draft and it treated an unknown server outcome as a failed operation.</p>
 <p>Multi-step interfaces need a model of what is current, what is proven and what has been accepted remotely. A step index and several booleans are rarely enough once validation, autosave and submission overlap.</p>
 <p>The hypothetical workflow uses React 18-compatible reducers. Its <a href="https://github.com/Israel-oduguwa/israel-oduguwa/tree/main/examples/engineering-series">executable example</a> verifies draft-revision ownership; saving and submission require the separate server contracts developed below.</p>
@@ -68,7 +67,8 @@ submitting -&gt; outcome_unknown -&gt; retrieve by operation identity</pre>
 <h2>A changed field can invalidate more than one step</h2>
 <p>Consider a booking draft with address, service, price quote and consent. The price is validated for address revision 4 and service revision 2. The user changes the address on an earlier step. Returning to the review screen should not display the old quote as current merely because that screen's own fields were untouched.</p>
 <p>Represent the inputs used to obtain derived evidence. A quote can carry its address revision, service revision, expiry and provider reference. canSubmit checks those against the current draft and server policy. Store the evidence; derive whether it is usable. Keeping a separate quoteIsValid boolean invites disagreement after an edit or timer event.</p>
-<figure><img src="https://israel-oduguwa.vercel.app/images/articles/ui-validation.png" alt="An edit invalidates validation evidence before the next request can own it"/><figcaption>An edit invalidates validation evidence before the next request can own it</figcaption></figure>
+<img src="https://israel-oduguwa.vercel.app/images/articles/ui-validation.png" alt="An edit invalidates validation evidence before the next request can own it"/>
+<p><em>An edit invalidates validation evidence before the next request can own it</em></p>
 <p>Expiry is a transition too. A quote valid when rendered may expire while the user reads the review. The UI should show the changed state and refresh deliberately; the server still validates the accepted command. Use a recorded timestamp and a server-defined expiry rule, rather than assuming the browser clock alone decides a financial fact.</p>
 <h2>Resolve a save conflict without losing the local draft</h2>
 <p>Three representations are useful: the base snapshot the edit began from, the local draft, and the newly fetched server snapshot. For each field, compare local and remote changes against the base. If only one side changed, a merge may be straightforward. If both changed differently, preserve both values and ask for a decision appropriate to the field.</p>

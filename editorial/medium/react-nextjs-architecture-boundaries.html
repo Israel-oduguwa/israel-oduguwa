@@ -1,6 +1,5 @@
 <h1>Architecture boundaries in a large React and Next.js application</h1>
 <h2>Separate domain policy, server data access and browser interaction so a growing frontend stays secure and changeable.</h2>
-<p>Written with AI assistance.</p>
 <p>A frontend becomes difficult to change when a billing component imports database types, decides who may refund an invoice, fetches its own data and manages an unrelated navigation modal. Splitting it into smaller components may reduce file length while leaving every dependency intact.</p>
 <p>Useful architecture boundaries separate responsibilities that change for different reasons. In a React 19 and Next.js 15 application, the server-client boundary adds another responsibility: deciding which code and data may reach the browser.</p>
 <p>I would organize a large application around product capabilities, explicit data contracts and a small routing layer. The example is a hypothetical billing area with invoice viewing and refund requests. The snippets illustrate module boundaries rather than providing a complete application.</p>

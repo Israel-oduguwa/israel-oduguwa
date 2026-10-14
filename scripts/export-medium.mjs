@@ -39,7 +39,7 @@ const toHtml = (body) => {
     if (image) {
       if (!/^https:\/\//.test(image[2])) throw new Error(`Unsupported image: ${image[2]}`);
       const source = image[2].replace(/\.svg$/, ".png");
-      blocks.push(`<figure><img src="${escape(source)}" alt="${escape(image[1])}"/><figcaption>${escape(image[1])}</figcaption></figure>`);
+      blocks.push(`<img src="${escape(source)}" alt="${escape(image[1])}"/>\n<p><em>${escape(image[1])}</em></p>`);
       i++; continue;
     }
     const heading = lines[i].match(/^(#{1,3})\s+(.+)$/);
@@ -79,18 +79,18 @@ for (const file of readdirSync("articles").filter((name) => name.endsWith(".md")
   const body = source.slice(header[0].length).trim()
     .replace(/\]\((\/(?!\/)[^)]+)\)/g,
       "](https://israel-oduguwa.vercel.app$1)");
-  const disclosure = "Written with AI assistance.";
   writeFileSync(resolve(directory, `${slug}.md`),
-    `# ${title}\n\n${field("description")}\n\n${disclosure}\n\n${body}\n\nOriginally published on [Israel Oduguwa's website](${url}).\n`);
+    `# ${title}\n\n${field("description")}\n\n${body}\n\nOriginally published on [Israel Oduguwa's website](${url}).\n`);
   // Medium rejected these body links; import still retains the canonical URL.
   const mediumBody = toHtml(body).replace(
     /<a href="https:\/\/israel-oduguwa\.vercel\.app[^\"]*">([\s\S]*?)<\/a>/g, "$1");
   writeFileSync(resolve(directory, `${slug}.html`),
-    `<h1>${escape(title)}</h1>\n<h2>${escape(field("description"))}</h2>\n<p>${disclosure}</p>\n${mediumBody}\n<p>Originally published on Israel Oduguwa's website.</p>\n`);
+    `<h1>${escape(title)}</h1>\n<h2>${escape(field("description"))}</h2>\n${mediumBody}\n<p>Originally published on Israel Oduguwa's website.</p>\n`);
   exports.push({ slug, title, canonicalUrl: url, originalDate: field("date"),
     contextDate,
     updatedAt: header[1].match(/^updatedAt:\s*"([^"]+)"/m)?.[1] ?? null,
-    markdown: `${slug}.md`, html: `${slug}.html`, disclosure });
+    markdown: `${slug}.md`, html: `${slug}.html`,
+    requiresAuthorDisclosure: true, disclosureAddedBy: "author-manually-before-publication" });
 }
 exports.sort((a, b) => b.originalDate.localeCompare(a.originalDate));
 writeFileSync(resolve(directory, "manifest.json"), `${JSON.stringify(exports, null, 2)}\n`);

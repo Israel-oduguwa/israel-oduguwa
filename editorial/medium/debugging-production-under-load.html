@@ -1,6 +1,5 @@
 <h1>Debugging a production service that slows down under load</h1>
 <h2>Separate waiting from work, locate the first saturated resource, and verify a fix with realistic arrival rates and failure conditions.</h2>
-<p>Written with AI assistance.</p>
 <p>A service responds in 80 milliseconds during a quiet test. At the busiest hour, its slowest requests take several seconds. CPU utilization looks unremarkable, database queries are individually fast, and adding application instances provides only temporary relief.</p>
 <p>This is a useful diagnostic scenario because several different failures produce the same symptom. A database connection pool can make requests wait before a query starts. A slow dependency can occupy request slots. A synchronous callback can delay unrelated work on the Node.js event loop. Retries can multiply the workload after the initial slowdown.</p>
 <p>I would begin by accounting for the time in one request and the resources occupied by all requests. A flame graph answers where CPU time went. It cannot, by itself, explain five seconds spent waiting for a connection.</p>

@@ -2,8 +2,6 @@
 
 Review generated patches against behavioral contracts, regression obligations and forbidden effects rather than treating a green test run as the whole result.
 
-Written with AI assistance.
-
 A coding agent fixes a search test by showing the latest response at the end of the test. An obsolete response still writes state halfway through the interaction. Another agent makes a payment test pass by returning success after catching every exception. The expected output appears; the required behavior does not.
 
 Passing tests is evidence about the executions those tests observe. The task contract can include behavior, regressions, timing, permissions and effects that the suite never checks. A reviewer needs to connect the evidence to those obligations before accepting the patch.

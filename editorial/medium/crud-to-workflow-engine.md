@@ -2,8 +2,6 @@
 
 Model commands, permissions, concurrency and external effects when several people and services share a business process.
 
-Written with AI assistance.
-
 A product starts with an application form and a status column. Then a reviewer must approve it, finance must collect payment, an applicant can withdraw, and support must reopen a rejected case. Two people can act at once. Payment confirmation arrives later, sometimes twice.
 
 At that point, allowing an API client to update `status` is an architectural liability. The product has commands with preconditions, actors with different authority, and effects that cannot be undone by changing a row back to its previous value.

@@ -2,8 +2,6 @@
 
 Prevent stale validation, lost drafts and duplicate submissions by modeling ownership, revisions and uncertain outcomes explicitly.
 
-Written with AI assistance.
-
 A user edits a form while remote validation is running. The old result returns after the edit and enables the Next button. Later, the final submission times out, so the user clicks again. The interface has two separate correctness problems: it accepted evidence for an obsolete draft and it treated an unknown server outcome as a failed operation.
 
 Multi-step interfaces need a model of what is current, what is proven and what has been accepted remotely. A step index and several booleans are rarely enough once validation, autosave and submission overlap.

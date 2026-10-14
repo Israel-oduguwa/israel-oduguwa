@@ -2,8 +2,6 @@
 
 Build reproducible tasks and evidence-based labels before converting expert work into supervised or preference-training examples.
 
-Written with AI assistance.
-
 A coding dataset can contain elegant explanations, valid syntax and thousands of green test runs while teaching the wrong behavior. The prompt may omit a requirement, the reference patch may depend on an unrecorded environment, or the preference label may reward confidence over correctness.
 
 The engineering unit is a reproducible task with a defensible behavioral contract. Demonstrations and preferences are derived from that unit. If its environment or grader is unreliable, scaling annotation increases the volume of unreliable evidence.

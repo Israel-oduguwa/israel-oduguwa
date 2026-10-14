@@ -2,8 +2,6 @@
 
 Trace authority and data across a production web system, then verify where each threat is prevented, detected and contained.
 
-Written with AI assistance.
-
 A web system can use HTTPS, verified tokens and parameterized queries while still allowing a tenant administrator to download another tenant's export. Security depends on how authority crosses boundaries, not just whether a list of controls appears in the stack.
 
 I would review the system as a sequence of decisions: who supplied this input, which identity has been established, which capability is being exercised, what data may cross the boundary, and what happens if that decision is wrong.

@@ -1,6 +1,5 @@
 <h1>From CRUD to a workflow engine: state, actors and irreversible effects</h1>
 <h2>Model commands, permissions, concurrency and external effects when several people and services share a business process.</h2>
-<p>Written with AI assistance.</p>
 <p>A product starts with an application form and a status column. Then a reviewer must approve it, finance must collect payment, an applicant can withdraw, and support must reopen a rejected case. Two people can act at once. Payment confirmation arrives later, sometimes twice.</p>
 <p>At that point, allowing an API client to update status is an architectural liability. The product has commands with preconditions, actors with different authority, and effects that cannot be undone by changing a row back to its previous value.</p>
 <p>The useful transition from CRUD to a workflow engine is making those rules explicit and executable. A state-machine library can help describe them. It does not supply transaction boundaries, authorization or recovery semantics on its own.</p>
@@ -79,7 +78,8 @@ reconciliation checks uncertain outcomes</pre>
 <h2>A refund after withdrawal is another workflow</h2>
 <p>Consider this history: a reviewer approves an application, the payment provider accepts the charge, the applicant withdraws, and only then does the payment confirmation arrive. There is no useful answer in the phrase “the latest event wins.” Withdrawal and payment describe different facts. Both can be true.</p>
 <p>Record the payment against its persisted attempt, even when the application is now withdrawn. Then let an explicit policy decide whether to refund, retain a fee or request review. A refund command creates a new operation with its own identity, amount, authorization and recovery state. It must not erase the charge record or reinterpret the confirmation as a failed payment.</p>
-<figure><img src="https://israel-oduguwa.vercel.app/images/articles/workflow-effects.png" alt="A committed workflow decision records an effect before a worker contacts the provider"/><figcaption>A committed workflow decision records an effect before a worker contacts the provider</figcaption></figure>
+<img src="https://israel-oduguwa.vercel.app/images/articles/workflow-effects.png" alt="A committed workflow decision records an effect before a worker contacts the provider"/>
+<p><em>A committed workflow decision records an effect before a worker contacts the provider</em></p>
 <p>This separation changes support tooling. An operator should be able to see that the application was withdrawn, attempt P17 succeeded, and refund R4 is awaiting confirmation. A single failed label hides all three. A repair action should target R4 with a reason and current expected version, rather than resetting the whole application to a previous state.</p>
 <p>Compensation also needs a business definition. Sending another API request can reverse an amount, but it may not reverse fees, taxes, notifications or a service already delivered. The workflow should record what the reversal promises and what remains unresolved. When automatic compensation is inappropriate, route the case to a bounded review queue with a named owner and an age objective.</p>
 <h2>Put command identity in the storage contract</h2>

@@ -2,8 +2,6 @@
 
 Separate domain policy, server data access and browser interaction so a growing frontend stays secure and changeable.
 
-Written with AI assistance.
-
 A frontend becomes difficult to change when a billing component imports database types, decides who may refund an invoice, fetches its own data and manages an unrelated navigation modal. Splitting it into smaller components may reduce file length while leaving every dependency intact.
 
 Useful architecture boundaries separate responsibilities that change for different reasons. In a React 19 and Next.js 15 application, the server-client boundary adds another responsibility: deciding which code and data may reach the browser.

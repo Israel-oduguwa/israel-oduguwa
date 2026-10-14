@@ -2,8 +2,6 @@
 
 Separate commercial agreements, invoices, payments and access while handling plan changes, duplicate events and uncertain outcomes.
 
-Written with AI assistance.
-
 A customer upgrades midway through a billing period while the current invoice is unpaid. The payment provider creates a credit and a new charge. A webhook arrives twice, an older subscription event arrives later, and the application's `isPaid` flag no longer explains what access the customer should have.
 
 Billing becomes difficult when several different facts are collapsed into one boolean. A commercial agreement, invoice, payment attempt, credit, refund and entitlement have different lifecycles. They must be connected without pretending that they are the same record.

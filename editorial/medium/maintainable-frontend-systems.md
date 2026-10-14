@@ -2,8 +2,6 @@
 
 Control dependency growth, shared-component variation and migration cost without turning every product change into framework work.
 
-Written with AI assistance.
-
 A shared table begins with sorting and pagination. Six teams add bulk actions, inline editing, grouped rows, custom filters and several permission models. The table now has dozens of flags, and changing one behavior requires checking unrelated products.
 
 The problem is not that the component has become large. Its contract now contains several capabilities with different owners and incompatible assumptions. Maintainability depends on controlling those contracts and the cost of changing them.
