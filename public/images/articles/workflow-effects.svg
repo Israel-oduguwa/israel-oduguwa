@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" role="img" aria-labelledby="title desc">
+  <title id="title">Workflow effects and transaction boundary</title>
+  <desc id="desc">A validated command commits state, audit and outbox together. A worker delivers the external effect, then records or reconciles its outcome.</desc>
+  <rect width="360" height="470" fill="#fff"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#2563eb"/></marker></defs>
+  <g fill="#f1f5f9" stroke="#94a3b8"><rect x="30" y="28" width="300" height="62" rx="8"/><rect x="30" y="134" width="300" height="76" rx="8" fill="#eff6ff" stroke="#2563eb"/><rect x="30" y="264" width="300" height="62" rx="8"/><rect x="30" y="380" width="300" height="62" rx="8"/></g>
+  <g fill="#172034" text-anchor="middle" font-family="sans-serif" font-size="20"><text x="180" y="67">Validate the command</text><text x="180" y="164">Commit state + audit</text><text x="180" y="191">+ outbox intent</text><text x="180" y="303">Call the provider</text><text x="180" y="419">Record or reconcile</text></g>
+  <g fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"><path d="M180 90V129"/><path d="M180 210V259"/><path d="M180 326V375"/></g>
+  <path d="M16 238H344" stroke="#536174" stroke-dasharray="5 5"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="title desc">
+  <title id="title">Public reuse and private request data</title>
+  <desc id="desc">The public description is reusable. The private offer is authorized per request. Both compose into a page, while checkout remains an authoritative server command.</desc>
+  <rect width="360" height="420" fill="#fff"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10" fill="#2563eb"/></marker></defs>
+  <g fill="#f1f5f9" stroke="#94a3b8"><rect x="30" y="24" width="300" height="58" rx="8"/><rect x="30" y="116" width="300" height="58" rx="8"/><rect x="30" y="226" width="300" height="58" rx="8" fill="#eff6ff" stroke="#2563eb"/><rect x="30" y="334" width="300" height="58" rx="8"/></g>
+  <g fill="#172034" text-anchor="middle" font-family="sans-serif" font-size="20"><text x="180" y="60">Public description: reuse</text><text x="180" y="152">Private offer: authorize</text><text x="180" y="262">Compose the page</text><text x="180" y="370">Checkout: verify again</text></g>
+  <g fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"><path d="M330 53H344V255H335"/><path d="M180 174V221"/><path d="M180 284V329"/></g>
+</svg>
