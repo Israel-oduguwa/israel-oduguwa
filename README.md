@@ -33,14 +33,14 @@ I built the TypeScript engine, PostgreSQL, MongoDB, Firestore and SQLite adapter
     <td width="50%" valign="top">
       <h3>KinsCare</h3>
       <p>Marketplace architecture, geospatial matching and production platform modernization.</p>
-      <p>I defined the system architecture and guided seven developers. I built retrieval and matching services, migrated 5,000+ user accounts and reduced infrastructure spend by more than 75%.</p>
+      <p>I defined the system architecture and guided seven developers. I built retrieval and matching services and reduced infrastructure spend by more than 75%.</p>
       <p><sub>Next.js · Node.js · Python · MongoDB · Clerk</sub></p>
       <p><a href="https://israel-oduguwa.vercel.app/work/kinscare">Case study</a> · <a href="https://www.kinscare.org/">Live product</a></p>
     </td>
     <td width="50%" valign="top">
       <h3>Excel Health Careers</h3>
       <p>Transaction consistency, revenue-driven acquisition and AI media orchestration.</p>
-      <p>I engineered the transaction layer across 8,000+ successful payments, designed the AI acquisition engine and orchestrated media services with bounded concurrency, failure recovery and publishing checks. Acquisition work contributed to a 60% increase in qualified student acquisition.</p>
+      <p>I engineered the transaction layer, designed the AI acquisition engine and orchestrated media services with bounded concurrency, failure recovery and publishing checks. Acquisition work contributed to a 60% increase in qualified student acquisition.</p>
       <p><sub>Next.js · Stripe · Firebase · Remotion · AWS</sub></p>
       <p><a href="https://israel-oduguwa.vercel.app/work/excelcna">Case study</a> · <a href="https://www.excelcna.com/">Live product</a></p>
     </td>
