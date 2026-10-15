@@ -49,7 +49,7 @@ I built the TypeScript engine, PostgreSQL, MongoDB, Firestore and SQLite adapter
 
 ## Current work at micro1
 
-**AI Evaluation Expert / Frontend SWE · Jul 2026**
+**AI Evaluation Expert / SWE · Jul 2026**
 
 I design frontend software engineering evaluation tasks from realistic technical prompts and structured source material. I create expert reference outputs and objective assessment criteria, then review generated deliverables for reasoning, correctness, completeness, source use and instruction following.
 
