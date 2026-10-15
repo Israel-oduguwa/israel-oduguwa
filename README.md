@@ -10,9 +10,8 @@
 
 I'm Israel, a senior full stack software engineer with 6+ years designing and building production systems. My work spans platform architecture, backend and data services, payment infrastructure, applied AI and technical leadership.
 
-At KinsCare, I defined marketplace architecture, guided seven developers and migrated 5,000+ user accounts while modernizing the platform and cloud infrastructure. At Excel Health Careers, I engineered a transaction layer supporting 8,000+ successful payments and built an AI acquisition engine that connects campaign execution to revenue data.
 
-I created and maintain [SafeStripe](https://github.com/Israel-oduguwa/SafeStripe), an open-source reliability layer for Stripe with five explicit reliability contracts, four database adapters and Express/Next.js integrations. I also work at micro1 as an AI evaluation expert in frontend software engineering.
+I maintain [SafeStripe](https://github.com/Israel-oduguwa/SafeStripe), an open-source reliability layer for Stripe with five explicit reliability contracts, four database adapters and Express/Next.js integrations. I also work at micro1 as an AI evaluation expert in frontend software engineering.
 
 [Portfolio](https://israel-oduguwa.vercel.app/) &nbsp; · &nbsp; [Résumé](https://israel-oduguwa.vercel.app/documents/israel-oduguwa-resume.pdf) &nbsp; · &nbsp; [Email](mailto:oduguwa.israel22@gmail.com)
 
@@ -50,7 +49,7 @@ I built the TypeScript engine, PostgreSQL, MongoDB, Firestore and SQLite adapter
 
 ## Current work at micro1
 
-**AI Evaluation Expert / Frontend SWE · Jul 2026 - Present**
+**AI Evaluation Expert / Frontend SWE · Jul 2026**
 
 I design frontend software engineering evaluation tasks from realistic technical prompts and structured source material. I create expert reference outputs and objective assessment criteria, then review generated deliverables for reasoning, correctness, completeness, source use and instruction following.
 
